@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 final ThemeData lightTheme = ThemeData(
+    scaffoldBackgroundColor: CupertinoColors.systemBackground,
     brightness: Brightness.light,
     primaryColor: Colors.green,
     listTileTheme: ListTileThemeData(tileColor: Colors.grey.shade200),
@@ -9,8 +10,9 @@ final ThemeData lightTheme = ThemeData(
         selectedItemColor: Colors.green,
         unselectedItemColor: Colors.grey.shade600),
     navigationBarTheme: const NavigationBarThemeData(
-      indicatorColor: Colors.green,
-    ),
+        indicatorColor: Colors.green,
+        elevation: 2,
+        backgroundColor: CupertinoColors.secondarySystemBackground),
     floatingActionButtonTheme: const FloatingActionButtonThemeData(
         backgroundColor: Colors.green, foregroundColor: Colors.white),
     switchTheme:
@@ -52,6 +54,7 @@ final ThemeData lightTheme = ThemeData(
       ),
     ));
 final ThemeData darkTheme = ThemeData(
+    scaffoldBackgroundColor: CupertinoColors.darkBackgroundGray,
     brightness: Brightness.dark,
     primaryColor: Colors.grey[900],
     listTileTheme: ListTileThemeData(tileColor: Colors.grey.shade600),
@@ -59,8 +62,9 @@ final ThemeData darkTheme = ThemeData(
         selectedItemColor: Colors.green,
         unselectedItemColor: Colors.grey.shade600),
     navigationBarTheme: const NavigationBarThemeData(
-      indicatorColor: Colors.green,
-    ),
+        indicatorColor: Colors.green,
+        elevation: 2,
+        backgroundColor: CupertinoColors.black),
     floatingActionButtonTheme: const FloatingActionButtonThemeData(
         backgroundColor: Colors.green, foregroundColor: Colors.white),
     switchTheme: SwitchThemeData(

@@ -21,6 +21,7 @@ class ItemWidget extends StatelessWidget {
         }));
       },
       child: Card(
+        elevation: 0,
         child: IntrinsicHeight(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,

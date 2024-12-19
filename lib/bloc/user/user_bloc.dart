@@ -15,7 +15,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     on<GetUserEvent>((event, emit) async {
       emit(UserLoading());
       final response = await http.get(
-        Uri.parse('http://192.168.0.100:8000/user'),
+        Uri.parse('http://192.168.0.106:8000/user'),
         headers: {
           "Content-Type": "application/json",
         },
@@ -52,7 +52,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
         if (kDebugMode) {
           print('error_repository: $e');
         }
-        emit(EditUserErrorState('Terjadi kesalahan saat Edit user'));
+        emit(EditUserErrorState('Terjadi kesalahan saat Edit User'));
       }
     });
 
@@ -61,14 +61,14 @@ class UserBloc extends Bloc<UserEvent, UserState> {
       try {
         await userRepository.deleteUser(event.id);
 
-        emit(DeleteUserSuccess('Berhasil menghapus User'));
+        emit(DeleteUserSuccess('Berhasil Menghapus User'));
 
         add(GetUserEvent());
       } catch (e) {
         if (kDebugMode) {
           print('error_repository: $e');
         }
-        emit(DeleteUserErrorState('Terjadi kesalahan saat menghapus user'));
+        emit(DeleteUserErrorState('Terjadi kesalahan saat Menghapus User'));
       }
     });
   }

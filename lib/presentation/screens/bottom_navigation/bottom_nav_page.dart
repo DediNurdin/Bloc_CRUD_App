@@ -1,40 +1,42 @@
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
 import '../../../bloc/bottom_nav/bottom_nav_bloc.dart';
 import '../product/product_page.dart';
 import '../settings/setting_page.dart';
 import '../user/user_page.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 List<NavigationDestination> bottomNavItems = <NavigationDestination>[
   NavigationDestination(
     icon: Icon(
-      Icons.home_filled,
+      CupertinoIcons.house,
       color: Colors.grey.shade600,
     ),
     selectedIcon: const Icon(
-      Icons.home_filled,
+      CupertinoIcons.house_fill,
       color: Colors.white,
     ),
     label: 'Home',
   ),
   NavigationDestination(
     icon: Icon(
-      Icons.person,
+      CupertinoIcons.person,
       color: Colors.grey.shade600,
     ),
     selectedIcon: const Icon(
-      Icons.person,
+      CupertinoIcons.person_fill,
       color: Colors.white,
     ),
     label: 'User',
   ),
   NavigationDestination(
     icon: Icon(
-      Icons.settings,
+      CupertinoIcons.settings,
       color: Colors.grey.shade600,
     ),
     selectedIcon: const Icon(
-      Icons.settings,
+      CupertinoIcons.settings_solid,
       color: Colors.white,
     ),
     label: 'Setting',

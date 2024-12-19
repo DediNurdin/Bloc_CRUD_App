@@ -1,7 +1,8 @@
-import '../../bloc/bottom_nav/bottom_nav_bloc.dart';
-import '../screens/bottom_navigation/bottom_nav_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../../bloc/bottom_nav/bottom_nav_bloc.dart';
+import '../screens/bottom_navigation/bottom_nav_page.dart';
 
 class RouteGenerator {
   final BottomNavBloc bottomNavBloc = BottomNavBloc();

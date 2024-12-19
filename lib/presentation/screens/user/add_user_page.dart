@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import '../../../utils/utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -32,6 +35,12 @@ class _AddUserPageState extends State<AddUserPage> {
 
   final TextEditingController kelController = TextEditingController();
   final TextEditingController kelIdController = TextEditingController();
+
+  final TextEditingController dateController = TextEditingController();
+  final TextEditingController imgController = TextEditingController();
+
+  File? imageFile;
+  String base64Image = '';
 
   @override
   void initState() {
@@ -162,6 +171,69 @@ class _AddUserPageState extends State<AddUserPage> {
                 readOnly: true,
                 onTap: () {},
                 decoration: const InputDecoration(labelText: 'Kelurahan'),
+              ),
+              const SizedBox(
+                height: 8,
+              ),
+              TextField(
+                controller: dateController,
+                readOnly: true,
+                onTap: () {
+                  Utils.selectDate(context, DateTime.now(), 'yyyy-MM-dd',
+                      (DateTime date, String controller) {
+                    setState(() {
+                      dateController.text = controller;
+                    });
+                  }, DateTime.now());
+                },
+                decoration: const InputDecoration(labelText: 'Tanggal Lahir'),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              const Text('Gambar'),
+              const SizedBox(
+                height: 10,
+              ),
+              InkWell(
+                overlayColor: const WidgetStatePropertyAll(Colors.transparent),
+                onTap: () {
+                  Utils.selectImage((String base64String, File tempImage) {
+                    setState(() {
+                      base64Image = base64String;
+                      imageFile = tempImage;
+                      imgController.text = base64Image;
+                    });
+                  }, false);
+                },
+                child: Container(
+                    padding: const EdgeInsets.all(5),
+                    decoration: BoxDecoration(
+                        border: Border.all(),
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(10))),
+                    child: const Icon(CupertinoIcons.add)),
+              ),
+              Visibility(
+                visible: base64Image == '' ? false : true,
+                child: SizedBox(
+                    height: 100,
+                    width: 100,
+                    child: base64Image != ''
+                        ? ClipRRect(
+                            borderRadius:
+                                const BorderRadius.all(Radius.circular(10)),
+                            child: Image.file(
+                              fit: BoxFit.contain,
+                              imageFile!,
+                            ),
+                          )
+                        : const Center(
+                            child: Icon(
+                            CupertinoIcons.app_badge,
+                            size: 18,
+                            color: CupertinoColors.destructiveRed,
+                          ))),
               ),
               const SizedBox(
                 height: 50,

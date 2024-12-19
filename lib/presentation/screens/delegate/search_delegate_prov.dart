@@ -47,7 +47,6 @@ class SearchDelegateProv extends SearchDelegate<String> {
           margin: const EdgeInsets.only(bottom: 5, left: 5, right: 5),
           child: ListTile(
             shape: RoundedRectangleBorder(
-              side: const BorderSide(width: 1),
               borderRadius: BorderRadius.circular(20),
             ),
             title: Text(allProv[index].nama),
@@ -75,7 +74,6 @@ class SearchDelegateProv extends SearchDelegate<String> {
           margin: const EdgeInsets.only(bottom: 5, left: 5, right: 5),
           child: ListTile(
             shape: RoundedRectangleBorder(
-              side: const BorderSide(width: 1),
               borderRadius: BorderRadius.circular(10),
             ),
             title: Text(allProvSugest[index].nama),

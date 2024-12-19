@@ -6,7 +6,7 @@ import 'package:http/http.dart' as http;
 import '../models/add_user.dart';
 
 class UserRepository {
-  final baseUrl = 'http://192.168.0.100:8000/user/';
+  final baseUrl = 'http://192.168.0.106:8000/user/';
 
   Future<CrudUserModel> addUser(
     String name,

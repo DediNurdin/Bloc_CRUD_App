@@ -26,81 +26,93 @@ class _UserPageState extends State<UserPage> {
         forceMaterialTransparency: true,
         title: const Text('User'),
       ),
-      body: BlocBuilder<UserBloc, UserState>(
-        builder: (context, state) {
-          if (state is UserLoading) {
-            return const Center(child: CircularProgressIndicator());
-          } else if (state is UserSuccess) {
-            return ListView.builder(
-              itemCount: state.user.length,
-              itemBuilder: (context, index) {
-                User user = state.user[index];
-                return Container(
-                  margin: const EdgeInsets.only(bottom: 5, left: 5, right: 5),
-                  child: ListTile(
-                    shape: RoundedRectangleBorder(
-                      side: const BorderSide(width: 1),
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    trailing: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        IconButton(
-                            style: const ButtonStyle(
-                                backgroundColor:
-                                    WidgetStatePropertyAll(Colors.amber)),
-                            onPressed: () {
-                              Navigator.of(context).push(
-                                MaterialPageRoute(
-                                    builder: (context) => AddUserPage(
-                                          type: 'Edit',
-                                          userData: user,
-                                        )),
-                              );
-                            },
-                            icon: const Icon(
-                              Icons.edit,
-                              color: Colors.white,
-                            )),
-                        const VerticalDivider(
-                          color: Colors.black12,
-                        ),
-                        IconButton(
-                            style: const ButtonStyle(
-                                backgroundColor:
-                                    WidgetStatePropertyAll(Colors.red)),
-                            onPressed: () {
-                              context.read<UserBloc>().add(
-                                    DeleteUserEvent(user.id),
-                                  );
-                            },
-                            icon: const Icon(
-                              Icons.delete,
-                              color: Colors.white,
-                            ))
-                      ],
-                    ),
-                    title: Text(
-                      user.name,
-                      style: const TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                    subtitle: Text(user.email),
-                  ),
-                );
-              },
-            );
-          } else if (state is UserInitial) {
-            context.read<UserBloc>().add(GetUserEvent());
-            return const Center(child: CircularProgressIndicator());
-          } else if (state is DeleteUserLoadingState) {
-            return const Center(child: CircularProgressIndicator());
+      body: BlocListener<UserBloc, UserState>(
+        listener: (context, state) {
+          if (state is DeleteUserLoadingState) {
+            const Center(child: CircularProgressIndicator());
           } else if (state is DeleteUserSuccess) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(content: Text(state.message)),
             );
           }
-          return const Center(child: Text('No Data Available'));
         },
+        child: BlocBuilder<UserBloc, UserState>(
+          builder: (context, state) {
+            if (state is UserLoading) {
+              return const Center(child: CircularProgressIndicator());
+            } else if (state is UserSuccess) {
+              return RefreshIndicator(
+                onRefresh: () async {
+                  context.read<UserBloc>().add(GetUserEvent());
+                },
+                child: ListView.builder(
+                  itemCount: state.user.length,
+                  itemBuilder: (context, index) {
+                    User user = state.user[index];
+                    return Container(
+                      margin:
+                          const EdgeInsets.only(bottom: 5, left: 5, right: 5),
+                      child: ListTile(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        trailing: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            IconButton(
+                                style: const ButtonStyle(
+                                    backgroundColor:
+                                        WidgetStatePropertyAll(Colors.amber)),
+                                onPressed: () {
+                                  Navigator.of(context).push(
+                                    MaterialPageRoute(
+                                        builder: (context) => AddUserPage(
+                                              type: 'Edit',
+                                              userData: user,
+                                            )),
+                                  );
+                                },
+                                icon: const Icon(
+                                  Icons.edit,
+                                  color: Colors.white,
+                                )),
+                            const VerticalDivider(
+                              color: Colors.black12,
+                            ),
+                            IconButton(
+                                style: const ButtonStyle(
+                                    backgroundColor:
+                                        WidgetStatePropertyAll(Colors.red)),
+                                onPressed: () {
+                                  context.read<UserBloc>().add(
+                                        DeleteUserEvent(user.id),
+                                      );
+                                },
+                                icon: const Icon(
+                                  Icons.delete,
+                                  color: Colors.white,
+                                ))
+                          ],
+                        ),
+                        title: Text(
+                          user.name,
+                          style: const TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                        subtitle: Text(user.email),
+                      ),
+                    );
+                  },
+                ),
+              );
+            } else if (state is UserInitial) {
+              context.read<UserBloc>().add(GetUserEvent());
+              return const Center(child: CircularProgressIndicator());
+            }
+            return const Center(
+              child: Text('No Data'),
+            );
+          },
+        ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {

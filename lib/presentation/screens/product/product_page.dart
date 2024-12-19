@@ -30,20 +30,26 @@ class _ProductPageState extends State<ProductPage> {
           if (state is ProductSuccess) {
             return Container(
               padding: const EdgeInsets.symmetric(horizontal: 10),
-              child: GridView.builder(
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  mainAxisSpacing: 7,
-                  crossAxisSpacing: 7,
-                  crossAxisCount: 3,
-                  childAspectRatio: 0.65,
-                ),
-                itemBuilder: (context, index) {
-                  return ItemWidget(product: state.products[index]);
+              child: RefreshIndicator(
+                onRefresh: () async {
+                  context.read<ProductBloc>().add(GetProductEvent());
                 },
-                itemCount: state.products.length,
+                child: GridView.builder(
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    mainAxisSpacing: 7,
+                    crossAxisSpacing: 7,
+                    crossAxisCount: 3,
+                    childAspectRatio: 0.65,
+                  ),
+                  itemBuilder: (context, index) {
+                    return ItemWidget(product: state.products[index]);
+                  },
+                  itemCount: state.products.length,
+                ),
               ),
             );
           }
+
           return const Center(
             child: Text('No Data'),
           );
