@@ -1,3 +1,4 @@
+import 'package:bloc_online_store/presentation/screens/user/login_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -8,7 +9,9 @@ class RouteGenerator {
   final BottomNavBloc bottomNavBloc = BottomNavBloc();
   Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
-      case '/':
+      case '/login':
+        return MaterialPageRoute(builder: (_) => LoginPage());
+      case '/bottomnav':
         return MaterialPageRoute(
           builder: (_) => BlocProvider<BottomNavBloc>.value(
             value: bottomNavBloc,

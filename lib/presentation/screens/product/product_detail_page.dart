@@ -5,7 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'item/start_display.dart';
 import 'package:flutter/material.dart';
 
-import '../../../models/product.dart';
+import '../../../models/product_model.dart';
 
 class ProductDetailPage extends StatefulWidget {
   const ProductDetailPage({
@@ -48,7 +48,8 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                             children: [
                               Row(
                                 children: [
-                                  SizedBox(
+                                  Container(
+                                    margin: const EdgeInsets.only(right: 10),
                                     height: 100,
                                     width: 100,
                                     child: ClipRRect(

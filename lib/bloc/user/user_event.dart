@@ -4,29 +4,32 @@ abstract class UserEvent {}
 
 class GetUserEvent extends UserEvent {}
 
-class PostAddUserEvent extends UserEvent {
-  String name;
-  String email;
-  String phone;
+abstract class RegisterEvent {}
 
-  PostAddUserEvent(this.name, this.email, this.phone);
-  List<Object?> get props => [name, email, phone];
+class SubmitRegisterEvent extends RegisterEvent {
+  final UserRegisterModel user;
+
+  SubmitRegisterEvent(this.user);
 }
 
-class PutEditUserEvent extends UserEvent {
-  String id;
-  String name;
-  String email;
-  String phone;
+class SubmitEditUserEvent extends RegisterEvent {
+  final String userId;
+  final UserRegisterModel user;
 
-  PutEditUserEvent(this.id, this.name, this.email, this.phone);
-  List<Object?> get props => [id, name, email, phone];
+  SubmitEditUserEvent(this.userId, this.user);
 }
 
-class DeleteUserEvent extends UserEvent {
-  String id;
-  DeleteUserEvent(
-    this.id,
-  );
-  List<Object?> get props => [id];
+class SubmitDeleteUserEvent extends UserEvent {
+  final String userId;
+
+  SubmitDeleteUserEvent(this.userId);
+}
+
+abstract class LoginEvent {}
+
+class SubmitLoginEvent extends LoginEvent {
+  final String username;
+  final String password;
+
+  SubmitLoginEvent({required this.username, required this.password});
 }

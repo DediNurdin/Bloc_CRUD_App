@@ -19,6 +19,7 @@ class _ProductPageState extends State<ProductPage> {
     return Scaffold(
         appBar: AppBar(
           forceMaterialTransparency: true,
+          automaticallyImplyLeading: false,
           title: TextField(
             controller: _searchController,
             decoration: const InputDecoration(

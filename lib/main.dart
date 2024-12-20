@@ -23,6 +23,12 @@ class MyApp extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(
+          create: (context) => LoginBloc(UserRepository()),
+        ),
+        BlocProvider(
+          create: (context) => RegisterBloc(UserRepository()),
+        ),
+        BlocProvider(
           create: (context) => UserBloc(UserRepository())..add(GetUserEvent()),
         ),
         BlocProvider(
@@ -47,7 +53,7 @@ class MyApp extends StatelessWidget {
           themeMode: state.themeMode,
           title: 'Bloc STM Learn',
           debugShowCheckedModeBanner: false,
-          initialRoute: '/',
+          initialRoute: '/bottomnav',
           onGenerateRoute: RouteGenerator().generateRoute,
         ),
       ),

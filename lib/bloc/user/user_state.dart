@@ -7,53 +7,62 @@ class UserInitial extends UserState {}
 class UserLoading extends UserState {}
 
 class UserSuccess extends UserState {
-  final List<User> user;
+  final List<UserModel> user;
   UserSuccess({
     required this.user,
   });
 }
 
-class AddUserLoadingState extends UserState {
-  List<Object?> get props => [];
-}
+abstract class RegisterState {}
 
-class AddUserSuccess extends UserState {
-  final String message;
-  AddUserSuccess(this.message);
-}
+class RegisterInitial extends RegisterState {}
 
-class AddUserErrorState extends UserState {
+class RegisterLoading extends RegisterState {}
+
+class RegisterSuccess extends RegisterState {}
+
+class RegisterFailure extends RegisterState {
   final String error;
-  AddUserErrorState(this.error);
-  List<Object?> get props => [error];
+
+  RegisterFailure(this.error);
 }
 
-class EditUserLoadingState extends UserState {
-  List<Object?> get props => [];
-}
+class EditUserLoading extends RegisterState {}
 
-class EditUserSuccess extends UserState {
-  final String message;
-  EditUserSuccess(this.message);
-}
+class EditUserSuccess extends RegisterState {}
 
-class EditUserErrorState extends UserState {
+class EditUserFailure extends RegisterState {
   final String error;
-  EditUserErrorState(this.error);
-  List<Object?> get props => [error];
+
+  EditUserFailure(this.error);
 }
 
-class DeleteUserLoadingState extends UserState {
-  List<Object?> get props => [];
-}
+class DeleteUserInitial extends UserState {}
 
-class DeleteUserSuccess extends UserState {
-  final String message;
-  DeleteUserSuccess(this.message);
-}
+class DeleteUserLoading extends UserState {}
 
-class DeleteUserErrorState extends UserState {
+class DeleteUserSuccess extends UserState {}
+
+class DeleteUserFailure extends UserState {
   final String error;
-  DeleteUserErrorState(this.error);
-  List<Object?> get props => [error];
+
+  DeleteUserFailure(this.error);
+}
+
+abstract class LoginState {}
+
+class LoginInitial extends LoginState {}
+
+class LoginLoading extends LoginState {}
+
+class LoginSuccess extends LoginState {
+  final String token;
+
+  LoginSuccess(this.token);
+}
+
+class LoginFailure extends LoginState {
+  final String error;
+
+  LoginFailure(this.error);
 }

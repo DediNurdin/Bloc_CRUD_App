@@ -1,9 +1,9 @@
+import 'package:bloc_online_store/models/user_model.dart';
+import 'package:bloc_online_store/presentation/screens/user/register_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../../models/user.dart';
 import '../../../bloc/user/user_bloc.dart';
-import 'add_user_page.dart';
 
 class UserPage extends StatefulWidget {
   const UserPage({super.key});
@@ -23,16 +23,17 @@ class _UserPageState extends State<UserPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         forceMaterialTransparency: true,
         title: const Text('User'),
       ),
       body: BlocListener<UserBloc, UserState>(
         listener: (context, state) {
-          if (state is DeleteUserLoadingState) {
+          if (state is DeleteUserLoading) {
             const Center(child: CircularProgressIndicator());
           } else if (state is DeleteUserSuccess) {
             ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(state.message)),
+              SnackBar(content: Text('Delete User Successful!')),
             );
           }
         },
@@ -48,7 +49,7 @@ class _UserPageState extends State<UserPage> {
                 child: ListView.builder(
                   itemCount: state.user.length,
                   itemBuilder: (context, index) {
-                    User user = state.user[index];
+                    UserModel user = state.user[index];
                     return Container(
                       margin:
                           const EdgeInsets.only(bottom: 5, left: 5, right: 5),
@@ -66,8 +67,9 @@ class _UserPageState extends State<UserPage> {
                                 onPressed: () {
                                   Navigator.of(context).push(
                                     MaterialPageRoute(
-                                        builder: (context) => AddUserPage(
+                                        builder: (context) => RegisterPage(
                                               type: 'Edit',
+                                              userId: user.id.toString(),
                                               userData: user,
                                             )),
                                   );
@@ -85,7 +87,8 @@ class _UserPageState extends State<UserPage> {
                                         WidgetStatePropertyAll(Colors.red)),
                                 onPressed: () {
                                   context.read<UserBloc>().add(
-                                        DeleteUserEvent(user.id),
+                                        SubmitDeleteUserEvent(
+                                            user.id.toString()),
                                       );
                                 },
                                 icon: const Icon(
@@ -95,7 +98,7 @@ class _UserPageState extends State<UserPage> {
                           ],
                         ),
                         title: Text(
-                          user.name,
+                          '${user.name.firstname} ${user.name.lastname}',
                           style: const TextStyle(fontWeight: FontWeight.bold),
                         ),
                         subtitle: Text(user.email),
@@ -118,7 +121,7 @@ class _UserPageState extends State<UserPage> {
         onPressed: () {
           Navigator.of(context).push(
             MaterialPageRoute(
-                builder: (context) => const AddUserPage(
+                builder: (context) => RegisterPage(
                       type: 'Add',
                     )),
           );

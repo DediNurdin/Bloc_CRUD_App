@@ -1,9 +1,10 @@
 import 'dart:convert';
 
+import 'package:bloc_online_store/utils/utils.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart' as http;
 
-import '../../models/product.dart';
+import '../../models/product_model.dart';
 
 part 'product_event.dart';
 part 'product_state.dart';
@@ -13,7 +14,7 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
     on<GetProductEvent>((event, emit) async {
       emit(ProductLoading());
       final response = await http.get(
-        Uri.parse('https://fakestoreapi.com/products'),
+        Uri.parse('${Utils.baseUrlFakeApi}/products'),
         headers: {
           "Content-Type": "application/json",
         },
@@ -34,7 +35,7 @@ class ProductCategoriesBloc
     on<GetProductCategoriesEvent>((event, emit) async {
       emit(ProductCategoriesLoading());
       final response = await http.get(
-        Uri.parse('https://fakestoreapi.com/products/categories'),
+        Uri.parse('${Utils.baseUrlFakeApi}/products/categories'),
         headers: {
           "Content-Type": "application/json",
         },

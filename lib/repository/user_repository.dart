@@ -1,90 +1,54 @@
 import 'dart:convert';
 
-import 'package:flutter/foundation.dart';
+import 'package:bloc_online_store/models/user_model.dart';
+import 'package:bloc_online_store/utils/utils.dart';
 import 'package:http/http.dart' as http;
 
-import '../models/add_user.dart';
-
 class UserRepository {
-  final baseUrl = 'http://192.168.0.106:8000/user/';
-
-  Future<CrudUserModel> addUser(
-    String name,
-    String email,
-    String phone,
-  ) async {
-    Map body = {
-      'name': name,
-      'email': email,
-      'phone': phone,
-    };
-
-    http.Response response = await http.post(
-      Uri.parse(baseUrl),
-      body: jsonEncode(body),
+  Future<void> registerUser(UserRegisterModel user) async {
+    final response = await http.post(
+      Uri.parse('${Utils.baseUrlFakeApi}/users'),
+      body: jsonEncode(user.toJson()),
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
     );
-    if (response.statusCode == 200 || response.statusCode == 201) {
-      final result = jsonDecode(response.body);
 
-      return CrudUserModel.fromJson(result);
-    } else {
-      if (kDebugMode) {
-        print('error_repository ${response.statusCode}');
-      }
-      throw Exception(response.reasonPhrase ?? 'Unknown error');
+    if (response.statusCode != 200) {
+      throw Exception('Failed to register user');
     }
   }
 
-  Future<CrudUserModel> editUser(
-    String id,
-    String name,
-    String email,
-    String phone,
-  ) async {
-    Map body = {
-      'name': name,
-      'email': email,
-      'phone': phone,
-    };
-
-    http.Response response = await http.put(
-      Uri.parse(baseUrl + id),
-      body: jsonEncode(body),
+  Future<void> editUser(String userId, UserRegisterModel user) async {
+    final response = await http.put(
+      Uri.parse('${Utils.baseUrlFakeApi}/users/$userId'),
+      body: jsonEncode(user.toJson()),
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
     );
-    if (response.statusCode == 200 || response.statusCode == 201) {
-      final result = jsonDecode(response.body);
 
-      return CrudUserModel.fromJson(result);
-    } else {
-      if (kDebugMode) {
-        print('error_repository ${response.statusCode}');
-      }
-      throw Exception(response.reasonPhrase ?? 'Unknown error');
+    if (response.statusCode != 200) {
+      throw Exception('Failed to edit user');
     }
   }
 
-  Future deleteUser(
-    String id,
-  ) async {
-    http.Response response = await http.delete(
-      Uri.parse(baseUrl + id),
+  Future<String> loginUser(String username, String password) async {
+    final response = await http.post(
+      Uri.parse('${Utils.baseUrlFakeApi}/auth/login'),
+      body: jsonEncode({
+        "username": username,
+        "password": password,
+      }),
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
     );
 
-    if (response.statusCode == 200 || response.statusCode == 201) {
+    if (response.statusCode == 200) {
+      return jsonDecode(response.body)['token'];
     } else {
-      if (kDebugMode) {
-        print('error_repository ${response.statusCode}');
-      }
-      throw Exception(response.reasonPhrase ?? 'Unknown error');
+      throw Exception('Failed to login: ${response.reasonPhrase}');
     }
   }
 }

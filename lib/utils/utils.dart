@@ -8,6 +8,8 @@ import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 
 class Utils {
+  static String baseUrlFakeApi = 'https://fakestoreapi.com';
+
   static List<Widget> styleBuildActionAppBarSearch(
       void Function() onPressed, bool visible) {
     return [

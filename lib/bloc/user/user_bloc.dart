@@ -1,8 +1,8 @@
-import 'package:flutter/foundation.dart';
+import 'package:bloc_online_store/models/user_model.dart';
+import 'package:bloc_online_store/utils/utils.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart' as http;
 
-import '../../models/user.dart';
 import '../../repository/user_repository.dart';
 
 part 'user_event.dart';
@@ -15,60 +15,66 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     on<GetUserEvent>((event, emit) async {
       emit(UserLoading());
       final response = await http.get(
-        Uri.parse('http://192.168.0.106:8000/user'),
+        Uri.parse('${Utils.baseUrlFakeApi}/users'),
         headers: {
           "Content-Type": "application/json",
         },
       );
-      emit(UserSuccess(user: userFromJson(response.body)));
+      emit(UserSuccess(user: userModelFromJson(response.body)));
     });
 
-    on<PostAddUserEvent>((event, emit) async {
-      emit(AddUserLoadingState());
+    on<SubmitDeleteUserEvent>((event, emit) async {
+      emit(DeleteUserLoading());
+      await http.delete(
+        Uri.parse('${Utils.baseUrlFakeApi}/users/${event.userId}'),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      );
+      emit(DeleteUserSuccess());
+      add(GetUserEvent());
+    });
+  }
+}
+
+class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
+  final UserRepository userRepository;
+
+  RegisterBloc(this.userRepository) : super(RegisterInitial()) {
+    on<SubmitRegisterEvent>((event, emit) async {
+      emit(RegisterLoading());
       try {
-        await userRepository.addUser(event.name, event.email, event.phone);
-
-        emit(AddUserSuccess('Berhasil Menambahkan User'));
-
-        add(GetUserEvent());
+        await userRepository.registerUser(event.user);
+        emit(RegisterSuccess());
       } catch (e) {
-        if (kDebugMode) {
-          print('error_repository: $e');
-        }
-        emit(AddUserErrorState('Terjadi kesalahan saat menambahkan user'));
+        emit(RegisterFailure(e.toString()));
       }
     });
 
-    on<PutEditUserEvent>((event, emit) async {
-      emit(EditUserLoadingState());
+    on<SubmitEditUserEvent>((event, emit) async {
+      emit(EditUserLoading());
       try {
-        await userRepository.editUser(
-            event.id, event.name, event.email, event.phone);
-
-        emit(EditUserSuccess('Berhasil Edit User'));
-
-        add(GetUserEvent());
+        await userRepository.editUser(event.userId, event.user);
+        emit(EditUserSuccess());
       } catch (e) {
-        if (kDebugMode) {
-          print('error_repository: $e');
-        }
-        emit(EditUserErrorState('Terjadi kesalahan saat Edit User'));
+        emit(EditUserFailure(e.toString()));
       }
     });
+  }
+}
 
-    on<DeleteUserEvent>((event, emit) async {
-      emit(DeleteUserLoadingState());
+class LoginBloc extends Bloc<LoginEvent, LoginState> {
+  final UserRepository userRepository;
+
+  LoginBloc(this.userRepository) : super(LoginInitial()) {
+    on<SubmitLoginEvent>((event, emit) async {
+      emit(LoginLoading());
       try {
-        await userRepository.deleteUser(event.id);
-
-        emit(DeleteUserSuccess('Berhasil Menghapus User'));
-
-        add(GetUserEvent());
+        final token =
+            await userRepository.loginUser(event.username, event.password);
+        emit(LoginSuccess(token));
       } catch (e) {
-        if (kDebugMode) {
-          print('error_repository: $e');
-        }
-        emit(DeleteUserErrorState('Terjadi kesalahan saat Menghapus User'));
+        emit(LoginFailure(e.toString()));
       }
     });
   }

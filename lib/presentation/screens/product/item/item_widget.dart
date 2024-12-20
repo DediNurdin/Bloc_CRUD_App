@@ -1,7 +1,5 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
-import '../../../../models/product.dart';
+import '../../../../models/product_model.dart';
 import '../product_detail_page.dart';
 
 class ItemWidget extends StatelessWidget {
@@ -31,7 +29,6 @@ class ItemWidget extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Expanded(
-              flex: 5,
               child: Hero(
                 tag: product.image,
                 child: SizedBox(
@@ -77,78 +74,73 @@ class ItemWidget extends StatelessWidget {
                 ),
               ),
             ),
-            Expanded(
-              flex: 2,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 7),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          product.title,
-                          maxLines: 2,
-                          style: const TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                      ],
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 7),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Text(
+                    product.title,
+                    maxLines: 2,
+                    textAlign: TextAlign.start,
+                    style: const TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.w500,
                     ),
-                    Align(
-                        alignment: Alignment.bottomRight,
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Expanded(
                         child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          mainAxisAlignment: MainAxisAlignment.start,
                           children: [
-                            Row(
-                              children: [
-                                Text(
-                                  'USD ${product.price}',
-                                  style: const TextStyle(
-                                    color: Colors.blue,
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                ),
-                                const SizedBox(
-                                  width: 7,
-                                ),
-                                const Icon(
-                                  CupertinoIcons.tag_solid,
-                                  size: 12,
+                            Flexible(
+                              child: Text(
+                                'USD ${product.price}',
+                                overflow: TextOverflow.fade,
+                                style: const TextStyle(
                                   color: Colors.green,
-                                )
-                              ],
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
                             ),
-                            Row(
-                              children: [
-                                Text(
-                                  ' ${product.rating.count} Sold',
-                                  textAlign: TextAlign.right,
-                                  style: const TextStyle(
-                                    color: Colors.yellow,
-                                    fontSize: 13,
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                ),
-                                const SizedBox(
-                                  width: 7,
-                                ),
-                                const Icon(
-                                  Icons.more_horiz,
-                                  size: 18,
-                                )
-                              ],
+                          ],
+                        ),
+                      ),
+                      Expanded(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            Text(
+                              ' ${product.rating.count} Sold',
+                              textAlign: TextAlign.right,
+                              style: const TextStyle(
+                                color: Colors.yellow,
+                                fontSize: 12,
+                                fontWeight: FontWeight.w300,
+                              ),
+                            ),
+                            const SizedBox(
+                              width: 5,
+                            ),
+                            const Icon(
+                              Icons.more_horiz,
+                              size: 18,
                             )
                           ],
-                        )),
-                  ],
-                ),
+                        ),
+                      )
+                    ],
+                  )
+                ],
               ),
-            )
+            ),
           ],
         ),
       ),
