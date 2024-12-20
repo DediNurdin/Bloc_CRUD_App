@@ -6,6 +6,16 @@ final ThemeData lightTheme = ThemeData(
     brightness: Brightness.light,
     primaryColor: Colors.green,
     listTileTheme: ListTileThemeData(tileColor: Colors.grey.shade200),
+    chipTheme: ChipThemeData(
+        iconTheme: const IconThemeData(color: Colors.green),
+        backgroundColor: Colors.grey.shade200,
+        selectedColor: Colors.green,
+        secondarySelectedColor: Colors.green,
+        labelStyle: const TextStyle(color: Colors.black),
+        secondaryLabelStyle: const TextStyle(color: Colors.white),
+        brightness: Brightness.light),
+    bottomSheetTheme:
+        BottomSheetThemeData(backgroundColor: CupertinoColors.systemBackground),
     bottomNavigationBarTheme: BottomNavigationBarThemeData(
         selectedItemColor: Colors.green,
         unselectedItemColor: Colors.grey.shade600),
@@ -58,6 +68,16 @@ final ThemeData darkTheme = ThemeData(
     brightness: Brightness.dark,
     primaryColor: Colors.grey[900],
     listTileTheme: ListTileThemeData(tileColor: Colors.grey.shade600),
+    chipTheme: ChipThemeData(
+        iconTheme: const IconThemeData(color: Colors.green),
+        backgroundColor: Colors.grey.shade600,
+        selectedColor: Colors.green,
+        secondarySelectedColor: Colors.green,
+        labelStyle: const TextStyle(color: Colors.white),
+        secondaryLabelStyle: const TextStyle(color: Colors.black),
+        brightness: Brightness.dark),
+    bottomSheetTheme: BottomSheetThemeData(
+        backgroundColor: CupertinoColors.darkBackgroundGray),
     bottomNavigationBarTheme: BottomNavigationBarThemeData(
         selectedItemColor: Colors.green,
         unselectedItemColor: Colors.grey.shade600),

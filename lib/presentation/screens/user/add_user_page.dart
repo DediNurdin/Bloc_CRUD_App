@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import '../../../utils/utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -8,6 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../bloc/region/region_bloc.dart';
 import '../../../bloc/user/user_bloc.dart';
 import '../../../models/user.dart';
+import '../../../utils/utils.dart';
 import '../delegate/search_delegate_prov.dart';
 
 class AddUserPage extends StatefulWidget {
@@ -213,6 +213,9 @@ class _AddUserPageState extends State<AddUserPage> {
                         borderRadius:
                             const BorderRadius.all(Radius.circular(10))),
                     child: const Icon(CupertinoIcons.add)),
+              ),
+              const SizedBox(
+                height: 10,
               ),
               Visibility(
                 visible: base64Image == '' ? false : true,
