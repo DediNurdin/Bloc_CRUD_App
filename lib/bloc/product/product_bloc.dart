@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:bloc_online_store/utils/utils.dart';
+import '../../utils/utils.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart' as http;
 
@@ -21,10 +21,56 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
       );
       emit(ProductSuccess(products: productFromJson(response.body)));
     });
+  }
+}
+
+class ProductDetailBloc extends Bloc<ProductDetailEvent, ProductDetailState> {
+  ProductDetailBloc() : super(ProductDetailInitial()) {
+    on<GetProductDetailEvent>((event, emit) async {
+      emit(ProductDetailLoading());
+
+      emit(ProductDetailSuccess());
+    });
 
     on<ShowBottomSheetBuyProductEvent>((event, emit) {
       emit(ShowBottomSheetBuyProduct());
-      add(GetProductEvent());
+      add(GetProductDetailEvent());
+    });
+
+    on<ShowBottomSheetAddCartProductEvent>((event, emit) {
+      emit(ShowBottomSheetAddCartProduct());
+      add(GetProductDetailEvent());
+    });
+
+    on<AddCartEvent>((event, emit) async {
+      emit(AddCartLoading());
+      try {
+        final response = await http.post(
+          Uri.parse('${Utils.baseUrlFakeApi}/carts'),
+          headers: {'Content-Type': 'application/json'},
+          body: jsonEncode({
+            'userId': event.userId,
+            'date': event.date,
+            'products': event.products.map((product) {
+              return {
+                'productId': product.id,
+                'quantity': event.quantity,
+              };
+            }).toList(),
+          }),
+        );
+
+        if (response.statusCode == 200) {
+          emit(AddCartSuccess('Cart successfully added!'));
+          add(GetProductDetailEvent());
+        } else {
+          emit(AddCartError('Failed to add cart: ${response.reasonPhrase}'));
+          add(GetProductDetailEvent());
+        }
+      } catch (e) {
+        emit(AddCartError('An error occurred: $e'));
+        add(GetProductDetailEvent());
+      }
     });
   }
 }

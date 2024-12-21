@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Utils {
   static String baseUrlFakeApi = 'https://fakestoreapi.com';
@@ -83,5 +84,38 @@ class Utils {
         print('Failed to pick image: $e');
       }
     }
+  }
+
+  static const String keyToken = 'token_key';
+
+  static Future<void> saveToken(String userData) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString(keyToken, userData);
+  }
+
+  static Future<String?> getToken() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? userDataToken = prefs.getString(keyToken);
+
+    return userDataToken;
+  }
+
+  static Future<void> removeTokenData() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.remove(keyToken);
+  }
+
+  static const String keyUser = 'user_key';
+
+  static Future<void> saveUser(int userData) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setInt(keyUser, userData);
+  }
+
+  static Future<int?> getUser() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    int? userDataUser = prefs.getInt(keyUser);
+
+    return userDataUser;
   }
 }

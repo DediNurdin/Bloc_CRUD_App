@@ -1,5 +1,5 @@
-import 'package:bloc_online_store/models/user_model.dart';
-import 'package:bloc_online_store/presentation/screens/user/register_page.dart';
+import '../../../models/user_model.dart';
+import '../auth/register_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -24,16 +24,17 @@ class _UserPageState extends State<UserPage> {
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        forceMaterialTransparency: true,
         title: const Text('User'),
       ),
       body: BlocListener<UserBloc, UserState>(
         listener: (context, state) {
-          if (state is DeleteUserLoading) {
-            const Center(child: CircularProgressIndicator());
-          } else if (state is DeleteUserSuccess) {
+          if (state is DeleteUserSuccess) {
             ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text('Delete User Successful!')),
+              const SnackBar(content: Text('Delete User Successful!')),
+            );
+          } else if (state is DeleteUserFailure) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text(state.error)),
             );
           }
         },
@@ -51,8 +52,11 @@ class _UserPageState extends State<UserPage> {
                   itemBuilder: (context, index) {
                     UserModel user = state.user[index];
                     return Container(
-                      margin:
-                          const EdgeInsets.only(bottom: 5, left: 5, right: 5),
+                      margin: EdgeInsets.only(
+                          bottom: 5,
+                          left: 5,
+                          right: 5,
+                          top: index == 0 ? 5 : 0),
                       child: ListTile(
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10),
@@ -109,6 +113,8 @@ class _UserPageState extends State<UserPage> {
               );
             } else if (state is UserInitial) {
               context.read<UserBloc>().add(GetUserEvent());
+              return const Center(child: CircularProgressIndicator());
+            } else if (state is DeleteUserLoading) {
               return const Center(child: CircularProgressIndicator());
             }
             return const Center(

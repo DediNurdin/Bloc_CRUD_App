@@ -1,5 +1,5 @@
-import 'package:bloc_online_store/bloc/user/user_bloc.dart';
-import 'package:bloc_online_store/presentation/screens/user/register_page.dart';
+import '../../../bloc/user/user_bloc.dart';
+import 'register_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

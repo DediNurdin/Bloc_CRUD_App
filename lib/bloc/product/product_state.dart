@@ -2,9 +2,15 @@ part of 'product_bloc.dart';
 
 abstract class ProductState {}
 
+abstract class ProductDetailState {}
+
 class ProductInitial extends ProductState {}
 
+class ProductDetailInitial extends ProductDetailState {}
+
 class ProductLoading extends ProductState {}
+
+class ProductDetailLoading extends ProductDetailState {}
 
 class ProductSuccess extends ProductState {
   final List<Product> products;
@@ -13,6 +19,8 @@ class ProductSuccess extends ProductState {
     required this.products,
   });
 }
+
+class ProductDetailSuccess extends ProductDetailState {}
 
 abstract class ProductCategoriesState {}
 
@@ -27,7 +35,9 @@ class ProductCategoriesSuccess extends ProductCategoriesState {
   });
 }
 
-class ShowBottomSheetBuyProduct extends ProductState {}
+class ShowBottomSheetBuyProduct extends ProductDetailState {}
+
+class ShowBottomSheetAddCartProduct extends ProductDetailState {}
 
 class QuantityState {
   final int quantity;
@@ -45,6 +55,20 @@ class QuantityState {
 
 class QuantityUpdated extends QuantityState {
   QuantityUpdated({required super.quantity, required super.price});
+}
+
+class AddCartLoading extends ProductDetailState {}
+
+class AddCartSuccess extends ProductDetailState {
+  final String message;
+
+  AddCartSuccess(this.message);
+}
+
+class AddCartError extends ProductDetailState {
+  final String error;
+
+  AddCartError(this.error);
 }
 
 class LikeProductState {

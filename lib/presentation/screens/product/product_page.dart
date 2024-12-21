@@ -1,3 +1,4 @@
+import '../cart/cart_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -20,19 +21,19 @@ class _ProductPageState extends State<ProductPage> {
         appBar: AppBar(
           forceMaterialTransparency: true,
           automaticallyImplyLeading: false,
-          title: TextField(
+          title: CupertinoSearchTextField(
             controller: _searchController,
-            decoration: const InputDecoration(
-              hintText: 'Search Your Product',
-              border: InputBorder.none,
-            ),
-            onChanged: (value) {},
+            placeholder: 'Search Product',
+            onSubmitted: (value) {},
           ),
           actions: [
             IconButton(
-              icon: Badge(
-                  label: Text('7'), child: Icon(CupertinoIcons.shopping_cart)),
-              onPressed: () {},
+              icon: Icon(CupertinoIcons.shopping_cart),
+              onPressed: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => CartPage()),
+                );
+              },
             ),
             IconButton(
               icon: Icon(CupertinoIcons.chat_bubble_2),
@@ -50,9 +51,8 @@ class _ProductPageState extends State<ProductPage> {
                   );
                 }
                 if (state is ProductCategoriesSuccess) {
-                  return Container(
+                  return SizedBox(
                     height: 50,
-                    padding: const EdgeInsets.only(top: 10),
                     child: ListView.builder(
                       scrollDirection: Axis.horizontal,
                       itemBuilder: (context, index) {

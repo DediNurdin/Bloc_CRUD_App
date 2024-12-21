@@ -50,6 +50,30 @@ class Product {
   }
 }
 
+class ProductAddCart {
+  final int id;
+  final int quantity;
+
+  ProductAddCart({
+    required this.id,
+    required this.quantity,
+  });
+
+  factory ProductAddCart.fromJson(Map<String, dynamic> json) {
+    return ProductAddCart(
+      id: json['id'],
+      quantity: json['quantity'],
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'quantity': quantity,
+    };
+  }
+}
+
 class Rating {
   final double rate;
   final int count;

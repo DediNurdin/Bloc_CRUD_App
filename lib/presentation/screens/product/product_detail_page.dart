@@ -1,3 +1,6 @@
+import 'package:bloc_online_store/presentation/screens/cart/cart_page.dart';
+import 'package:bloc_online_store/utils/utils.dart';
+
 import '../../../bloc/product/product_bloc.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -20,12 +23,51 @@ class ProductDetailPage extends StatefulWidget {
 }
 
 class _ProductDetailPageState extends State<ProductDetailPage> {
+  DateTime today = DateTime.now();
+  String dateStr = '';
+  int? userId;
+
+  @override
+  void initState() {
+    super.initState();
+    initialize();
+  }
+
+  Future<void> initialize() async {
+    userId = await Utils.getUser();
+
+    setState(() {
+      dateStr = "${today.year}-${today.month}-${today.day}";
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       extendBodyBehindAppBar: true,
-      body: BlocListener<ProductBloc, ProductState>(
+      body: BlocListener<ProductDetailBloc, ProductDetailState>(
         listener: (context, state) {
+          if (state is AddCartSuccess) {
+            showCupertinoDialog(
+                context: context,
+                builder: (context) => CupertinoAlertDialog(
+                      title: Text('Success'),
+                      content: Text(state.message),
+                      actions: [
+                        CupertinoDialogAction(
+                          child: Text('OK'),
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                        )
+                      ],
+                    ));
+          } else if (state is AddCartError) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text(state.error)),
+            );
+          }
+
           if (state is ShowBottomSheetBuyProduct) {
             showModalBottomSheet(
                 context: context,
@@ -213,9 +255,226 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                       ],
                     ));
           }
+
+          if (state is ShowBottomSheetAddCartProduct) {
+            showModalBottomSheet(
+                context: context,
+                builder: (context) => Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            IconButton(
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                                icon: Icon(Icons.close))
+                          ],
+                        ),
+                        Container(
+                          margin: const EdgeInsets.symmetric(horizontal: 16),
+                          child: Column(
+                            children: [
+                              Row(
+                                children: [
+                                  Container(
+                                    margin: const EdgeInsets.only(right: 10),
+                                    height: 100,
+                                    width: 100,
+                                    child: ClipRRect(
+                                      borderRadius:
+                                          BorderRadius.all(Radius.circular(10)),
+                                      child: Image.network(
+                                        widget.product.image,
+                                        fit: BoxFit.fill,
+                                        errorBuilder:
+                                            (context, error, stackTrace) {
+                                          return const SizedBox(
+                                            height: 100,
+                                            child: Icon(
+                                              Icons.image,
+                                              size: 40,
+                                              color: Colors.green,
+                                            ),
+                                          );
+                                        },
+                                        loadingBuilder: (BuildContext context,
+                                            Widget child,
+                                            ImageChunkEvent? loadingProgress) {
+                                          if (loadingProgress == null) {
+                                            return child;
+                                          }
+                                          return SizedBox(
+                                            height: 100,
+                                            child: Center(
+                                              child: CircularProgressIndicator(
+                                                color: Colors.green,
+                                                strokeWidth: 1.5,
+                                                value: loadingProgress
+                                                            .expectedTotalBytes !=
+                                                        null
+                                                    ? loadingProgress
+                                                            .cumulativeBytesLoaded /
+                                                        loadingProgress
+                                                            .expectedTotalBytes!
+                                                    : null,
+                                              ),
+                                            ),
+                                          );
+                                        },
+                                      ),
+                                    ),
+                                  ),
+                                  Expanded(
+                                    child: Text(
+                                      widget.product.title,
+                                      textAlign: TextAlign.start,
+                                      style: const TextStyle(
+                                          fontSize: 17,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                  )
+                                ],
+                              ),
+                              BlocProvider(
+                                create: (context) =>
+                                    QuantityBloc(widget.product.price),
+                                child: BlocBuilder<QuantityBloc, QuantityState>(
+                                  builder: (context, state) {
+                                    final quantity = state is QuantityUpdated
+                                        ? state.quantity
+                                        : 1;
+
+                                    final totalPrice =
+                                        widget.product.price * quantity;
+                                    return Column(
+                                      children: [
+                                        Row(
+                                          children: [
+                                            Text(
+                                              'Quantity',
+                                              style: const TextStyle(
+                                                  color: Colors.green,
+                                                  fontSize: 15,
+                                                  fontWeight: FontWeight.w700),
+                                            ),
+                                            const Spacer(),
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.end,
+                                              children: [
+                                                IconButton(
+                                                  onPressed: () {
+                                                    context
+                                                        .read<QuantityBloc>()
+                                                        .add(
+                                                            DecrementQuantity());
+                                                  },
+                                                  icon: const Icon(
+                                                    CupertinoIcons.minus,
+                                                    size: 15,
+                                                  ),
+                                                ),
+                                                Text(
+                                                  quantity.toString(),
+                                                  style: const TextStyle(
+                                                      fontSize: 15,
+                                                      fontWeight:
+                                                          FontWeight.w700),
+                                                ),
+                                                IconButton(
+                                                  onPressed: () {
+                                                    context
+                                                        .read<QuantityBloc>()
+                                                        .add(
+                                                            IncrementQuantity());
+                                                  },
+                                                  icon: const Icon(
+                                                    CupertinoIcons.add,
+                                                    size: 15,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ],
+                                        ),
+                                        Row(
+                                          children: [
+                                            Text(
+                                              'Total',
+                                              style: const TextStyle(
+                                                  color: Colors.green,
+                                                  fontSize: 15,
+                                                  fontWeight: FontWeight.w700),
+                                            ),
+                                            const Spacer(),
+                                            Text(
+                                              'USD ${totalPrice.toString()}',
+                                              style: const TextStyle(
+                                                  color: Colors.green,
+                                                  fontSize: 15,
+                                                  fontWeight: FontWeight.w700),
+                                            )
+                                          ],
+                                        ),
+                                        const SizedBox(
+                                          height: 20,
+                                        ),
+                                        BlocProvider(
+                                          create: (context) => ProductBloc(),
+                                          child: BlocBuilder<ProductBloc,
+                                              ProductState>(
+                                            builder: (context, state) {
+                                              return SizedBox(
+                                                width: MediaQuery.of(context)
+                                                    .size
+                                                    .width,
+                                                child: ElevatedButton(
+                                                    onPressed: () {
+                                                      context
+                                                          .read<
+                                                              ProductDetailBloc>()
+                                                          .add(AddCartEvent(
+                                                              userId: userId!,
+                                                              date: dateStr,
+                                                              quantity:
+                                                                  quantity,
+                                                              products: [
+                                                                ProductAddCart(
+                                                                    id: widget
+                                                                        .product
+                                                                        .id,
+                                                                    quantity:
+                                                                        quantity)
+                                                              ]));
+                                                    },
+                                                    child: const Text(
+                                                        'Add To Cart')),
+                                              );
+                                            },
+                                          ),
+                                        ),
+                                        const SizedBox(
+                                          height: 20,
+                                        )
+                                      ],
+                                    );
+                                  },
+                                ),
+                              ),
+                            ],
+                          ),
+                        )
+                      ],
+                    ));
+          }
         },
-        child: BlocBuilder<ProductBloc, ProductState>(
-          builder: (context, state) {
+        child: BlocBuilder<ProductDetailBloc, ProductDetailState>(
+            builder: (context, state) {
+          if (state is ProductDetailLoading) {
+            return const Center(child: CircularProgressIndicator());
+          } else if (state is ProductDetailSuccess) {
             return Column(
               children: [
                 Expanded(
@@ -240,20 +499,21 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                           ),
                         ),
                         actions: [
-                          Badge(
-                            label: Text('7'),
-                            child: IconButton(
-                              style: ButtonStyle(
-                                  backgroundColor: WidgetStatePropertyAll(
-                                      Colors.grey.shade400),
-                                  shape:
-                                      WidgetStatePropertyAll(CircleBorder())),
-                              icon: Icon(
-                                CupertinoIcons.shopping_cart,
-                                color: Colors.black,
-                              ),
-                              onPressed: () {},
+                          IconButton(
+                            style: ButtonStyle(
+                                backgroundColor: WidgetStatePropertyAll(
+                                    Colors.grey.shade400),
+                                shape: WidgetStatePropertyAll(CircleBorder())),
+                            icon: Icon(
+                              CupertinoIcons.shopping_cart,
+                              color: Colors.black,
                             ),
+                            onPressed: () {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                    builder: (context) => CartPage()),
+                              );
+                            },
                           ),
                           IconButton(
                             style: ButtonStyle(
@@ -280,51 +540,47 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                             FlexibleSpaceBar(
                               background: SizedBox(
                                 width: MediaQuery.of(context).size.width,
-                                child: Hero(
-                                  tag: widget.product.image,
-                                  child: SizedBox(
-                                    height: MediaQuery.of(context).size.height *
-                                        0.50,
-                                    width: double.infinity,
-                                    child: Image.network(
-                                      widget.product.image,
-                                      fit: BoxFit.fill,
-                                      errorBuilder:
-                                          (context, error, stackTrace) {
-                                        return const SizedBox(
-                                          height: 150,
-                                          child: Icon(
-                                            Icons.image,
-                                            size: 40,
+                                child: SizedBox(
+                                  height:
+                                      MediaQuery.of(context).size.height * 0.50,
+                                  width: double.infinity,
+                                  child: Image.network(
+                                    widget.product.image,
+                                    fit: BoxFit.fill,
+                                    errorBuilder: (context, error, stackTrace) {
+                                      return const SizedBox(
+                                        height: 150,
+                                        child: Icon(
+                                          Icons.image,
+                                          size: 40,
+                                          color: Colors.green,
+                                        ),
+                                      );
+                                    },
+                                    loadingBuilder: (BuildContext context,
+                                        Widget child,
+                                        ImageChunkEvent? loadingProgress) {
+                                      if (loadingProgress == null) {
+                                        return child;
+                                      }
+                                      return SizedBox(
+                                        height: 150,
+                                        child: Center(
+                                          child: CircularProgressIndicator(
                                             color: Colors.green,
+                                            strokeWidth: 1.5,
+                                            value: loadingProgress
+                                                        .expectedTotalBytes !=
+                                                    null
+                                                ? loadingProgress
+                                                        .cumulativeBytesLoaded /
+                                                    loadingProgress
+                                                        .expectedTotalBytes!
+                                                : null,
                                           ),
-                                        );
-                                      },
-                                      loadingBuilder: (BuildContext context,
-                                          Widget child,
-                                          ImageChunkEvent? loadingProgress) {
-                                        if (loadingProgress == null) {
-                                          return child;
-                                        }
-                                        return SizedBox(
-                                          height: 150,
-                                          child: Center(
-                                            child: CircularProgressIndicator(
-                                              color: Colors.green,
-                                              strokeWidth: 1.5,
-                                              value: loadingProgress
-                                                          .expectedTotalBytes !=
-                                                      null
-                                                  ? loadingProgress
-                                                          .cumulativeBytesLoaded /
-                                                      loadingProgress
-                                                          .expectedTotalBytes!
-                                                  : null,
-                                            ),
-                                          ),
-                                        );
-                                      },
-                                    ),
+                                        ),
+                                      );
+                                    },
                                   ),
                                 ),
                               ),
@@ -456,24 +712,31 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                               ))),
                       Expanded(
                           flex: 2,
-                          child: Container(
-                              height: double.infinity,
-                              color: Colors.blue.shade800,
-                              child: Column(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  Icon(CupertinoIcons.shopping_cart),
-                                  Text('Add To Cart')
-                                ],
-                              ))),
-                      Expanded(
-                          flex: 5,
                           child: InkWell(
                             onTap: () {
                               context
-                                  .read<ProductBloc>()
+                                  .read<ProductDetailBloc>()
+                                  .add(ShowBottomSheetAddCartProductEvent());
+                            },
+                            child: Container(
+                                height: double.infinity,
+                                color: Colors.blue.shade800,
+                                child: Column(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Icon(CupertinoIcons.shopping_cart),
+                                    Text('Add To Cart')
+                                  ],
+                                )),
+                          )),
+                      Expanded(
+                          flex: 4,
+                          child: InkWell(
+                            onTap: () {
+                              context
+                                  .read<ProductDetailBloc>()
                                   .add(ShowBottomSheetBuyProductEvent());
                             },
                             child: Container(
@@ -496,8 +759,16 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                 )
               ],
             );
-          },
-        ),
+          } else if (state is ProductDetailInitial) {
+            context.read<ProductDetailBloc>().add(GetProductDetailEvent());
+            return const Center(child: CircularProgressIndicator());
+          } else if (state is AddCartLoading) {
+            return const Center(child: CircularProgressIndicator());
+          }
+          return const Center(
+            child: Text('No Data'),
+          );
+        }),
       ),
     );
   }

@@ -7,38 +7,17 @@ import '../product/product_page.dart';
 import '../settings/setting_page.dart';
 import '../user/user_page.dart';
 
-List<NavigationDestination> bottomNavItems = <NavigationDestination>[
-  NavigationDestination(
-    icon: Icon(
-      CupertinoIcons.house,
-      color: Colors.grey.shade600,
-    ),
-    selectedIcon: const Icon(
-      CupertinoIcons.house_fill,
-      color: Colors.white,
-    ),
+List<BottomNavigationBarItem> bottomNavItems = <BottomNavigationBarItem>[
+  BottomNavigationBarItem(
+    icon: Icon(CupertinoIcons.house_fill),
     label: 'Home',
   ),
-  NavigationDestination(
-    icon: Icon(
-      CupertinoIcons.person,
-      color: Colors.grey.shade600,
-    ),
-    selectedIcon: const Icon(
-      CupertinoIcons.person_fill,
-      color: Colors.white,
-    ),
+  BottomNavigationBarItem(
+    icon: Icon(CupertinoIcons.person_fill),
     label: 'User',
   ),
-  NavigationDestination(
-    icon: Icon(
-      CupertinoIcons.settings,
-      color: Colors.grey.shade600,
-    ),
-    selectedIcon: const Icon(
-      CupertinoIcons.settings_solid,
-      color: Colors.white,
-    ),
+  BottomNavigationBarItem(
+    icon: Icon(CupertinoIcons.settings),
     label: 'Setting',
   ),
 ];
@@ -46,7 +25,9 @@ List<NavigationDestination> bottomNavItems = <NavigationDestination>[
 const List<Widget> bottomNavScreen = [ProductPage(), UserPage(), SettingPage()];
 
 class BottomNavigationPage extends StatelessWidget {
-  const BottomNavigationPage({super.key});
+  const BottomNavigationPage({
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -55,10 +36,10 @@ class BottomNavigationPage extends StatelessWidget {
       builder: (context, state) {
         return Scaffold(
           body: Center(child: bottomNavScreen.elementAt(state.tabIndex)),
-          bottomNavigationBar: NavigationBar(
-            destinations: bottomNavItems,
-            selectedIndex: state.tabIndex,
-            onDestinationSelected: (int index) {
+          bottomNavigationBar: BottomNavigationBar(
+            items: bottomNavItems,
+            currentIndex: state.tabIndex,
+            onTap: (index) {
               BlocProvider.of<BottomNavBloc>(context)
                   .add(TabChange(tabIndex: index));
             },

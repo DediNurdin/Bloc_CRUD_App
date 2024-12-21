@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import '../../../../models/product_model.dart';
 import '../product_detail_page.dart';
 
@@ -29,47 +30,44 @@ class ItemWidget extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Expanded(
-              child: Hero(
-                tag: product.image,
-                child: SizedBox(
-                  width: double.infinity,
-                  child: ClipRRect(
-                    borderRadius: const BorderRadius.only(
-                        topLeft: Radius.circular(4),
-                        topRight: Radius.circular(4)),
-                    child: Image.network(
-                      product.image,
-                      fit: BoxFit.fill,
-                      errorBuilder: (context, error, stackTrace) {
-                        return const SizedBox(
-                          height: 50,
-                          child: Icon(
-                            Icons.image,
-                            size: 40,
+              child: SizedBox(
+                width: double.infinity,
+                child: ClipRRect(
+                  borderRadius: const BorderRadius.only(
+                      topLeft: Radius.circular(4),
+                      topRight: Radius.circular(4)),
+                  child: Image.network(
+                    product.image,
+                    fit: BoxFit.fill,
+                    errorBuilder: (context, error, stackTrace) {
+                      return const SizedBox(
+                        height: 50,
+                        child: Icon(
+                          Icons.image,
+                          size: 40,
+                          color: Colors.green,
+                        ),
+                      );
+                    },
+                    loadingBuilder: (BuildContext context, Widget child,
+                        ImageChunkEvent? loadingProgress) {
+                      if (loadingProgress == null) {
+                        return child;
+                      }
+                      return SizedBox(
+                        height: 50,
+                        child: Center(
+                          child: CircularProgressIndicator(
                             color: Colors.green,
+                            strokeWidth: 1.5,
+                            value: loadingProgress.expectedTotalBytes != null
+                                ? loadingProgress.cumulativeBytesLoaded /
+                                    loadingProgress.expectedTotalBytes!
+                                : null,
                           ),
-                        );
-                      },
-                      loadingBuilder: (BuildContext context, Widget child,
-                          ImageChunkEvent? loadingProgress) {
-                        if (loadingProgress == null) {
-                          return child;
-                        }
-                        return SizedBox(
-                          height: 50,
-                          child: Center(
-                            child: CircularProgressIndicator(
-                              color: Colors.green,
-                              strokeWidth: 1.5,
-                              value: loadingProgress.expectedTotalBytes != null
-                                  ? loadingProgress.cumulativeBytesLoaded /
-                                      loadingProgress.expectedTotalBytes!
-                                  : null,
-                            ),
-                          ),
-                        );
-                      },
-                    ),
+                        ),
+                      );
+                    },
                   ),
                 ),
               ),

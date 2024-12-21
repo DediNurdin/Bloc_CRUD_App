@@ -1,7 +1,7 @@
 import 'dart:convert';
 
-import 'package:bloc_online_store/models/user_model.dart';
-import 'package:bloc_online_store/utils/utils.dart';
+import '../models/user_model.dart';
+import '../utils/utils.dart';
 import 'package:http/http.dart' as http;
 
 class UserRepository {

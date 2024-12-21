@@ -1,3 +1,7 @@
+import 'package:bloc_online_store/bloc/auth/auth_bloc.dart';
+import 'package:bloc_online_store/bloc/splash/splash_bloc.dart';
+
+import 'bloc/cart/cart_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -23,6 +27,9 @@ class MyApp extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(
+          create: (context) => SplashBloc(),
+        ),
+        BlocProvider(
           create: (context) => LoginBloc(UserRepository()),
         ),
         BlocProvider(
@@ -39,7 +46,16 @@ class MyApp extends StatelessWidget {
               ProductCategoriesBloc()..add(GetProductCategoriesEvent()),
         ),
         BlocProvider(
+          create: (context) => ProductDetailBloc(),
+        ),
+        BlocProvider(
+          create: (context) => CartBloc()..add(GetCartEvent()),
+        ),
+        BlocProvider(
           create: (context) => RegionBloc(RegionRepository()),
+        ),
+        BlocProvider(
+          create: (context) => AuthBloc()..add(GetAuthEvent()),
         ),
         BlocProvider(
             create: (BuildContext context) =>
@@ -53,7 +69,7 @@ class MyApp extends StatelessWidget {
           themeMode: state.themeMode,
           title: 'Bloc STM Learn',
           debugShowCheckedModeBanner: false,
-          initialRoute: '/bottomnav',
+          initialRoute: '/',
           onGenerateRoute: RouteGenerator().generateRoute,
         ),
       ),
