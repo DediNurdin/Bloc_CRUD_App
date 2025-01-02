@@ -1,12 +1,11 @@
 import 'package:flutter/foundation.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:http/http.dart' as http;
 import 'package:jwt_decoder/jwt_decoder.dart';
 
 import '../../models/user_model.dart';
-import '../../utils/utils.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:http/http.dart' as http;
-
 import '../../repository/user_repository.dart';
+import '../../utils/utils.dart';
 
 part 'user_event.dart';
 part 'user_state.dart';

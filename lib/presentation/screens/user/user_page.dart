@@ -1,9 +1,9 @@
-import '../../../models/user_model.dart';
-import '../auth/register_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../bloc/user/user_bloc.dart';
+import '../../../models/user_model.dart';
+import '../auth/register_page.dart';
 
 class UserPage extends StatefulWidget {
   const UserPage({super.key});
@@ -23,6 +23,7 @@ class _UserPageState extends State<UserPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        scrolledUnderElevation: 0,
         automaticallyImplyLeading: false,
         title: const Text('User'),
       ),

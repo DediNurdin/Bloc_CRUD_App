@@ -1,14 +1,15 @@
-import 'package:bloc_online_store/presentation/screens/cart/cart_page.dart';
-import 'package:bloc_online_store/utils/utils.dart';
-
-import '../../../bloc/product/product_bloc.dart';
+import 'package:add_to_cart_animation/add_to_cart_animation.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'item/start_display.dart';
-import 'package:flutter/material.dart';
-
+import '../../../bloc/product/product_bloc.dart';
 import '../../../models/product_model.dart';
+import '../cart/cart_page.dart';
+import '../delegate/search_delegate_product.dart';
+import 'item/buy_add_cart_dialog_widget.dart';
+import 'item/rating_product_widget.dart';
+import 'item/review_widget.dart';
 
 class ProductDetailPage extends StatefulWidget {
   const ProductDetailPage({
@@ -23,45 +24,39 @@ class ProductDetailPage extends StatefulWidget {
 }
 
 class _ProductDetailPageState extends State<ProductDetailPage> {
-  DateTime today = DateTime.now();
-  String dateStr = '';
-  int? userId;
+  GlobalKey<CartIconKey> cartKey = GlobalKey<CartIconKey>();
+  late Function(GlobalKey) runAddToCartAnimation;
 
-  @override
-  void initState() {
-    super.initState();
-    initialize();
-  }
-
-  Future<void> initialize() async {
-    userId = await Utils.getUser();
-
-    setState(() {
-      dateStr = "${today.year}-${today.month}-${today.day}";
-    });
+  void addCartAnim(GlobalKey widgetKey, int quantity) async {
+    await runAddToCartAnimation(widgetKey);
+    await cartKey.currentState!.runCartAnimation((quantity).toString());
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      extendBodyBehindAppBar: true,
-      body: BlocListener<ProductDetailBloc, ProductDetailState>(
-        listener: (context, state) {
+    return AddToCartAnimation(
+      cartKey: cartKey,
+      height: 30,
+      width: 30,
+      opacity: 0.85,
+      dragAnimation: const DragToCartAnimationOptions(
+        rotation: false,
+      ),
+      jumpAnimation: const JumpAnimationOptions(),
+      createAddToCartAnimation: (runAddToCartAnimation) {
+        this.runAddToCartAnimation = runAddToCartAnimation;
+      },
+      child: Scaffold(
+        extendBodyBehindAppBar: false,
+        body: BlocConsumer<ProductDetailBloc, ProductDetailState>(
+            listener: (context, state) {
           if (state is AddCartSuccess) {
-            showCupertinoDialog(
-                context: context,
-                builder: (context) => CupertinoAlertDialog(
-                      title: Text('Success'),
-                      content: Text(state.message),
-                      actions: [
-                        CupertinoDialogAction(
-                          child: Text('OK'),
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                        )
-                      ],
-                    ));
+            addCartAnim(state.key, state.quantity);
+            if (!context.mounted) return;
+            Navigator.of(context).pop();
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text(state.message)),
+            );
           } else if (state is AddCartError) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(content: Text(state.error)),
@@ -71,705 +66,319 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
           if (state is ShowBottomSheetBuyProduct) {
             showModalBottomSheet(
                 context: context,
-                builder: (context) => Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            IconButton(
-                                onPressed: () {
-                                  Navigator.pop(context);
-                                },
-                                icon: Icon(Icons.close))
-                          ],
-                        ),
-                        Container(
-                          margin: const EdgeInsets.symmetric(horizontal: 16),
-                          child: Column(
-                            children: [
-                              Row(
-                                children: [
-                                  Container(
-                                    margin: const EdgeInsets.only(right: 10),
-                                    height: 100,
-                                    width: 100,
-                                    child: ClipRRect(
-                                      borderRadius:
-                                          BorderRadius.all(Radius.circular(10)),
-                                      child: Image.network(
-                                        widget.product.image,
-                                        fit: BoxFit.fill,
-                                        errorBuilder:
-                                            (context, error, stackTrace) {
-                                          return const SizedBox(
-                                            height: 100,
-                                            child: Icon(
-                                              Icons.image,
-                                              size: 40,
-                                              color: Colors.green,
-                                            ),
-                                          );
-                                        },
-                                        loadingBuilder: (BuildContext context,
-                                            Widget child,
-                                            ImageChunkEvent? loadingProgress) {
-                                          if (loadingProgress == null) {
-                                            return child;
-                                          }
-                                          return SizedBox(
-                                            height: 100,
-                                            child: Center(
-                                              child: CircularProgressIndicator(
-                                                color: Colors.green,
-                                                strokeWidth: 1.5,
-                                                value: loadingProgress
-                                                            .expectedTotalBytes !=
-                                                        null
-                                                    ? loadingProgress
-                                                            .cumulativeBytesLoaded /
-                                                        loadingProgress
-                                                            .expectedTotalBytes!
-                                                    : null,
-                                              ),
-                                            ),
-                                          );
-                                        },
-                                      ),
-                                    ),
-                                  ),
-                                  Expanded(
-                                    child: Text(
-                                      widget.product.title,
-                                      textAlign: TextAlign.start,
-                                      style: const TextStyle(
-                                          fontSize: 17,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                  )
-                                ],
-                              ),
-                              BlocProvider(
-                                create: (context) =>
-                                    QuantityBloc(widget.product.price),
-                                child: BlocBuilder<QuantityBloc, QuantityState>(
-                                  builder: (context, state) {
-                                    final quantity = state is QuantityUpdated
-                                        ? state.quantity
-                                        : 1;
-
-                                    final totalPrice =
-                                        widget.product.price * quantity;
-                                    return Column(
-                                      children: [
-                                        Row(
-                                          children: [
-                                            Text(
-                                              'Quantity',
-                                              style: const TextStyle(
-                                                  color: Colors.green,
-                                                  fontSize: 15,
-                                                  fontWeight: FontWeight.w700),
-                                            ),
-                                            const Spacer(),
-                                            Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.end,
-                                              children: [
-                                                IconButton(
-                                                  onPressed: () {
-                                                    context
-                                                        .read<QuantityBloc>()
-                                                        .add(
-                                                            DecrementQuantity());
-                                                  },
-                                                  icon: const Icon(
-                                                    CupertinoIcons.minus,
-                                                    size: 15,
-                                                  ),
-                                                ),
-                                                Text(
-                                                  quantity.toString(),
-                                                  style: const TextStyle(
-                                                      fontSize: 15,
-                                                      fontWeight:
-                                                          FontWeight.w700),
-                                                ),
-                                                IconButton(
-                                                  onPressed: () {
-                                                    context
-                                                        .read<QuantityBloc>()
-                                                        .add(
-                                                            IncrementQuantity());
-                                                  },
-                                                  icon: const Icon(
-                                                    CupertinoIcons.add,
-                                                    size: 15,
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ],
-                                        ),
-                                        Row(
-                                          children: [
-                                            Text(
-                                              'Total',
-                                              style: const TextStyle(
-                                                  color: Colors.green,
-                                                  fontSize: 15,
-                                                  fontWeight: FontWeight.w700),
-                                            ),
-                                            const Spacer(),
-                                            Text(
-                                              'USD ${totalPrice.toString()}',
-                                              style: const TextStyle(
-                                                  color: Colors.green,
-                                                  fontSize: 15,
-                                                  fontWeight: FontWeight.w700),
-                                            )
-                                          ],
-                                        ),
-                                      ],
-                                    );
-                                  },
-                                ),
-                              ),
-                              const SizedBox(
-                                height: 20,
-                              ),
-                              SizedBox(
-                                width: MediaQuery.of(context).size.width,
-                                child: ElevatedButton(
-                                    onPressed: () {
-                                      Navigator.pop(context);
-                                    },
-                                    child: const Text('Buy')),
-                              ),
-                              const SizedBox(
-                                height: 20,
-                              )
-                            ],
-                          ),
-                        )
-                      ],
+                builder: (context) => BuyAddCartDialogWidget(
+                      product: widget.product,
+                      title: 'Buy',
                     ));
           }
 
           if (state is ShowBottomSheetAddCartProduct) {
             showModalBottomSheet(
                 context: context,
-                builder: (context) => Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            IconButton(
-                                onPressed: () {
-                                  Navigator.pop(context);
-                                },
-                                icon: Icon(Icons.close))
-                          ],
-                        ),
-                        Container(
-                          margin: const EdgeInsets.symmetric(horizontal: 16),
-                          child: Column(
-                            children: [
-                              Row(
-                                children: [
-                                  Container(
-                                    margin: const EdgeInsets.only(right: 10),
-                                    height: 100,
-                                    width: 100,
-                                    child: ClipRRect(
-                                      borderRadius:
-                                          BorderRadius.all(Radius.circular(10)),
-                                      child: Image.network(
-                                        widget.product.image,
-                                        fit: BoxFit.fill,
-                                        errorBuilder:
-                                            (context, error, stackTrace) {
-                                          return const SizedBox(
-                                            height: 100,
-                                            child: Icon(
-                                              Icons.image,
-                                              size: 40,
-                                              color: Colors.green,
-                                            ),
-                                          );
-                                        },
-                                        loadingBuilder: (BuildContext context,
-                                            Widget child,
-                                            ImageChunkEvent? loadingProgress) {
-                                          if (loadingProgress == null) {
-                                            return child;
-                                          }
-                                          return SizedBox(
-                                            height: 100,
-                                            child: Center(
-                                              child: CircularProgressIndicator(
-                                                color: Colors.green,
-                                                strokeWidth: 1.5,
-                                                value: loadingProgress
-                                                            .expectedTotalBytes !=
-                                                        null
-                                                    ? loadingProgress
-                                                            .cumulativeBytesLoaded /
-                                                        loadingProgress
-                                                            .expectedTotalBytes!
-                                                    : null,
-                                              ),
-                                            ),
-                                          );
-                                        },
-                                      ),
-                                    ),
-                                  ),
-                                  Expanded(
-                                    child: Text(
-                                      widget.product.title,
-                                      textAlign: TextAlign.start,
-                                      style: const TextStyle(
-                                          fontSize: 17,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                  )
-                                ],
-                              ),
-                              BlocProvider(
-                                create: (context) =>
-                                    QuantityBloc(widget.product.price),
-                                child: BlocBuilder<QuantityBloc, QuantityState>(
-                                  builder: (context, state) {
-                                    final quantity = state is QuantityUpdated
-                                        ? state.quantity
-                                        : 1;
-
-                                    final totalPrice =
-                                        widget.product.price * quantity;
-                                    return Column(
-                                      children: [
-                                        Row(
-                                          children: [
-                                            Text(
-                                              'Quantity',
-                                              style: const TextStyle(
-                                                  color: Colors.green,
-                                                  fontSize: 15,
-                                                  fontWeight: FontWeight.w700),
-                                            ),
-                                            const Spacer(),
-                                            Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.end,
-                                              children: [
-                                                IconButton(
-                                                  onPressed: () {
-                                                    context
-                                                        .read<QuantityBloc>()
-                                                        .add(
-                                                            DecrementQuantity());
-                                                  },
-                                                  icon: const Icon(
-                                                    CupertinoIcons.minus,
-                                                    size: 15,
-                                                  ),
-                                                ),
-                                                Text(
-                                                  quantity.toString(),
-                                                  style: const TextStyle(
-                                                      fontSize: 15,
-                                                      fontWeight:
-                                                          FontWeight.w700),
-                                                ),
-                                                IconButton(
-                                                  onPressed: () {
-                                                    context
-                                                        .read<QuantityBloc>()
-                                                        .add(
-                                                            IncrementQuantity());
-                                                  },
-                                                  icon: const Icon(
-                                                    CupertinoIcons.add,
-                                                    size: 15,
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ],
-                                        ),
-                                        Row(
-                                          children: [
-                                            Text(
-                                              'Total',
-                                              style: const TextStyle(
-                                                  color: Colors.green,
-                                                  fontSize: 15,
-                                                  fontWeight: FontWeight.w700),
-                                            ),
-                                            const Spacer(),
-                                            Text(
-                                              'USD ${totalPrice.toString()}',
-                                              style: const TextStyle(
-                                                  color: Colors.green,
-                                                  fontSize: 15,
-                                                  fontWeight: FontWeight.w700),
-                                            )
-                                          ],
-                                        ),
-                                        const SizedBox(
-                                          height: 20,
-                                        ),
-                                        BlocProvider(
-                                          create: (context) => ProductBloc(),
-                                          child: BlocBuilder<ProductBloc,
-                                              ProductState>(
-                                            builder: (context, state) {
-                                              return SizedBox(
-                                                width: MediaQuery.of(context)
-                                                    .size
-                                                    .width,
-                                                child: ElevatedButton(
-                                                    onPressed: () {
-                                                      context
-                                                          .read<
-                                                              ProductDetailBloc>()
-                                                          .add(AddCartEvent(
-                                                              userId: userId!,
-                                                              date: dateStr,
-                                                              quantity:
-                                                                  quantity,
-                                                              products: [
-                                                                ProductAddCart(
-                                                                    id: widget
-                                                                        .product
-                                                                        .id,
-                                                                    quantity:
-                                                                        quantity)
-                                                              ]));
-                                                    },
-                                                    child: const Text(
-                                                        'Add To Cart')),
-                                              );
-                                            },
-                                          ),
-                                        ),
-                                        const SizedBox(
-                                          height: 20,
-                                        )
-                                      ],
-                                    );
-                                  },
-                                ),
-                              ),
-                            ],
-                          ),
-                        )
-                      ],
+                builder: (context) => BuyAddCartDialogWidget(
+                      product: widget.product,
+                      title: 'Add To Cart',
                     ));
           }
-        },
-        child: BlocBuilder<ProductDetailBloc, ProductDetailState>(
-            builder: (context, state) {
+        }, builder: (context, state) {
           if (state is ProductDetailLoading) {
             return const Center(child: CircularProgressIndicator());
           } else if (state is ProductDetailSuccess) {
-            return Column(
-              children: [
-                Expanded(
-                  child: CustomScrollView(
-                    shrinkWrap: true,
-                    slivers: [
-                      SliverAppBar(
-                        leading: Container(
-                          margin: const EdgeInsets.only(left: 10),
-                          child: IconButton(
-                            style: ButtonStyle(
-                                backgroundColor: WidgetStatePropertyAll(
-                                    Colors.grey.shade400),
-                                shape: WidgetStatePropertyAll(CircleBorder())),
-                            onPressed: () {
-                              Navigator.pop(context);
-                            },
-                            icon: Icon(
-                              Icons.arrow_back,
-                              color: Colors.black,
-                            ),
-                          ),
-                        ),
-                        actions: [
-                          IconButton(
-                            style: ButtonStyle(
-                                backgroundColor: WidgetStatePropertyAll(
-                                    Colors.grey.shade400),
-                                shape: WidgetStatePropertyAll(CircleBorder())),
-                            icon: Icon(
-                              CupertinoIcons.shopping_cart,
-                              color: Colors.black,
-                            ),
-                            onPressed: () {
-                              Navigator.of(context).push(
-                                MaterialPageRoute(
-                                    builder: (context) => CartPage()),
-                              );
-                            },
-                          ),
-                          IconButton(
-                            style: ButtonStyle(
-                                backgroundColor: WidgetStatePropertyAll(
-                                    Colors.grey.shade400),
-                                shape: WidgetStatePropertyAll(CircleBorder())),
-                            icon: Icon(
-                              CupertinoIcons.chat_bubble_2,
-                              color: Colors.black,
-                            ),
-                            onPressed: () {},
-                          ),
-                          const SizedBox(
-                            width: 10,
-                          )
-                        ],
-                        expandedHeight:
-                            MediaQuery.of(context).size.height * 0.45,
-                        pinned: true,
-                        collapsedHeight: kToolbarHeight,
-                        flexibleSpace: Stack(
-                          clipBehavior: Clip.none,
-                          children: [
-                            FlexibleSpaceBar(
-                              background: SizedBox(
-                                width: MediaQuery.of(context).size.width,
-                                child: SizedBox(
-                                  height:
-                                      MediaQuery.of(context).size.height * 0.50,
-                                  width: double.infinity,
-                                  child: Image.network(
-                                    widget.product.image,
-                                    fit: BoxFit.fill,
-                                    errorBuilder: (context, error, stackTrace) {
-                                      return const SizedBox(
-                                        height: 150,
-                                        child: Icon(
-                                          Icons.image,
-                                          size: 40,
-                                          color: Colors.green,
-                                        ),
-                                      );
-                                    },
-                                    loadingBuilder: (BuildContext context,
-                                        Widget child,
-                                        ImageChunkEvent? loadingProgress) {
-                                      if (loadingProgress == null) {
-                                        return child;
-                                      }
-                                      return SizedBox(
-                                        height: 150,
-                                        child: Center(
-                                          child: CircularProgressIndicator(
-                                            color: Colors.green,
-                                            strokeWidth: 1.5,
-                                            value: loadingProgress
-                                                        .expectedTotalBytes !=
-                                                    null
-                                                ? loadingProgress
-                                                        .cumulativeBytesLoaded /
-                                                    loadingProgress
-                                                        .expectedTotalBytes!
-                                                : null,
-                                          ),
-                                        ),
-                                      );
-                                    },
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      SliverList.list(children: [
-                        Container(
-                            padding: const EdgeInsets.only(
-                                left: 10, top: 20, right: 10),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Container(
-                                      margin: const EdgeInsets.only(bottom: 10),
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Text(
-                                            'USD ${widget.product.price}',
-                                            style: const TextStyle(
-                                                color: Colors.green,
-                                                fontSize: 25,
-                                                fontWeight: FontWeight.w700),
-                                          ),
-                                          StarDisplay(
-                                            value: widget.product.rating.rate
-                                                .toInt(),
-                                          )
-                                        ],
-                                      ),
-                                    ),
-                                    BlocProvider(
-                                      create: (context) =>
-                                          LikeProductBloc(false),
-                                      child: BlocBuilder<LikeProductBloc,
-                                          LikeProductState>(
-                                        builder: (context, state) {
-                                          final isLiked =
-                                              state is LikeProductUpdated
-                                                  ? state.isLiked
-                                                  : false;
-                                          return Row(
-                                            children: [
-                                              Text(
-                                                '${widget.product.rating.count} Sold',
-                                                textAlign: TextAlign.end,
-                                                style: TextStyle(
-                                                    color: Colors.blue.shade800,
-                                                    fontSize: 17,
-                                                    fontWeight:
-                                                        FontWeight.w500),
-                                              ),
-                                              const Spacer(),
-                                              IconButton(
-                                                  onPressed: () {
-                                                    context
-                                                        .read<LikeProductBloc>()
-                                                        .add(
-                                                            LikedProductEvent());
-                                                  },
-                                                  icon: isLiked
-                                                      ? Icon(
-                                                          CupertinoIcons
-                                                              .heart_fill,
-                                                          color: Colors.red,
-                                                        )
-                                                      : Icon(
-                                                          CupertinoIcons.heart))
-                                            ],
-                                          );
-                                        },
-                                      ),
-                                    ),
-                                    const SizedBox(
-                                      height: 15,
-                                    ),
-                                    Text(
-                                      widget.product.title,
-                                      maxLines: 2,
-                                      style: const TextStyle(
-                                        fontSize: 30,
-                                        fontWeight: FontWeight.w700,
-                                      ),
-                                    ),
-                                    Text(
-                                      widget.product.description,
-                                      style: const TextStyle(
-                                        fontSize: 15,
-                                        fontWeight: FontWeight.w500,
-                                      ),
-                                      textAlign: TextAlign.justify,
-                                      overflow: TextOverflow.ellipsis,
-                                      maxLines: 5,
-                                    ),
-                                  ],
-                                )
-                              ],
-                            )),
-                      ]),
-                    ],
-                  ),
-                ),
-                SizedBox(
-                  height: 70,
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      Expanded(
-                          flex: 2,
-                          child: Container(
-                              height: double.infinity,
-                              color: Colors.yellow.shade800,
-                              child: Column(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  Icon(CupertinoIcons.chat_bubble_text),
-                                  Text('Chat Seller')
-                                ],
-                              ))),
-                      Expanded(
-                          flex: 2,
-                          child: InkWell(
-                            onTap: () {
-                              context
-                                  .read<ProductDetailBloc>()
-                                  .add(ShowBottomSheetAddCartProductEvent());
-                            },
-                            child: Container(
-                                height: double.infinity,
-                                color: Colors.blue.shade800,
-                                child: Column(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceEvenly,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    Icon(CupertinoIcons.shopping_cart),
-                                    Text('Add To Cart')
-                                  ],
-                                )),
-                          )),
-                      Expanded(
-                          flex: 4,
-                          child: InkWell(
-                            onTap: () {
-                              context
-                                  .read<ProductDetailBloc>()
-                                  .add(ShowBottomSheetBuyProductEvent());
-                            },
-                            child: Container(
-                                height: double.infinity,
-                                color: Colors.green.shade800,
-                                child: Column(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceEvenly,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      'Buy USD ${widget.product.price}',
-                                      style: TextStyle(fontSize: 20),
-                                    ),
-                                  ],
-                                )),
-                          )),
-                    ],
-                  ),
-                )
-              ],
-            );
+            return main();
           } else if (state is ProductDetailInitial) {
             context.read<ProductDetailBloc>().add(GetProductDetailEvent());
             return const Center(child: CircularProgressIndicator());
           } else if (state is AddCartLoading) {
-            return const Center(child: CircularProgressIndicator());
+            return Stack(
+              children: [main(), Center(child: CircularProgressIndicator())],
+            );
           }
           return const Center(
             child: Text('No Data'),
           );
         }),
       ),
+    );
+  }
+
+  Widget main() {
+    return Column(
+      children: [
+        Expanded(
+          child: CustomScrollView(
+            shrinkWrap: true,
+            slivers: [
+              SliverAppBar(
+                scrolledUnderElevation: 0,
+                leading: IconButton(
+                  style: ButtonStyle(
+                      backgroundColor:
+                          WidgetStatePropertyAll(Colors.grey.shade400),
+                      shape: WidgetStatePropertyAll(CircleBorder())),
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  icon: Icon(
+                    Icons.arrow_back,
+                    color: Colors.black,
+                  ),
+                ),
+                actions: [
+                  IconButton(
+                    onPressed: () async {
+                      await showSearch(
+                          context: context, delegate: SearchDelegateProduct());
+                    },
+                    style: ButtonStyle(
+                        backgroundColor:
+                            WidgetStatePropertyAll(Colors.grey.shade400),
+                        shape: WidgetStatePropertyAll(CircleBorder())),
+                    icon: Icon(
+                      CupertinoIcons.search,
+                      color: Colors.black,
+                    ),
+                  ),
+                  IconButton(
+                      onPressed: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(builder: (context) => CartPage()),
+                        );
+                      },
+                      style: ButtonStyle(
+                          backgroundColor:
+                              WidgetStatePropertyAll(Colors.grey.shade400),
+                          shape: WidgetStatePropertyAll(CircleBorder())),
+                      icon: AddToCartIcon(
+                        key: cartKey,
+                        icon: Icon(
+                          CupertinoIcons.shopping_cart,
+                          color: Colors.black,
+                        ),
+                        badgeOptions: const BadgeOptions(
+                          active: true,
+                          backgroundColor: Colors.red,
+                        ),
+                      )),
+                  IconButton(
+                    style: ButtonStyle(
+                        backgroundColor:
+                            WidgetStatePropertyAll(Colors.grey.shade400),
+                        shape: WidgetStatePropertyAll(CircleBorder())),
+                    icon: Icon(
+                      CupertinoIcons.chat_bubble_2,
+                      color: Colors.black,
+                    ),
+                    onPressed: () {},
+                  ),
+                ],
+                expandedHeight: MediaQuery.of(context).size.height * 0.40,
+                pinned: true,
+                collapsedHeight: kToolbarHeight,
+                flexibleSpace: Stack(
+                  clipBehavior: Clip.none,
+                  children: [
+                    FlexibleSpaceBar(
+                      background: SizedBox(
+                        width: MediaQuery.of(context).size.width,
+                        child: SizedBox(
+                          height: MediaQuery.of(context).size.height * 0.40,
+                          width: double.infinity,
+                          child: Image.network(
+                            widget.product.image,
+                            fit: BoxFit.fill,
+                            errorBuilder: (context, error, stackTrace) {
+                              return const SizedBox(
+                                height: 150,
+                                child: Icon(
+                                  Icons.image,
+                                  size: 40,
+                                  color: Colors.green,
+                                ),
+                              );
+                            },
+                            loadingBuilder: (BuildContext context, Widget child,
+                                ImageChunkEvent? loadingProgress) {
+                              if (loadingProgress == null) {
+                                return child;
+                              }
+                              return SizedBox(
+                                height: 150,
+                                child: Center(
+                                  child: CircularProgressIndicator(
+                                    color: Colors.green,
+                                    strokeWidth: 1.5,
+                                    value: loadingProgress.expectedTotalBytes !=
+                                            null
+                                        ? loadingProgress
+                                                .cumulativeBytesLoaded /
+                                            loadingProgress.expectedTotalBytes!
+                                        : null,
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+              ),
+              SliverList.list(children: [
+                Container(
+                    padding:
+                        const EdgeInsets.only(left: 10, top: 10, right: 10),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  'USD ${widget.product.price}',
+                                  style: const TextStyle(
+                                      color: Colors.green,
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.w700),
+                                ),
+                                RatingProductWidget(
+                                  value: widget.product.rating.rate.toInt(),
+                                )
+                              ],
+                            ),
+                            BlocProvider(
+                              create: (context) => LikeProductBloc(false),
+                              child: BlocBuilder<LikeProductBloc,
+                                  LikeProductState>(
+                                builder: (context, state) {
+                                  final isLiked = state is LikeProductUpdated
+                                      ? state.isLiked
+                                      : false;
+                                  return Row(
+                                    children: [
+                                      Text(
+                                        '${widget.product.rating.count} Sold',
+                                        textAlign: TextAlign.end,
+                                        style: TextStyle(
+                                            color: Colors.blue.shade800,
+                                            fontSize: 12,
+                                            fontWeight: FontWeight.w500),
+                                      ),
+                                      const Spacer(),
+                                      IconButton(
+                                          onPressed: () {
+                                            context
+                                                .read<LikeProductBloc>()
+                                                .add(LikedProductEvent());
+                                          },
+                                          icon: isLiked
+                                              ? Icon(
+                                                  CupertinoIcons.heart_fill,
+                                                  color: Colors.red,
+                                                )
+                                              : Icon(CupertinoIcons.heart))
+                                    ],
+                                  );
+                                },
+                              ),
+                            ),
+                            Text(
+                              widget.product.title,
+                              maxLines: 2,
+                              style: const TextStyle(
+                                fontSize: 17,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            const SizedBox(height: 20),
+                            Text(
+                              widget.product.description,
+                              style: const TextStyle(
+                                fontSize: 12,
+                                fontWeight: FontWeight.normal,
+                              ),
+                              textAlign: TextAlign.justify,
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 5,
+                            ),
+                            ReviewWidget()
+                          ],
+                        )
+                      ],
+                    )),
+              ]),
+            ],
+          ),
+        ),
+        SizedBox(
+          height: 70,
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              Expanded(
+                  flex: 2,
+                  child: Container(
+                      height: double.infinity,
+                      color: Colors.yellow.shade800,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Icon(CupertinoIcons.chat_bubble_text),
+                          Text('Chat Seller')
+                        ],
+                      ))),
+              Expanded(
+                  flex: 2,
+                  child: InkWell(
+                    onTap: () {
+                      context
+                          .read<ProductDetailBloc>()
+                          .add(ShowBottomSheetAddCartProductEvent());
+                    },
+                    child: Container(
+                        height: double.infinity,
+                        color: Colors.blue.shade800,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Icon(CupertinoIcons.shopping_cart),
+                            Text('Add To Cart')
+                          ],
+                        )),
+                  )),
+              Expanded(
+                  flex: 4,
+                  child: InkWell(
+                    onTap: () {
+                      context
+                          .read<ProductDetailBloc>()
+                          .add(ShowBottomSheetBuyProductEvent());
+                    },
+                    child: Container(
+                        height: double.infinity,
+                        color: Colors.green.shade800,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Text(
+                              'Buy USD ${widget.product.price}',
+                              style: TextStyle(fontSize: 20),
+                            ),
+                          ],
+                        )),
+                  )),
+            ],
+          ),
+        )
+      ],
     );
   }
 }

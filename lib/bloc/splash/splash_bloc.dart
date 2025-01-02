@@ -1,7 +1,8 @@
 import 'package:bloc/bloc.dart';
-import 'package:bloc_online_store/utils/utils.dart';
 import 'package:flutter/foundation.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
+
+import '../../utils/utils.dart';
 
 part 'splash_event.dart';
 part 'splash_state.dart';

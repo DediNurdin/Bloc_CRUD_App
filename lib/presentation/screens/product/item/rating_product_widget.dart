@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class StarDisplay extends StatelessWidget {
-  const StarDisplay({super.key, required this.value});
+class RatingProductWidget extends StatelessWidget {
+  const RatingProductWidget({super.key, required this.value});
 
   final int value;
 
@@ -11,6 +11,7 @@ class StarDisplay extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: List.generate(5, (index) {
         return Icon(
+          size: 18,
           index < value ? Icons.star : Icons.star_border,
           color: Colors.yellow,
         );

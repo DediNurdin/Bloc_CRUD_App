@@ -1,8 +1,9 @@
 import 'dart:convert';
 
+import 'package:http/http.dart' as http;
+
 import '../models/user_model.dart';
 import '../utils/utils.dart';
-import 'package:http/http.dart' as http;
 
 class UserRepository {
   Future<void> registerUser(UserRegisterModel user) async {

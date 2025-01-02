@@ -1,10 +1,11 @@
-import '../cart/cart_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../bloc/product/product_bloc.dart';
-import 'item/item_widget.dart';
+import '../cart/cart_page.dart';
+import '../delegate/search_delegate_product.dart';
+import 'item/product_item_widget.dart';
 
 class ProductPage extends StatefulWidget {
   const ProductPage({super.key});
@@ -22,6 +23,10 @@ class _ProductPageState extends State<ProductPage> {
           forceMaterialTransparency: true,
           automaticallyImplyLeading: false,
           title: CupertinoSearchTextField(
+            onTap: () async {
+              await showSearch(
+                  context: context, delegate: SearchDelegateProduct());
+            },
             controller: _searchController,
             placeholder: 'Search Product',
             onSubmitted: (value) {},
@@ -61,7 +66,10 @@ class _ProductPageState extends State<ProductPage> {
                               right: 10, left: index == 0 ? 16 : 0),
                           child: Chip(
                             avatar: Icon(CupertinoIcons.bag_fill),
-                            label: Text(state.categories[index]),
+                            label: Text(
+                              state.categories[index],
+                              style: TextStyle(fontSize: 12),
+                            ),
                           ),
                         );
                       },
@@ -85,8 +93,10 @@ class _ProductPageState extends State<ProductPage> {
                   }
                   if (state is ProductSuccess) {
                     return Container(
-                      padding:
-                          const EdgeInsets.only(left: 16, right: 16, top: 10),
+                      padding: const EdgeInsets.only(
+                        left: 16,
+                        right: 16,
+                      ),
                       child: RefreshIndicator(
                         onRefresh: () async {
                           context.read<ProductBloc>().add(GetProductEvent());
@@ -97,10 +107,11 @@ class _ProductPageState extends State<ProductPage> {
                             mainAxisSpacing: 4,
                             crossAxisSpacing: 4,
                             crossAxisCount: 2,
-                            childAspectRatio: 0.70,
+                            childAspectRatio: 0.79,
                           ),
                           itemBuilder: (context, index) {
-                            return ItemWidget(product: state.products[index]);
+                            return ProductItemWidget(
+                                product: state.products[index]);
                           },
                           itemCount: state.products.length,
                         ),

@@ -1,13 +1,20 @@
-import '../../../bloc/user/user_bloc.dart';
-import 'register_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class LoginPage extends StatelessWidget {
+import '../../../bloc/user/user_bloc.dart';
+import 'register_page.dart';
+
+class LoginPage extends StatefulWidget {
+  const LoginPage({super.key});
+
+  @override
+  State<LoginPage> createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
   final TextEditingController usernameController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
-
-  LoginPage({super.key});
+  var isObsecure = true;
 
   @override
   Widget build(BuildContext context) {
@@ -42,15 +49,26 @@ class LoginPage extends StatelessWidget {
                     children: [
                       TextField(
                         controller: usernameController,
+                        textInputAction: TextInputAction.next,
                         decoration:
                             const InputDecoration(labelText: 'Username'),
                       ),
                       const SizedBox(height: 16),
                       TextField(
                         controller: passwordController,
-                        decoration:
-                            const InputDecoration(labelText: 'Password'),
-                        obscureText: true,
+                        textInputAction: TextInputAction.done,
+                        decoration: InputDecoration(
+                            labelText: 'Password',
+                            suffixIcon: IconButton(
+                                onPressed: () {
+                                  setState(() {
+                                    isObsecure = !isObsecure;
+                                  });
+                                },
+                                icon: Icon(isObsecure
+                                    ? Icons.visibility_off
+                                    : Icons.visibility))),
+                        obscureText: isObsecure,
                       ),
                       const SizedBox(height: 32),
                       ElevatedButton(

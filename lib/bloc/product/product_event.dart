@@ -2,11 +2,15 @@ part of 'product_bloc.dart';
 
 abstract class ProductEvent {}
 
+abstract class ProductSearchEvent {}
+
 abstract class ProductDetailEvent {}
 
 abstract class ProductCategoriesEvent {}
 
 class GetProductEvent extends ProductEvent {}
+
+class GetProductSearchEvent extends ProductSearchEvent {}
 
 class GetProductDetailEvent extends ProductDetailEvent {}
 
@@ -31,11 +35,12 @@ class AddCartEvent extends ProductDetailEvent {
   final String date;
   final int quantity;
   final List<ProductAddCart> products;
+  final GlobalKey wgtKey;
 
-  AddCartEvent({
-    required this.userId,
-    required this.date,
-    required this.quantity,
-    required this.products,
-  });
+  AddCartEvent(
+      {required this.userId,
+      required this.date,
+      required this.quantity,
+      required this.products,
+      required this.wgtKey});
 }

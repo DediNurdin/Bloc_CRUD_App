@@ -1,10 +1,11 @@
 import 'dart:convert';
 
-import '../../utils/utils.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart' as http;
 
 import '../../models/product_model.dart';
+import '../../utils/utils.dart';
 
 part 'product_event.dart';
 part 'product_state.dart';
@@ -20,6 +21,21 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
         },
       );
       emit(ProductSuccess(products: productFromJson(response.body)));
+    });
+  }
+}
+
+class ProductSearchBloc extends Bloc<ProductSearchEvent, ProductSearchState> {
+  ProductSearchBloc() : super(ProductSearchInitial()) {
+    on<GetProductSearchEvent>((event, emit) async {
+      emit(ProductSearchLoading());
+      final response = await http.get(
+        Uri.parse('${Utils.baseUrlFakeApi}/products'),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      );
+      emit(ProductSearchSuccess(products: productFromJson(response.body)));
     });
   }
 }
@@ -61,7 +77,8 @@ class ProductDetailBloc extends Bloc<ProductDetailEvent, ProductDetailState> {
         );
 
         if (response.statusCode == 200) {
-          emit(AddCartSuccess('Cart successfully added!'));
+          emit(AddCartSuccess(
+              'Cart successfully added!', event.wgtKey, event.quantity));
           add(GetProductDetailEvent());
         } else {
           emit(AddCartError('Failed to add cart: ${response.reasonPhrase}'));

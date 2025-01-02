@@ -1,13 +1,18 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 final ThemeData lightTheme = ThemeData(
+  fontFamily: GoogleFonts.roboto().fontFamily,
+  useMaterial3: true,
   scaffoldBackgroundColor: CupertinoColors.systemBackground,
-  appBarTheme: const AppBarTheme(
-    backgroundColor: CupertinoColors.systemBackground,
-  ),
+  appBarTheme: AppBarTheme(
+      scrolledUnderElevation: 0,
+      backgroundColor: CupertinoColors.systemBackground,
+      systemOverlayStyle: SystemUiOverlayStyle.light),
   brightness: Brightness.light,
-  primaryColor: Colors.green,
+  primaryColor: CupertinoColors.systemBackground,
   listTileTheme: ListTileThemeData(tileColor: Colors.grey.shade200),
   chipTheme: ChipThemeData(
       iconTheme: const IconThemeData(color: Colors.green),
@@ -15,8 +20,10 @@ final ThemeData lightTheme = ThemeData(
       brightness: Brightness.light),
   bottomSheetTheme:
       BottomSheetThemeData(backgroundColor: CupertinoColors.systemBackground),
-  bottomNavigationBarTheme:
-      BottomNavigationBarThemeData(selectedItemColor: Colors.green),
+  bottomNavigationBarTheme: BottomNavigationBarThemeData(
+      selectedItemColor: Colors.green,
+      unselectedItemColor: Colors.grey.shade600,
+      backgroundColor: CupertinoColors.systemBackground),
   navigationBarTheme: const NavigationBarThemeData(
       indicatorColor: Colors.green,
       elevation: 2,
@@ -60,12 +67,15 @@ final ThemeData lightTheme = ThemeData(
   ),
 );
 final ThemeData darkTheme = ThemeData(
+    fontFamily: GoogleFonts.roboto().fontFamily,
+    useMaterial3: true,
     scaffoldBackgroundColor: CupertinoColors.darkBackgroundGray,
     appBarTheme: AppBarTheme(
-      backgroundColor: CupertinoColors.darkBackgroundGray,
-    ),
+        scrolledUnderElevation: 0,
+        backgroundColor: CupertinoColors.darkBackgroundGray,
+        systemOverlayStyle: SystemUiOverlayStyle.dark),
     brightness: Brightness.dark,
-    primaryColor: Colors.grey[900],
+    primaryColor: CupertinoColors.darkBackgroundGray,
     listTileTheme: ListTileThemeData(tileColor: Colors.grey.shade600),
     chipTheme: ChipThemeData(
         iconTheme: const IconThemeData(color: Colors.green),
@@ -74,6 +84,7 @@ final ThemeData darkTheme = ThemeData(
     bottomSheetTheme: BottomSheetThemeData(
         backgroundColor: CupertinoColors.darkBackgroundGray),
     bottomNavigationBarTheme: BottomNavigationBarThemeData(
+        backgroundColor: CupertinoColors.darkBackgroundGray,
         selectedItemColor: Colors.green,
         unselectedItemColor: Colors.grey.shade600),
     navigationBarTheme: const NavigationBarThemeData(

@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import '../../../../models/product_model.dart';
 import '../product_detail_page.dart';
 
-class ItemWidget extends StatelessWidget {
-  const ItemWidget({
+class ProductItemWidget extends StatelessWidget {
+  const ProductItemWidget({
     super.key,
     required this.product,
   });
@@ -83,7 +83,7 @@ class ItemWidget extends StatelessWidget {
                     maxLines: 2,
                     textAlign: TextAlign.start,
                     style: const TextStyle(
-                      fontSize: 15,
+                      fontSize: 12,
                       fontWeight: FontWeight.w500,
                     ),
                   ),
@@ -97,15 +97,13 @@ class ItemWidget extends StatelessWidget {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
-                            Flexible(
-                              child: Text(
-                                'USD ${product.price}',
-                                overflow: TextOverflow.fade,
-                                style: const TextStyle(
-                                  color: Colors.green,
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.w600,
-                                ),
+                            Text(
+                              'USD ${product.price}',
+                              overflow: TextOverflow.fade,
+                              style: const TextStyle(
+                                color: Colors.green,
+                                fontSize: 10,
+                                fontWeight: FontWeight.w600,
                               ),
                             ),
                           ],
@@ -114,13 +112,14 @@ class ItemWidget extends StatelessWidget {
                       Expanded(
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.end,
+                          mainAxisSize: MainAxisSize.min,
                           children: [
                             Text(
-                              ' ${product.rating.count} Sold',
+                              '${product.rating.count} Sold',
                               textAlign: TextAlign.right,
                               style: const TextStyle(
                                 color: Colors.yellow,
-                                fontSize: 12,
+                                fontSize: 10,
                                 fontWeight: FontWeight.w300,
                               ),
                             ),

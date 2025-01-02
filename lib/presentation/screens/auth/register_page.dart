@@ -1,7 +1,8 @@
-import '../../../bloc/user/user_bloc.dart';
-import '../../../models/user_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../../../bloc/user/user_bloc.dart';
+import '../../../models/user_model.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage(

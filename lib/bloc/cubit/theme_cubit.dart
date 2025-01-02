@@ -15,29 +15,24 @@ class ThemeCubit extends Cubit<ThemeState> {
         super(const ThemeState());
 
   final ThemeRepository _themeRepository;
-  static late bool _isDarkTheme;
 
   Future<void> getCurrentTheme() async {
     _themeRepository.getTheme().then((isDarkTheme) {
       if (isDarkTheme) {
-        _isDarkTheme = true;
         emit(state.copyWith(themeMode: ThemeMode.dark));
       } else {
-        _isDarkTheme = false;
         emit(state.copyWith(themeMode: ThemeMode.light));
       }
     });
   }
 
-  Future<void> switchTheme() async {
-    if (_isDarkTheme) {
-      await _themeRepository.setTheme(isDarkTheme: false);
-      _isDarkTheme = false;
-      emit(state.copyWith(themeMode: ThemeMode.light));
-    } else {
-      await _themeRepository.setTheme(isDarkTheme: true);
-      _isDarkTheme = true;
-      emit(state.copyWith(themeMode: ThemeMode.dark));
-    }
+  Future<void> switchThemeLight() async {
+    await _themeRepository.setTheme(isDarkTheme: false);
+    emit(state.copyWith(themeMode: ThemeMode.light));
+  }
+
+  Future<void> switchThemeDark() async {
+    await _themeRepository.setTheme(isDarkTheme: true);
+    emit(state.copyWith(themeMode: ThemeMode.dark));
   }
 }

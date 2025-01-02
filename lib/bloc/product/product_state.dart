@@ -2,13 +2,19 @@ part of 'product_bloc.dart';
 
 abstract class ProductState {}
 
+abstract class ProductSearchState {}
+
 abstract class ProductDetailState {}
 
 class ProductInitial extends ProductState {}
 
+class ProductSearchInitial extends ProductSearchState {}
+
 class ProductDetailInitial extends ProductDetailState {}
 
 class ProductLoading extends ProductState {}
+
+class ProductSearchLoading extends ProductSearchState {}
 
 class ProductDetailLoading extends ProductDetailState {}
 
@@ -16,6 +22,14 @@ class ProductSuccess extends ProductState {
   final List<Product> products;
 
   ProductSuccess({
+    required this.products,
+  });
+}
+
+class ProductSearchSuccess extends ProductSearchState {
+  final List<Product> products;
+
+  ProductSearchSuccess({
     required this.products,
   });
 }
@@ -40,7 +54,7 @@ class ShowBottomSheetBuyProduct extends ProductDetailState {}
 class ShowBottomSheetAddCartProduct extends ProductDetailState {}
 
 class QuantityState {
-  final int quantity;
+  late final int quantity;
   final double price;
 
   QuantityState({required this.quantity, required this.price});
@@ -61,8 +75,10 @@ class AddCartLoading extends ProductDetailState {}
 
 class AddCartSuccess extends ProductDetailState {
   final String message;
+  final GlobalKey key;
+  final int quantity;
 
-  AddCartSuccess(this.message);
+  AddCartSuccess(this.message, this.key, this.quantity);
 }
 
 class AddCartError extends ProductDetailState {
