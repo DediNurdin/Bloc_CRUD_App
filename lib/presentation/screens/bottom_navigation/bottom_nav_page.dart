@@ -1,10 +1,10 @@
-import '../settings/setting_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../bloc/bottom_nav/bottom_nav_bloc.dart';
 import '../product/product_page.dart';
+import '../settings/setting_page.dart';
 import '../user/user_page.dart';
 
 List<BottomNavigationBarItem> bottomNavItems = <BottomNavigationBarItem>[

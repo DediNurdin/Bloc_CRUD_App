@@ -2,15 +2,18 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class QuantityWidget extends StatefulWidget {
-  const QuantityWidget(
-      {super.key,
-      required this.txtQauntity,
-      required this.onPressIncrement,
-      required this.onPressDecrement});
+  const QuantityWidget({
+    super.key,
+    required this.txtQauntity,
+    required this.onPressIncrement,
+    required this.onPressDecrement,
+    this.colorTxt,
+  });
 
   final String txtQauntity;
   final Function() onPressIncrement;
   final Function() onPressDecrement;
+  final Color? colorTxt;
 
   @override
   State<QuantityWidget> createState() => _QuantityWidgetState();
@@ -50,8 +53,10 @@ class _QuantityWidgetState extends State<QuantityWidget> {
                 widget.txtQauntity,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
-                style:
-                    const TextStyle(fontSize: 12, fontWeight: FontWeight.w700),
+                style: TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w700,
+                    color: widget.colorTxt),
               ),
             ),
           ),

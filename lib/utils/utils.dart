@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -11,21 +12,20 @@ import 'package:shared_preferences/shared_preferences.dart';
 class Utils {
   static String baseUrlFakeApi = 'https://fakestoreapi.com';
 
-  static List<Widget> styleBuildActionAppBarSearch(
-      void Function() onPressed, bool visible) {
+  static bool isDarkMode(BuildContext context) {
+    return Theme.of(context).brightness == Brightness.dark;
+  }
+
+  static List<Widget> styleBuildActionAppBarSearch(void Function() onPressed) {
     return [
-      Visibility(
-        visible: visible,
-        child: InkWell(
-          overlayColor: const WidgetStatePropertyAll(Colors.transparent),
-          onTap: onPressed,
-          child: const Padding(
-            padding: EdgeInsets.only(right: 15),
-            child: Text('Batal',
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w300)),
-          ),
+      InkWell(
+        overlayColor: const WidgetStatePropertyAll(Colors.transparent),
+        onTap: onPressed,
+        child: const Padding(
+          padding: EdgeInsets.only(right: 15),
+          child: Icon(CupertinoIcons.search),
         ),
-      )
+      ),
     ];
   }
 

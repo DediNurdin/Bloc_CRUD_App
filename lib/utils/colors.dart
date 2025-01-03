@@ -3,129 +3,212 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-final ThemeData lightTheme = ThemeData(
-  fontFamily: GoogleFonts.roboto().fontFamily,
-  useMaterial3: true,
-  scaffoldBackgroundColor: CupertinoColors.systemBackground,
-  appBarTheme: AppBarTheme(
-      scrolledUnderElevation: 0,
-      backgroundColor: CupertinoColors.systemBackground,
-      systemOverlayStyle: SystemUiOverlayStyle.light),
-  brightness: Brightness.light,
-  primaryColor: CupertinoColors.systemBackground,
-  listTileTheme: ListTileThemeData(tileColor: Colors.grey.shade200),
-  chipTheme: ChipThemeData(
-      iconTheme: const IconThemeData(color: Colors.green),
-      backgroundColor: CupertinoColors.extraLightBackgroundGray,
-      brightness: Brightness.light),
-  bottomSheetTheme:
-      BottomSheetThemeData(backgroundColor: CupertinoColors.systemBackground),
-  bottomNavigationBarTheme: BottomNavigationBarThemeData(
-      selectedItemColor: Colors.green,
-      unselectedItemColor: Colors.grey.shade600,
-      backgroundColor: CupertinoColors.systemBackground),
-  navigationBarTheme: const NavigationBarThemeData(
-      indicatorColor: Colors.green,
-      elevation: 2,
-      backgroundColor: CupertinoColors.secondarySystemBackground),
-  floatingActionButtonTheme: const FloatingActionButtonThemeData(
-      backgroundColor: Colors.green, foregroundColor: Colors.white),
-  cardTheme: CardTheme(color: Colors.grey.shade200),
-  progressIndicatorTheme: const ProgressIndicatorThemeData(color: Colors.green),
-  elevatedButtonTheme: const ElevatedButtonThemeData(
-      style: ButtonStyle(
-          backgroundColor: WidgetStatePropertyAll(Colors.green),
-          foregroundColor: WidgetStatePropertyAll(Colors.white))),
-  inputDecorationTheme: InputDecorationTheme(
-    enabledBorder: OutlineInputBorder(
-      borderSide: BorderSide(color: Colors.grey.shade600),
-      borderRadius: const BorderRadius.only(
-        topRight: Radius.circular(10),
-        topLeft: Radius.circular(10),
-        bottomRight: Radius.circular(10),
-        bottomLeft: Radius.circular(10),
-      ),
-    ),
-    focusedBorder: const OutlineInputBorder(
-      borderSide: BorderSide(color: Colors.blue),
-      borderRadius: BorderRadius.only(
-        topRight: Radius.circular(10),
-        topLeft: Radius.circular(10),
-        bottomRight: Radius.circular(10),
-        bottomLeft: Radius.circular(10),
-      ),
-    ),
-    errorBorder: const OutlineInputBorder(
-      borderSide: BorderSide(color: CupertinoColors.destructiveRed),
-      borderRadius: BorderRadius.only(
-        topRight: Radius.circular(10),
-        topLeft: Radius.circular(10),
-        bottomRight: Radius.circular(10),
-        bottomLeft: Radius.circular(10),
-      ),
-    ),
-  ),
-);
-final ThemeData darkTheme = ThemeData(
-    fontFamily: GoogleFonts.roboto().fontFamily,
-    useMaterial3: true,
-    scaffoldBackgroundColor: CupertinoColors.darkBackgroundGray,
-    appBarTheme: AppBarTheme(
-        scrolledUnderElevation: 0,
-        backgroundColor: CupertinoColors.darkBackgroundGray,
-        systemOverlayStyle: SystemUiOverlayStyle.dark),
-    brightness: Brightness.dark,
-    primaryColor: CupertinoColors.darkBackgroundGray,
-    listTileTheme: ListTileThemeData(tileColor: Colors.grey.shade600),
-    chipTheme: ChipThemeData(
-        iconTheme: const IconThemeData(color: Colors.green),
-        backgroundColor: CupertinoColors.darkBackgroundGray,
-        brightness: Brightness.dark),
-    bottomSheetTheme: BottomSheetThemeData(
-        backgroundColor: CupertinoColors.darkBackgroundGray),
-    bottomNavigationBarTheme: BottomNavigationBarThemeData(
-        backgroundColor: CupertinoColors.darkBackgroundGray,
-        selectedItemColor: Colors.green,
-        unselectedItemColor: Colors.grey.shade600),
-    navigationBarTheme: const NavigationBarThemeData(
-        indicatorColor: Colors.green,
-        elevation: 2,
-        backgroundColor: CupertinoColors.black),
-    floatingActionButtonTheme: const FloatingActionButtonThemeData(
-        backgroundColor: Colors.green, foregroundColor: Colors.white),
-    cardTheme: CardTheme(color: Colors.grey.shade600),
-    progressIndicatorTheme:
-        const ProgressIndicatorThemeData(color: Colors.green),
-    elevatedButtonTheme: const ElevatedButtonThemeData(
-        style: ButtonStyle(
-            backgroundColor: WidgetStatePropertyAll(Colors.green),
-            foregroundColor: WidgetStatePropertyAll(Colors.white))),
-    inputDecorationTheme: InputDecorationTheme(
-      enabledBorder: OutlineInputBorder(
-        borderSide: BorderSide(color: Colors.grey.shade600),
-        borderRadius: const BorderRadius.only(
-          topRight: Radius.circular(10),
-          topLeft: Radius.circular(10),
-          bottomRight: Radius.circular(10),
-          bottomLeft: Radius.circular(10),
+class ThemeUtils {
+  static ThemeData lightTheme(bool isAppSearch) {
+    return ThemeData(
+      fontFamily: GoogleFonts.roboto().fontFamily,
+      useMaterial3: true,
+      splashColor: Colors.transparent,
+      pageTransitionsTheme: const PageTransitionsTheme(builders: {
+        TargetPlatform.android: CupertinoPageTransitionsBuilder(),
+        TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
+      }),
+      scaffoldBackgroundColor: CupertinoColors.systemBackground,
+      appBarTheme: AppBarTheme(
+          scrolledUnderElevation: 0,
+          backgroundColor: CupertinoColors.systemBackground,
+          systemOverlayStyle: SystemUiOverlayStyle(
+              statusBarColor: CupertinoColors.systemBackground)),
+      brightness: Brightness.light,
+      primaryColor: CupertinoColors.systemBackground,
+      listTileTheme: ListTileThemeData(tileColor: Colors.grey.shade200),
+      checkboxTheme: CheckboxThemeData(
+          side: BorderSide(color: Colors.grey),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+          checkColor: WidgetStateProperty.resolveWith((states) {
+            if (states.contains(WidgetState.selected)) {
+              return Colors.white;
+            }
+            return Colors.transparent;
+          }),
+          fillColor: WidgetStateProperty.resolveWith((states) {
+            if (states.contains(WidgetState.selected)) {
+              return Colors.green;
+            }
+            return Colors.transparent;
+          })),
+      chipTheme: ChipThemeData(
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(5),
+              side: BorderSide(color: Colors.grey)),
+          iconTheme: const IconThemeData(color: Colors.green),
+          backgroundColor: CupertinoColors.systemBackground,
+          brightness: Brightness.light),
+      bottomSheetTheme: BottomSheetThemeData(
+          backgroundColor: CupertinoColors.systemBackground),
+      bottomNavigationBarTheme: BottomNavigationBarThemeData(
+          selectedItemColor: Colors.green,
+          unselectedItemColor: Colors.grey.shade600,
+          backgroundColor: CupertinoColors.systemBackground),
+      navigationBarTheme: const NavigationBarThemeData(
+          indicatorColor: Colors.green,
+          elevation: 2,
+          backgroundColor: CupertinoColors.secondarySystemBackground),
+      floatingActionButtonTheme: const FloatingActionButtonThemeData(
+          backgroundColor: Colors.green, foregroundColor: Colors.white),
+      cardTheme: CardTheme(color: Colors.grey.shade200),
+      progressIndicatorTheme: const ProgressIndicatorThemeData(
+          color: Colors.green,
+          linearMinHeight: 2,
+          refreshBackgroundColor: CupertinoColors.extraLightBackgroundGray,
+          circularTrackColor: Colors.transparent,
+          linearTrackColor: Colors.transparent),
+      elevatedButtonTheme: ElevatedButtonThemeData(
+          style: ButtonStyle(
+              minimumSize: WidgetStatePropertyAll(Size(0, 50)),
+              shape: WidgetStatePropertyAll(RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10))),
+              backgroundColor: WidgetStatePropertyAll(Colors.green),
+              foregroundColor: WidgetStatePropertyAll(Colors.white))),
+      inputDecorationTheme: InputDecorationTheme(
+        hintStyle: const TextStyle(color: Colors.grey, fontSize: 14),
+        labelStyle: const TextStyle(color: Colors.grey, fontSize: 14),
+        contentPadding: isAppSearch
+            ? EdgeInsets.symmetric(horizontal: 15, vertical: 7)
+            : null,
+        isCollapsed: isAppSearch ? true : false,
+        enabledBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: Colors.grey.shade600),
+          borderRadius: BorderRadius.only(
+            topRight: Radius.circular(isAppSearch ? 5 : 10),
+            topLeft: Radius.circular(isAppSearch ? 5 : 10),
+            bottomRight: Radius.circular(isAppSearch ? 5 : 10),
+            bottomLeft: Radius.circular(isAppSearch ? 5 : 10),
+          ),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: Colors.blue),
+          borderRadius: BorderRadius.only(
+            topRight: Radius.circular(isAppSearch ? 5 : 10),
+            topLeft: Radius.circular(isAppSearch ? 5 : 10),
+            bottomRight: Radius.circular(isAppSearch ? 5 : 10),
+            bottomLeft: Radius.circular(isAppSearch ? 5 : 10),
+          ),
+        ),
+        errorBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: CupertinoColors.destructiveRed),
+          borderRadius: BorderRadius.only(
+            topRight: Radius.circular(isAppSearch ? 5 : 10),
+            topLeft: Radius.circular(isAppSearch ? 5 : 10),
+            bottomRight: Radius.circular(isAppSearch ? 5 : 10),
+            bottomLeft: Radius.circular(isAppSearch ? 5 : 10),
+          ),
         ),
       ),
-      focusedBorder: const OutlineInputBorder(
-        borderSide: BorderSide(color: Colors.blue),
-        borderRadius: BorderRadius.only(
-          topRight: Radius.circular(10),
-          topLeft: Radius.circular(10),
-          bottomRight: Radius.circular(10),
-          bottomLeft: Radius.circular(10),
-        ),
-      ),
-      errorBorder: const OutlineInputBorder(
-        borderSide: BorderSide(color: CupertinoColors.destructiveRed),
-        borderRadius: BorderRadius.only(
-          topRight: Radius.circular(10),
-          topLeft: Radius.circular(10),
-          bottomRight: Radius.circular(10),
-          bottomLeft: Radius.circular(10),
-        ),
-      ),
-    ));
+    );
+  }
+
+  static ThemeData darkTheme(bool isAppSearch) {
+    return ThemeData(
+        fontFamily: GoogleFonts.roboto().fontFamily,
+        useMaterial3: true,
+        splashColor: Colors.transparent,
+        pageTransitionsTheme: const PageTransitionsTheme(builders: {
+          TargetPlatform.android: CupertinoPageTransitionsBuilder(),
+          TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
+        }),
+        scaffoldBackgroundColor: CupertinoColors.darkBackgroundGray,
+        appBarTheme: AppBarTheme(
+            scrolledUnderElevation: 0,
+            backgroundColor: CupertinoColors.darkBackgroundGray,
+            systemOverlayStyle: SystemUiOverlayStyle(
+                statusBarColor: CupertinoColors.darkBackgroundGray)),
+        brightness: Brightness.dark,
+        primaryColor: CupertinoColors.darkBackgroundGray,
+        listTileTheme: ListTileThemeData(tileColor: Colors.grey.shade600),
+        checkboxTheme: CheckboxThemeData(
+            side: BorderSide(color: Colors.grey),
+            checkColor: WidgetStateProperty.resolveWith((states) {
+              if (states.contains(WidgetState.selected)) {
+                return Colors.white;
+              }
+              return Colors.transparent;
+            }),
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+            fillColor: WidgetStateProperty.resolveWith((states) {
+              if (states.contains(WidgetState.selected)) {
+                return Colors.green;
+              }
+              return Colors.transparent;
+            })),
+        chipTheme: ChipThemeData(
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(5),
+                side: BorderSide(color: Colors.grey)),
+            iconTheme: const IconThemeData(color: Colors.green),
+            backgroundColor: CupertinoColors.darkBackgroundGray,
+            brightness: Brightness.dark),
+        bottomSheetTheme: BottomSheetThemeData(
+            backgroundColor: CupertinoColors.darkBackgroundGray),
+        bottomNavigationBarTheme: BottomNavigationBarThemeData(
+            backgroundColor: CupertinoColors.darkBackgroundGray,
+            selectedItemColor: Colors.green,
+            unselectedItemColor: Colors.grey.shade600),
+        navigationBarTheme: const NavigationBarThemeData(
+            indicatorColor: Colors.green,
+            elevation: 2,
+            backgroundColor: CupertinoColors.black),
+        floatingActionButtonTheme: const FloatingActionButtonThemeData(
+            backgroundColor: Colors.green, foregroundColor: Colors.white),
+        cardTheme: CardTheme(color: Colors.grey.shade600),
+        progressIndicatorTheme: const ProgressIndicatorThemeData(
+            color: Colors.green,
+            linearMinHeight: 2,
+            refreshBackgroundColor: CupertinoColors.darkBackgroundGray,
+            circularTrackColor: Colors.transparent,
+            linearTrackColor: Colors.transparent),
+        elevatedButtonTheme: ElevatedButtonThemeData(
+            style: ButtonStyle(
+                minimumSize: WidgetStatePropertyAll(Size(0, 50)),
+                shape: WidgetStatePropertyAll(RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10))),
+                backgroundColor: WidgetStatePropertyAll(Colors.green),
+                foregroundColor: WidgetStatePropertyAll(Colors.white))),
+        inputDecorationTheme: InputDecorationTheme(
+          hintStyle: const TextStyle(color: Colors.grey, fontSize: 14),
+          labelStyle: const TextStyle(color: Colors.grey, fontSize: 14),
+          contentPadding: isAppSearch
+              ? EdgeInsets.symmetric(horizontal: 15, vertical: 7)
+              : null,
+          isCollapsed: isAppSearch ? true : false,
+          enabledBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: Colors.grey.shade600),
+            borderRadius: BorderRadius.only(
+              topRight: Radius.circular(isAppSearch ? 5 : 10),
+              topLeft: Radius.circular(isAppSearch ? 5 : 10),
+              bottomRight: Radius.circular(isAppSearch ? 5 : 10),
+              bottomLeft: Radius.circular(isAppSearch ? 5 : 10),
+            ),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: Colors.blue),
+            borderRadius: BorderRadius.only(
+              topRight: Radius.circular(isAppSearch ? 5 : 10),
+              topLeft: Radius.circular(isAppSearch ? 5 : 10),
+              bottomRight: Radius.circular(isAppSearch ? 5 : 10),
+              bottomLeft: Radius.circular(isAppSearch ? 5 : 10),
+            ),
+          ),
+          errorBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: CupertinoColors.destructiveRed),
+            borderRadius: BorderRadius.only(
+              topRight: Radius.circular(isAppSearch ? 5 : 10),
+              topLeft: Radius.circular(isAppSearch ? 5 : 10),
+              bottomRight: Radius.circular(isAppSearch ? 5 : 10),
+              bottomLeft: Radius.circular(isAppSearch ? 5 : 10),
+            ),
+          ),
+        ));
+  }
+}

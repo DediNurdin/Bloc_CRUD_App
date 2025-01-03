@@ -4,8 +4,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../bloc/product/product_bloc.dart';
 import '../cart/cart_page.dart';
-import '../delegate/search_delegate_product.dart';
 import 'item/product_item_widget.dart';
+import 'item/search_product_widget.dart';
 
 class ProductPage extends StatefulWidget {
   const ProductPage({super.key});
@@ -15,22 +15,14 @@ class ProductPage extends StatefulWidget {
 }
 
 class _ProductPageState extends State<ProductPage> {
-  final TextEditingController _searchController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
+          backgroundColor: Colors.green,
           forceMaterialTransparency: true,
           automaticallyImplyLeading: false,
-          title: CupertinoSearchTextField(
-            onTap: () async {
-              await showSearch(
-                  context: context, delegate: SearchDelegateProduct());
-            },
-            controller: _searchController,
-            placeholder: 'Search Product',
-            onSubmitted: (value) {},
-          ),
+          title: SearchProductWidget(),
           actions: [
             IconButton(
               icon: Icon(CupertinoIcons.shopping_cart),
@@ -60,12 +52,13 @@ class _ProductPageState extends State<ProductPage> {
                     height: 50,
                     child: ListView.builder(
                       scrollDirection: Axis.horizontal,
+                      itemCount: state.categories.length,
                       itemBuilder: (context, index) {
                         return Container(
                           margin: EdgeInsets.only(
                               right: 10, left: index == 0 ? 16 : 0),
                           child: Chip(
-                            avatar: Icon(CupertinoIcons.bag_fill),
+                            avatar: Icon(CupertinoIcons.bag),
                             label: Text(
                               state.categories[index],
                               style: TextStyle(fontSize: 12),
@@ -73,11 +66,9 @@ class _ProductPageState extends State<ProductPage> {
                           ),
                         );
                       },
-                      itemCount: state.categories.length,
                     ),
                   );
                 }
-
                 return const Center(
                   child: Text('No Data'),
                 );
@@ -94,8 +85,8 @@ class _ProductPageState extends State<ProductPage> {
                   if (state is ProductSuccess) {
                     return Container(
                       padding: const EdgeInsets.only(
-                        left: 16,
-                        right: 16,
+                        left: 10,
+                        right: 10,
                       ),
                       child: RefreshIndicator(
                         onRefresh: () async {

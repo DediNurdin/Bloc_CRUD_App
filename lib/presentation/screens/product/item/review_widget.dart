@@ -42,15 +42,6 @@ class ReviewWidget extends StatelessWidget {
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const SizedBox(height: 20),
-            Text(
-              'Reviews (2862)',
-              style: TextStyle(
-                fontSize: 17,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            const SizedBox(height: 20),
             ...reviews.map((review) => _buildReviewCard(context, review)),
           ],
         ),
@@ -67,7 +58,7 @@ class ReviewWidget extends StatelessWidget {
             review.title,
             style: const TextStyle(
               fontSize: 12,
-              fontWeight: FontWeight.bold,
+              fontWeight: FontWeight.normal,
             ),
           ),
         const SizedBox(height: 8),
@@ -79,7 +70,7 @@ class ReviewWidget extends StatelessWidget {
           review.content,
           style: const TextStyle(
             fontSize: 11,
-            fontWeight: FontWeight.bold,
+            fontWeight: FontWeight.normal,
           ),
         ),
         const Divider(),

@@ -49,6 +49,19 @@ class ProductCategoriesSuccess extends ProductCategoriesState {
   });
 }
 
+abstract class ProductByCategoriesState {}
+
+class ProductByCategoriesInitial extends ProductByCategoriesState {}
+
+class ProductByCategoriesLoading extends ProductByCategoriesState {}
+
+class ProductByCategoriesSuccess extends ProductByCategoriesState {
+  final List<Product> productByCategories;
+  ProductByCategoriesSuccess({
+    required this.productByCategories,
+  });
+}
+
 class ShowBottomSheetBuyProduct extends ProductDetailState {}
 
 class ShowBottomSheetAddCartProduct extends ProductDetailState {}

@@ -54,6 +54,10 @@ class MyApp extends StatelessWidget {
               ProductCategoriesBloc()..add(GetProductCategoriesEvent()),
         ),
         BlocProvider(
+          create: (context) => ProductByCategoriesBloc()
+            ..add(GetProductByCategoriesEvent(category: '')),
+        ),
+        BlocProvider(
           create: (context) => ProductDetailBloc(),
         ),
         BlocProvider(
@@ -79,8 +83,8 @@ class MyApp extends StatelessWidget {
       ],
       child: BlocBuilder<ThemeCubit, ThemeState>(
         builder: (BuildContext context, ThemeState state) => MaterialApp(
-          theme: lightTheme,
-          darkTheme: darkTheme,
+          theme: ThemeUtils.lightTheme(false),
+          darkTheme: ThemeUtils.darkTheme(false),
           themeMode: state.themeMode,
           title: 'Bloc STM Learn',
           debugShowCheckedModeBanner: false,

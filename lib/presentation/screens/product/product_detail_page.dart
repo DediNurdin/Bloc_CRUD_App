@@ -1,15 +1,16 @@
 import 'package:add_to_cart_animation/add_to_cart_animation.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../bloc/product/product_bloc.dart';
 import '../../../models/product_model.dart';
 import '../cart/cart_page.dart';
-import '../delegate/search_delegate_product.dart';
 import 'item/buy_add_cart_dialog_widget.dart';
-import 'item/rating_product_widget.dart';
+import 'item/product_item_widget.dart';
 import 'item/review_widget.dart';
+import 'item/search_product_widget.dart';
 
 class ProductDetailPage extends StatefulWidget {
   const ProductDetailPage({
@@ -26,7 +27,7 @@ class ProductDetailPage extends StatefulWidget {
 class _ProductDetailPageState extends State<ProductDetailPage> {
   GlobalKey<CartIconKey> cartKey = GlobalKey<CartIconKey>();
   late Function(GlobalKey) runAddToCartAnimation;
-
+  bool showSearchBar = false;
   void addCartAnim(GlobalKey widgetKey, int quantity) async {
     await runAddToCartAnimation(widgetKey);
     await cartKey.currentState!.runCartAnimation((quantity).toString());
@@ -102,283 +103,403 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
   }
 
   Widget main() {
-    return Column(
-      children: [
-        Expanded(
-          child: CustomScrollView(
-            shrinkWrap: true,
-            slivers: [
-              SliverAppBar(
-                scrolledUnderElevation: 0,
-                leading: IconButton(
-                  style: ButtonStyle(
-                      backgroundColor:
-                          WidgetStatePropertyAll(Colors.grey.shade400),
-                      shape: WidgetStatePropertyAll(CircleBorder())),
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  icon: Icon(
-                    Icons.arrow_back,
-                    color: Colors.black,
-                  ),
-                ),
-                actions: [
-                  IconButton(
-                    onPressed: () async {
-                      await showSearch(
-                          context: context, delegate: SearchDelegateProduct());
+    return NotificationListener<ScrollNotification>(
+      onNotification: (scrollNotification) {
+        if (scrollNotification.metrics.pixels > 200 && !showSearchBar) {
+          setState(() {
+            showSearchBar = true;
+          });
+        } else if (scrollNotification.metrics.pixels <= 200 && showSearchBar) {
+          setState(() {
+            showSearchBar = false;
+          });
+        }
+        return true;
+      },
+      child: Column(
+        children: [
+          Expanded(
+            child: CustomScrollView(
+              shrinkWrap: true,
+              slivers: [
+                SliverAppBar(
+                  scrolledUnderElevation: 0,
+                  systemOverlayStyle:
+                      SystemUiOverlayStyle(statusBarColor: Colors.transparent),
+                  leading: IconButton(
+                    style: ButtonStyle(
+                        backgroundColor: WidgetStatePropertyAll(showSearchBar
+                            ? Colors.transparent
+                            : Colors.grey.shade400),
+                        shape: WidgetStatePropertyAll(CircleBorder())),
+                    onPressed: () {
+                      Navigator.pop(context);
                     },
-                    style: ButtonStyle(
-                        backgroundColor:
-                            WidgetStatePropertyAll(Colors.grey.shade400),
-                        shape: WidgetStatePropertyAll(CircleBorder())),
                     icon: Icon(
-                      CupertinoIcons.search,
-                      color: Colors.black,
+                      Icons.arrow_back,
+                      color: showSearchBar ? Colors.green : Colors.black,
                     ),
                   ),
-                  IconButton(
-                      onPressed: () {
-                        Navigator.of(context).push(
-                          MaterialPageRoute(builder: (context) => CartPage()),
-                        );
-                      },
+                  title: showSearchBar
+                      ? SearchProductWidget(
+                          isMain: false,
+                        )
+                      : null,
+                  actions: [
+                    IconButton(
+                        onPressed: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(builder: (context) => CartPage()),
+                          );
+                        },
+                        style: ButtonStyle(
+                            backgroundColor: WidgetStatePropertyAll(
+                                showSearchBar
+                                    ? Colors.transparent
+                                    : Colors.grey.shade400),
+                            shape: WidgetStatePropertyAll(CircleBorder())),
+                        icon: AddToCartIcon(
+                          key: cartKey,
+                          icon: Icon(
+                            CupertinoIcons.shopping_cart,
+                            color: showSearchBar ? Colors.green : Colors.black,
+                          ),
+                          badgeOptions: const BadgeOptions(
+                            active: true,
+                            backgroundColor: Colors.red,
+                          ),
+                        )),
+                    IconButton(
                       style: ButtonStyle(
-                          backgroundColor:
-                              WidgetStatePropertyAll(Colors.grey.shade400),
+                          backgroundColor: WidgetStatePropertyAll(showSearchBar
+                              ? Colors.transparent
+                              : Colors.grey.shade400),
                           shape: WidgetStatePropertyAll(CircleBorder())),
-                      icon: AddToCartIcon(
-                        key: cartKey,
-                        icon: Icon(
-                          CupertinoIcons.shopping_cart,
-                          color: Colors.black,
-                        ),
-                        badgeOptions: const BadgeOptions(
-                          active: true,
-                          backgroundColor: Colors.red,
-                        ),
-                      )),
-                  IconButton(
-                    style: ButtonStyle(
-                        backgroundColor:
-                            WidgetStatePropertyAll(Colors.grey.shade400),
-                        shape: WidgetStatePropertyAll(CircleBorder())),
-                    icon: Icon(
-                      CupertinoIcons.chat_bubble_2,
-                      color: Colors.black,
+                      icon: Icon(
+                        CupertinoIcons.chat_bubble_2,
+                        color: showSearchBar ? Colors.green : Colors.black,
+                      ),
+                      onPressed: () {},
                     ),
-                    onPressed: () {},
-                  ),
-                ],
-                expandedHeight: MediaQuery.of(context).size.height * 0.40,
-                pinned: true,
-                collapsedHeight: kToolbarHeight,
-                flexibleSpace: Stack(
-                  clipBehavior: Clip.none,
-                  children: [
-                    FlexibleSpaceBar(
-                      background: SizedBox(
-                        width: MediaQuery.of(context).size.width,
-                        child: SizedBox(
-                          height: MediaQuery.of(context).size.height * 0.40,
-                          width: double.infinity,
-                          child: Image.network(
-                            widget.product.image,
-                            fit: BoxFit.fill,
-                            errorBuilder: (context, error, stackTrace) {
-                              return const SizedBox(
-                                height: 150,
-                                child: Icon(
-                                  Icons.image,
-                                  size: 40,
-                                  color: Colors.green,
-                                ),
-                              );
-                            },
-                            loadingBuilder: (BuildContext context, Widget child,
-                                ImageChunkEvent? loadingProgress) {
-                              if (loadingProgress == null) {
-                                return child;
-                              }
-                              return SizedBox(
-                                height: 150,
-                                child: Center(
-                                  child: CircularProgressIndicator(
+                  ],
+                  expandedHeight: MediaQuery.of(context).size.height * 0.40,
+                  pinned: true,
+                  collapsedHeight: kToolbarHeight,
+                  flexibleSpace: Stack(
+                    clipBehavior: Clip.none,
+                    children: [
+                      FlexibleSpaceBar(
+                        background: SizedBox(
+                          width: MediaQuery.of(context).size.width,
+                          child: SizedBox(
+                            height: MediaQuery.of(context).size.height * 0.40,
+                            width: double.infinity,
+                            child: Image.network(
+                              widget.product.image,
+                              fit: BoxFit.fill,
+                              errorBuilder: (context, error, stackTrace) {
+                                return const SizedBox(
+                                  height: 150,
+                                  child: Icon(
+                                    Icons.image,
+                                    size: 40,
                                     color: Colors.green,
-                                    strokeWidth: 1.5,
-                                    value: loadingProgress.expectedTotalBytes !=
-                                            null
-                                        ? loadingProgress
-                                                .cumulativeBytesLoaded /
-                                            loadingProgress.expectedTotalBytes!
-                                        : null,
                                   ),
-                                ),
-                              );
-                            },
+                                );
+                              },
+                              loadingBuilder: (BuildContext context,
+                                  Widget child,
+                                  ImageChunkEvent? loadingProgress) {
+                                if (loadingProgress == null) {
+                                  return child;
+                                }
+                                return SizedBox(
+                                  height: 150,
+                                  child: Center(
+                                    child: CircularProgressIndicator(
+                                      color: Colors.green,
+                                      strokeWidth: 1.5,
+                                      value:
+                                          loadingProgress.expectedTotalBytes !=
+                                                  null
+                                              ? loadingProgress
+                                                      .cumulativeBytesLoaded /
+                                                  loadingProgress
+                                                      .expectedTotalBytes!
+                                              : null,
+                                    ),
+                                  ),
+                                );
+                              },
+                            ),
                           ),
                         ),
-                      ),
-                    )
-                  ],
+                      )
+                    ],
+                  ),
                 ),
-              ),
-              SliverList.list(children: [
-                Container(
-                    padding:
-                        const EdgeInsets.only(left: 10, top: 10, right: 10),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  'USD ${widget.product.price}',
-                                  style: const TextStyle(
-                                      color: Colors.green,
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.w700),
-                                ),
-                                RatingProductWidget(
-                                  value: widget.product.rating.rate.toInt(),
-                                )
-                              ],
-                            ),
-                            BlocProvider(
-                              create: (context) => LikeProductBloc(false),
-                              child: BlocBuilder<LikeProductBloc,
-                                  LikeProductState>(
-                                builder: (context, state) {
-                                  final isLiked = state is LikeProductUpdated
-                                      ? state.isLiked
-                                      : false;
-                                  return Row(
-                                    children: [
-                                      Text(
-                                        '${widget.product.rating.count} Sold',
-                                        textAlign: TextAlign.end,
-                                        style: TextStyle(
-                                            color: Colors.blue.shade800,
-                                            fontSize: 12,
-                                            fontWeight: FontWeight.w500),
-                                      ),
-                                      const Spacer(),
-                                      IconButton(
-                                          onPressed: () {
-                                            context
-                                                .read<LikeProductBloc>()
-                                                .add(LikedProductEvent());
-                                          },
-                                          icon: isLiked
-                                              ? Icon(
-                                                  CupertinoIcons.heart_fill,
-                                                  color: Colors.red,
-                                                )
-                                              : Icon(CupertinoIcons.heart))
-                                    ],
-                                  );
-                                },
-                              ),
-                            ),
-                            Text(
-                              widget.product.title,
-                              maxLines: 2,
-                              style: const TextStyle(
-                                fontSize: 17,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            const SizedBox(height: 20),
-                            Text(
-                              widget.product.description,
-                              style: const TextStyle(
-                                fontSize: 12,
-                                fontWeight: FontWeight.normal,
-                              ),
-                              textAlign: TextAlign.justify,
-                              overflow: TextOverflow.ellipsis,
-                              maxLines: 5,
-                            ),
-                            ReviewWidget()
-                          ],
-                        )
-                      ],
-                    )),
-              ]),
-            ],
-          ),
-        ),
-        SizedBox(
-          height: 70,
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              Expanded(
-                  flex: 2,
-                  child: Container(
-                      height: double.infinity,
-                      color: Colors.yellow.shade800,
+                SliverList.list(children: [
+                  Container(
+                      padding:
+                          const EdgeInsets.only(left: 10, top: 10, right: 10),
                       child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          Icon(CupertinoIcons.chat_bubble_text),
-                          Text('Chat Seller')
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Expanded(
+                                    child: Text(
+                                      'USD ${widget.product.price}',
+                                      style: const TextStyle(
+                                          color: Colors.green,
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.w700),
+                                    ),
+                                  ),
+                                  Expanded(
+                                    child: BlocProvider(
+                                      create: (context) =>
+                                          LikeProductBloc(false),
+                                      child: BlocBuilder<LikeProductBloc,
+                                          LikeProductState>(
+                                        builder: (context, state) {
+                                          final isLiked =
+                                              state is LikeProductUpdated
+                                                  ? state.isLiked
+                                                  : false;
+                                          return Row(
+                                            mainAxisSize: MainAxisSize.min,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.end,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.center,
+                                            children: [
+                                              Text(
+                                                '${widget.product.rating.count} Sold',
+                                                style: TextStyle(
+                                                    fontSize: 11,
+                                                    fontWeight:
+                                                        FontWeight.w500),
+                                              ),
+                                              const SizedBox(
+                                                width: 5,
+                                              ),
+                                              InkWell(
+                                                  splashColor:
+                                                      Colors.transparent,
+                                                  onTap: () {
+                                                    context
+                                                        .read<LikeProductBloc>()
+                                                        .add(
+                                                            LikedProductEvent());
+                                                  },
+                                                  child: isLiked
+                                                      ? Icon(
+                                                          CupertinoIcons
+                                                              .heart_fill,
+                                                          color: Colors.red,
+                                                          size: 15,
+                                                        )
+                                                      : Icon(
+                                                          CupertinoIcons.heart,
+                                                          size: 15,
+                                                        ))
+                                            ],
+                                          );
+                                        },
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              Text(
+                                widget.product.title,
+                                maxLines: 2,
+                                style: const TextStyle(
+                                  fontSize: 17,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              const SizedBox(height: 20),
+                              Text(
+                                widget.product.description,
+                                style: const TextStyle(
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.normal,
+                                ),
+                                textAlign: TextAlign.justify,
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 5,
+                              ),
+                              const SizedBox(height: 20),
+                              Row(
+                                children: [
+                                  Text(
+                                    '${widget.product.rating.rate}',
+                                    style: TextStyle(
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    width: 5,
+                                  ),
+                                  Icon(
+                                    CupertinoIcons.star_fill,
+                                    color: Colors.yellow,
+                                    size: 15,
+                                  ),
+                                  const SizedBox(
+                                    width: 5,
+                                  ),
+                                  Text(
+                                    'Product Ratings (2862)',
+                                    style: TextStyle(
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(height: 20),
+                              ReviewWidget(),
+                              const SizedBox(height: 20),
+                              Row(
+                                children: [
+                                  Expanded(child: Divider()),
+                                  const SizedBox(
+                                    width: 10,
+                                  ),
+                                  Text(
+                                    'You May Also Like',
+                                    style: TextStyle(
+                                      fontSize: 15,
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    width: 10,
+                                  ),
+                                  Expanded(child: Divider()),
+                                ],
+                              ),
+                              BlocProvider(
+                                create: (context) => ProductByCategoriesBloc()
+                                  ..add(GetProductByCategoriesEvent(
+                                      category: widget.product.category)),
+                                child: BlocBuilder<ProductByCategoriesBloc,
+                                    ProductByCategoriesState>(
+                                  builder: (context, state) {
+                                    if (state is ProductByCategoriesLoading) {
+                                      return const LinearProgressIndicator();
+                                    }
+                                    if (state is ProductByCategoriesSuccess) {
+                                      return GridView.builder(
+                                        shrinkWrap: true,
+                                        physics:
+                                            const NeverScrollableScrollPhysics(),
+                                        gridDelegate:
+                                            const SliverGridDelegateWithFixedCrossAxisCount(
+                                          mainAxisSpacing: 4,
+                                          crossAxisSpacing: 4,
+                                          crossAxisCount: 2,
+                                          childAspectRatio: 0.79,
+                                        ),
+                                        itemBuilder: (context, index) {
+                                          return ProductItemWidget(
+                                              product: state
+                                                  .productByCategories[index]);
+                                        },
+                                        itemCount:
+                                            state.productByCategories.length,
+                                      );
+                                    }
+                                    return const Center(
+                                      child: Text('No Data'),
+                                    );
+                                  },
+                                ),
+                              ),
+                            ],
+                          )
                         ],
-                      ))),
-              Expanded(
-                  flex: 2,
-                  child: InkWell(
-                    onTap: () {
-                      context
-                          .read<ProductDetailBloc>()
-                          .add(ShowBottomSheetAddCartProductEvent());
-                    },
-                    child: Container(
-                        height: double.infinity,
-                        color: Colors.blue.shade800,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Icon(CupertinoIcons.shopping_cart),
-                            Text('Add To Cart')
-                          ],
-                        )),
-                  )),
-              Expanded(
-                  flex: 4,
-                  child: InkWell(
-                    onTap: () {
-                      context
-                          .read<ProductDetailBloc>()
-                          .add(ShowBottomSheetBuyProductEvent());
-                    },
-                    child: Container(
-                        height: double.infinity,
-                        color: Colors.green.shade800,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Text(
-                              'Buy USD ${widget.product.price}',
-                              style: TextStyle(fontSize: 20),
-                            ),
-                          ],
-                        )),
-                  )),
-            ],
+                      )),
+                ]),
+              ],
+            ),
           ),
-        )
-      ],
+          SizedBox(
+            height: 70,
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                Expanded(
+                    flex: 2,
+                    child: Container(
+                        height: double.infinity,
+                        color: Colors.yellow.shade800,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Icon(CupertinoIcons.chat_bubble_text),
+                            Text('Chat Seller')
+                          ],
+                        ))),
+                Expanded(
+                    flex: 2,
+                    child: InkWell(
+                      onTap: () {
+                        context
+                            .read<ProductDetailBloc>()
+                            .add(ShowBottomSheetAddCartProductEvent());
+                      },
+                      child: Container(
+                          height: double.infinity,
+                          color: Colors.blue.shade800,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Icon(CupertinoIcons.shopping_cart),
+                              Text('Add To Cart')
+                            ],
+                          )),
+                    )),
+                Expanded(
+                    flex: 4,
+                    child: InkWell(
+                      onTap: () {
+                        context
+                            .read<ProductDetailBloc>()
+                            .add(ShowBottomSheetBuyProductEvent());
+                      },
+                      child: Container(
+                          height: double.infinity,
+                          color: Colors.green.shade800,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Text(
+                                'Buy USD ${widget.product.price}',
+                                style: TextStyle(fontSize: 20),
+                              ),
+                            ],
+                          )),
+                    )),
+              ],
+            ),
+          )
+        ],
+      ),
     );
   }
 }

@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../bloc/product/product_bloc.dart';
 import '../../../models/product_model.dart';
+import '../../../utils/colors.dart';
 import '../../../utils/utils.dart';
 import '../product/product_detail_page.dart';
 
@@ -19,10 +20,19 @@ class SearchDelegateProduct extends SearchDelegate<String> {
   String get searchFieldLabel => 'Search Product';
 
   @override
+  ThemeData appBarTheme(BuildContext context) {
+    return Utils.isDarkMode(context)
+        ? ThemeUtils.darkTheme(true)
+        : ThemeUtils.lightTheme(true);
+  }
+
+  @override
   List<Widget>? buildActions(BuildContext context) {
-    return Utils.styleBuildActionAppBarSearch(() {
-      query = '';
-    }, query != '' ? true : false);
+    return Utils.styleBuildActionAppBarSearch(
+      () {
+        query = '';
+      },
+    );
   }
 
   @override

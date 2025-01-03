@@ -118,7 +118,7 @@ class ProductItemWidget extends StatelessWidget {
                               '${product.rating.count} Sold',
                               textAlign: TextAlign.right,
                               style: const TextStyle(
-                                color: Colors.yellow,
+                                color: Colors.blue,
                                 fontSize: 10,
                                 fontWeight: FontWeight.w300,
                               ),

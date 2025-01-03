@@ -1,5 +1,6 @@
-import '../../../../models/product_model.dart';
 import 'package:flutter/material.dart';
+
+import '../../../../models/product_model.dart';
 
 class DetailProductSrcWidget extends StatefulWidget {
   const DetailProductSrcWidget({

@@ -109,6 +109,24 @@ class ProductCategoriesBloc
   }
 }
 
+class ProductByCategoriesBloc
+    extends Bloc<ProductByCategoriesEvent, ProductByCategoriesState> {
+  ProductByCategoriesBloc() : super(ProductByCategoriesInitial()) {
+    on<GetProductByCategoriesEvent>((event, emit) async {
+      emit(ProductByCategoriesLoading());
+      final response = await http.get(
+        Uri.parse(
+            '${Utils.baseUrlFakeApi}/products/category/${event.category}'),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      );
+      emit(ProductByCategoriesSuccess(
+          productByCategories: productFromJson(response.body)));
+    });
+  }
+}
+
 class QuantityBloc extends Bloc<QuantityEvent, QuantityState> {
   final double productPrice;
 

@@ -22,7 +22,18 @@ class _CartPageState extends State<CartPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Shopping Cart')),
+      appBar: AppBar(
+        title: Text(
+          'Shopping Cart',
+        ),
+        actions: [
+          Padding(
+              padding: const EdgeInsets.only(right: 15),
+              child: Icon(
+                CupertinoIcons.chat_bubble_2,
+              ))
+        ],
+      ),
       body: BlocProvider(
         create: (context) => CartBloc()..add(GetCartEvent()),
         child: BlocBuilder<CartBloc, CartState>(
@@ -41,6 +52,9 @@ class _CartPageState extends State<CartPage> {
                           final cart = state.carts[index];
                           return Card(
                             elevation: 0,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(3),
+                            ),
                             child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
@@ -100,7 +114,7 @@ class _CartPageState extends State<CartPage> {
                                                     style: TextStyle(
                                                         fontSize: 12)),
                                                 leading: SizedBox(
-                                                  height: 85,
+                                                  height: 100,
                                                   width: 60,
                                                   child: Center(
                                                     child:
@@ -136,111 +150,152 @@ class _CartPageState extends State<CartPage> {
                                                         productDetail.price *
                                                             quantity;
 
-                                                    return ListTile(
-                                                      contentPadding:
-                                                          const EdgeInsets.all(
-                                                              0),
-                                                      shape:
-                                                          RoundedRectangleBorder(
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(10),
-                                                      ),
-                                                      leading: Row(
-                                                        mainAxisSize:
-                                                            MainAxisSize.min,
-                                                        children: [
-                                                          BlocProvider(
-                                                            create: (context) =>
-                                                                CartCheckBloc(),
-                                                            child: BlocBuilder<
-                                                                CartCheckBloc,
-                                                                CartCheckState>(
-                                                              builder: (context,
-                                                                  state) {
-                                                                return Checkbox(
-                                                                  value: state.productChecks[product
-                                                                          .productId
-                                                                          .toString()] ??
-                                                                      false,
-                                                                  onChanged:
-                                                                      (_) {
-                                                                    context
-                                                                        .read<
-                                                                            CartCheckBloc>()
-                                                                        .add(ToggleProductCheck(product
-                                                                            .productId
-                                                                            .toString()));
-                                                                  },
-                                                                );
-                                                              },
+                                                    return Dismissible(
+                                                      key: Key(product.productId
+                                                          .toString()),
+                                                      background: Container(
+                                                        color: Colors.red,
+                                                        child: Align(
+                                                          alignment: Alignment
+                                                              .centerRight,
+                                                          child: Padding(
+                                                            padding:
+                                                                const EdgeInsets
+                                                                    .only(
+                                                                    right: 16),
+                                                            child: Column(
+                                                              crossAxisAlignment:
+                                                                  CrossAxisAlignment
+                                                                      .center,
+                                                              mainAxisAlignment:
+                                                                  MainAxisAlignment
+                                                                      .center,
+                                                              children: [
+                                                                Icon(
+                                                                  Icons.delete,
+                                                                  color: Colors
+                                                                      .white,
+                                                                ),
+                                                                Text(
+                                                                  'Delete',
+                                                                  style: TextStyle(
+                                                                      color: Colors
+                                                                          .white),
+                                                                )
+                                                              ],
                                                             ),
                                                           ),
-                                                          ClipRRect(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        4),
-                                                            child: SizedBox(
-                                                              height: 85,
-                                                              width: 60,
-                                                              child:
-                                                                  Image.network(
-                                                                productDetail
-                                                                    .image,
-                                                                fit:
-                                                                    BoxFit.fill,
-                                                              ),
-                                                            ),
-                                                          )
-                                                        ],
-                                                      ),
-                                                      title: Container(
-                                                        margin: const EdgeInsets
-                                                            .only(right: 10),
-                                                        child: Text(
-                                                          productDetail.title,
-                                                          style: TextStyle(
-                                                              fontSize: 12,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w700),
                                                         ),
                                                       ),
-                                                      subtitle: Row(
-                                                        children: [
-                                                          Text(
-                                                            'USD $totalPrice',
+                                                      child: ListTile(
+                                                        contentPadding:
+                                                            const EdgeInsets
+                                                                .all(0),
+                                                        shape:
+                                                            RoundedRectangleBorder(
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(10),
+                                                        ),
+                                                        leading: Row(
+                                                          mainAxisSize:
+                                                              MainAxisSize.min,
+                                                          children: [
+                                                            BlocProvider(
+                                                              create: (context) =>
+                                                                  CartCheckBloc(),
+                                                              child: BlocBuilder<
+                                                                  CartCheckBloc,
+                                                                  CartCheckState>(
+                                                                builder:
+                                                                    (context,
+                                                                        state) {
+                                                                  return Checkbox(
+                                                                    value: state.productChecks[product
+                                                                            .productId
+                                                                            .toString()] ??
+                                                                        false,
+                                                                    onChanged:
+                                                                        (_) {
+                                                                      context
+                                                                          .read<
+                                                                              CartCheckBloc>()
+                                                                          .add(ToggleProductCheck(product
+                                                                              .productId
+                                                                              .toString()));
+                                                                    },
+                                                                  );
+                                                                },
+                                                              ),
+                                                            ),
+                                                            SizedBox(
+                                                              height: 120,
+                                                              width: 60,
+                                                              child: ClipRRect(
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            4),
+                                                                child: Image
+                                                                    .network(
+                                                                  productDetail
+                                                                      .image,
+                                                                  fit: BoxFit
+                                                                      .fill,
+                                                                ),
+                                                              ),
+                                                            )
+                                                          ],
+                                                        ),
+                                                        title: Container(
+                                                          margin:
+                                                              const EdgeInsets
+                                                                  .only(
+                                                                  right: 10),
+                                                          child: Text(
+                                                            productDetail.title,
                                                             style: TextStyle(
                                                                 fontSize: 12,
-                                                                color: Colors
-                                                                    .green),
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w700),
                                                           ),
-                                                          const Spacer(),
-                                                          QuantityWidget(
-                                                              txtQauntity:
-                                                                  quantity
-                                                                      .toString(),
-                                                              onPressIncrement:
-                                                                  () {
-                                                                context
-                                                                    .read<
-                                                                        QuantityCartBloc>()
-                                                                    .add(
-                                                                        IncrementCartQuantity());
-                                                              },
-                                                              onPressDecrement:
-                                                                  () {
-                                                                context
-                                                                    .read<
-                                                                        QuantityCartBloc>()
-                                                                    .add(
-                                                                        DecrementCartQuantity());
-                                                              }),
-                                                          const SizedBox(
-                                                            width: 10,
-                                                          )
-                                                        ],
+                                                        ),
+                                                        subtitle: Row(
+                                                          children: [
+                                                            Text(
+                                                              'USD $totalPrice',
+                                                              style: TextStyle(
+                                                                  fontSize: 12,
+                                                                  color: Colors
+                                                                      .green),
+                                                            ),
+                                                            const Spacer(),
+                                                            QuantityWidget(
+                                                                txtQauntity:
+                                                                    quantity
+                                                                        .toString(),
+                                                                onPressIncrement:
+                                                                    () {
+                                                                  context
+                                                                      .read<
+                                                                          QuantityCartBloc>()
+                                                                      .add(
+                                                                          IncrementCartQuantity());
+                                                                },
+                                                                onPressDecrement:
+                                                                    () {
+                                                                  context
+                                                                      .read<
+                                                                          QuantityCartBloc>()
+                                                                      .add(
+                                                                          DecrementCartQuantity());
+                                                                }),
+                                                            const SizedBox(
+                                                              width: 10,
+                                                            )
+                                                          ],
+                                                        ),
                                                       ),
                                                     );
                                                   },
@@ -288,19 +343,22 @@ class _CartPageState extends State<CartPage> {
                             )),
                         Expanded(
                             flex: 3,
-                            child: Center(
-                                child: BlocProvider(
+                            child: BlocProvider(
                               create: (context) => CartCheckBloc(),
                               child: BlocBuilder<CartCheckBloc, CartCheckState>(
                                 builder: (context, state) {
-                                  return Text(
-                                      "Total: Rp${context.watch<CartCheckBloc>().state.totalPrice}",
-                                      style: TextStyle(
-                                          fontSize: 17,
-                                          fontWeight: FontWeight.w600));
+                                  return Padding(
+                                    padding: const EdgeInsets.only(right: 10),
+                                    child: Text(
+                                        "Total: USD ${context.watch<CartCheckBloc>().state.totalPrice}",
+                                        textAlign: TextAlign.end,
+                                        style: TextStyle(
+                                            fontSize: 13,
+                                            fontWeight: FontWeight.w600)),
+                                  );
                                 },
                               ),
-                            ))),
+                            )),
                         Expanded(
                             flex: 3,
                             child: Container(
@@ -310,7 +368,7 @@ class _CartPageState extends State<CartPage> {
                                     child: Text(
                                   'Check Out',
                                   style: TextStyle(
-                                      fontSize: 17,
+                                      fontSize: 13,
                                       fontWeight: FontWeight.w600),
                                 ))))
                       ],

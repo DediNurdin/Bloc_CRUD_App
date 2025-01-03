@@ -1,3 +1,5 @@
+import '../../../utils/colors.dart';
+import '../../../utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -47,8 +49,14 @@ class _RegisterPageState extends State<RegisterPage> {
     }
   }
 
+  var isObsecure = true;
+
   @override
   Widget build(BuildContext context) {
+    Utils.isDarkMode(context)
+        ? ThemeUtils.darkTheme(false)
+        : ThemeUtils.lightTheme(false);
+
     return Scaffold(
       appBar: AppBar(
         title: Text('${widget.type} User'),
@@ -82,7 +90,7 @@ class _RegisterPageState extends State<RegisterPage> {
             return const Center(child: CircularProgressIndicator());
           }
           return Padding(
-              padding: const EdgeInsets.all(16.0),
+              padding: const EdgeInsets.all(10),
               child: Column(
                 children: [
                   Expanded(
@@ -93,27 +101,45 @@ class _RegisterPageState extends State<RegisterPage> {
                         ),
                         TextField(
                             controller: emailController,
+                            textInputAction: TextInputAction.next,
+                            keyboardType: TextInputType.emailAddress,
                             decoration:
                                 const InputDecoration(labelText: 'Email')),
                         const SizedBox(
                           height: 10,
                         ),
                         TextField(
+                            textInputAction: TextInputAction.next,
                             controller: usernameController,
-                            decoration:
-                                const InputDecoration(labelText: 'Username')),
+                            decoration: const InputDecoration(
+                              labelText: 'Username',
+                            )),
                         const SizedBox(
                           height: 10,
                         ),
                         TextField(
-                            controller: passwordController,
-                            decoration:
-                                const InputDecoration(labelText: 'Password')),
+                          controller: passwordController,
+                          textInputAction: TextInputAction.next,
+                          keyboardType: TextInputType.visiblePassword,
+                          decoration: InputDecoration(
+                              labelText: 'Password',
+                              suffixIcon: IconButton(
+                                  onPressed: () {
+                                    setState(() {
+                                      isObsecure = !isObsecure;
+                                    });
+                                  },
+                                  icon: Icon(isObsecure
+                                      ? Icons.visibility_off
+                                      : Icons.visibility))),
+                          obscureText: isObsecure,
+                        ),
                         const SizedBox(
                           height: 10,
                         ),
                         TextField(
                             controller: firstnameController,
+                            textInputAction: TextInputAction.next,
                             decoration:
                                 const InputDecoration(labelText: 'First Name')),
                         const SizedBox(
@@ -121,6 +147,7 @@ class _RegisterPageState extends State<RegisterPage> {
                         ),
                         TextField(
                             controller: lastnameController,
+                            textInputAction: TextInputAction.next,
                             decoration:
                                 const InputDecoration(labelText: 'Last Name')),
                         const SizedBox(
@@ -128,6 +155,7 @@ class _RegisterPageState extends State<RegisterPage> {
                         ),
                         TextField(
                             controller: cityController,
+                            textInputAction: TextInputAction.next,
                             decoration:
                                 const InputDecoration(labelText: 'City')),
                         const SizedBox(
@@ -135,6 +163,7 @@ class _RegisterPageState extends State<RegisterPage> {
                         ),
                         TextField(
                             controller: streetController,
+                            textInputAction: TextInputAction.next,
                             decoration:
                                 const InputDecoration(labelText: 'Street')),
                         const SizedBox(
@@ -142,6 +171,7 @@ class _RegisterPageState extends State<RegisterPage> {
                         ),
                         TextField(
                             controller: numberController,
+                            textInputAction: TextInputAction.next,
                             decoration:
                                 const InputDecoration(labelText: 'Number')),
                         const SizedBox(
@@ -149,6 +179,7 @@ class _RegisterPageState extends State<RegisterPage> {
                         ),
                         TextField(
                             controller: zipcodeController,
+                            textInputAction: TextInputAction.next,
                             decoration:
                                 const InputDecoration(labelText: 'Zipcode')),
                         const SizedBox(
@@ -156,6 +187,7 @@ class _RegisterPageState extends State<RegisterPage> {
                         ),
                         TextField(
                             controller: latController,
+                            textInputAction: TextInputAction.next,
                             decoration:
                                 const InputDecoration(labelText: 'Latitude')),
                         const SizedBox(
@@ -163,6 +195,7 @@ class _RegisterPageState extends State<RegisterPage> {
                         ),
                         TextField(
                             controller: longController,
+                            textInputAction: TextInputAction.next,
                             decoration:
                                 const InputDecoration(labelText: 'Longitude')),
                         const SizedBox(
@@ -170,6 +203,7 @@ class _RegisterPageState extends State<RegisterPage> {
                         ),
                         TextField(
                             controller: phoneController,
+                            textInputAction: TextInputAction.done,
                             decoration:
                                 const InputDecoration(labelText: 'Phone')),
                         const SizedBox(height: 16),

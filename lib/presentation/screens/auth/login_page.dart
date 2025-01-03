@@ -1,8 +1,9 @@
+import '../../../utils/colors.dart';
+import '../../../utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../bloc/user/user_bloc.dart';
-import 'register_page.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -18,6 +19,9 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
+    Utils.isDarkMode(context)
+        ? ThemeUtils.darkTheme(false)
+        : ThemeUtils.lightTheme(false);
     return Scaffold(
       appBar: AppBar(
         title: const Text('Login'),
@@ -42,64 +46,53 @@ class _LoginPageState extends State<LoginPage> {
 
           return Padding(
             padding: const EdgeInsets.all(16),
-            child: Column(
+            child: ListView(
               children: [
-                Expanded(
-                  child: ListView(
-                    children: [
-                      TextField(
-                        controller: usernameController,
-                        textInputAction: TextInputAction.next,
-                        decoration:
-                            const InputDecoration(labelText: 'Username'),
-                      ),
-                      const SizedBox(height: 16),
-                      TextField(
-                        controller: passwordController,
-                        textInputAction: TextInputAction.done,
-                        decoration: InputDecoration(
-                            labelText: 'Password',
-                            suffixIcon: IconButton(
-                                onPressed: () {
-                                  setState(() {
-                                    isObsecure = !isObsecure;
-                                  });
-                                },
-                                icon: Icon(isObsecure
-                                    ? Icons.visibility_off
-                                    : Icons.visibility))),
-                        obscureText: isObsecure,
-                      ),
-                      const SizedBox(height: 32),
-                      ElevatedButton(
-                        onPressed: () {
-                          final username = usernameController.text;
-                          final password = passwordController.text;
-
-                          context.read<LoginBloc>().add(
-                                SubmitLoginEvent(
-                                    username: username, password: password),
-                              );
-                        },
-                        child: const Text('Login'),
-                      ),
-                    ],
+                Text('Welcome Back!',
+                    style: Theme.of(context).textTheme.headlineLarge),
+                Text('Login to your account',
+                    style: Theme.of(context).textTheme.bodyMedium),
+                const SizedBox(height: 16),
+                TextField(
+                  controller: usernameController,
+                  textInputAction: TextInputAction.next,
+                  decoration: const InputDecoration(
+                    labelText: 'Username',
                   ),
                 ),
-                Visibility(
-                  visible: false,
-                  child: Container(
-                    alignment: Alignment.bottomCenter,
-                    child: GestureDetector(
-                        onTap: () {
-                          Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context) => RegisterPage(
-                                    type: 'Add',
-                                  )));
-                        },
-                        child: Text('Dont have an account? Register here')),
+                const SizedBox(height: 16),
+                TextField(
+                  controller: passwordController,
+                  textInputAction: TextInputAction.done,
+                  decoration: InputDecoration(
+                      labelText: 'Password',
+                      suffixIcon: IconButton(
+                          onPressed: () {
+                            setState(() {
+                              isObsecure = !isObsecure;
+                            });
+                          },
+                          icon: Icon(isObsecure
+                              ? Icons.visibility_off
+                              : Icons.visibility))),
+                  obscureText: isObsecure,
+                ),
+                const SizedBox(height: 32),
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      final username = usernameController.text;
+                      final password = passwordController.text;
+
+                      context.read<LoginBloc>().add(
+                            SubmitLoginEvent(
+                                username: username, password: password),
+                          );
+                    },
+                    child: const Text('Login'),
                   ),
-                )
+                ),
               ],
             ),
           );

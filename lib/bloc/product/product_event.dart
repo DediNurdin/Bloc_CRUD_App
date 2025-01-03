@@ -8,6 +8,8 @@ abstract class ProductDetailEvent {}
 
 abstract class ProductCategoriesEvent {}
 
+abstract class ProductByCategoriesEvent {}
+
 class GetProductEvent extends ProductEvent {}
 
 class GetProductSearchEvent extends ProductSearchEvent {}
@@ -15,6 +17,12 @@ class GetProductSearchEvent extends ProductSearchEvent {}
 class GetProductDetailEvent extends ProductDetailEvent {}
 
 class GetProductCategoriesEvent extends ProductCategoriesEvent {}
+
+class GetProductByCategoriesEvent extends ProductByCategoriesEvent {
+  final String category;
+
+  GetProductByCategoriesEvent({required this.category});
+}
 
 class ShowBottomSheetBuyProductEvent extends ProductDetailEvent {}
 

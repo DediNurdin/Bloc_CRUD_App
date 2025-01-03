@@ -37,7 +37,6 @@ class _BuyAddCartDialogWidgetState extends State<BuyAddCartDialogWidget> {
 
   Future<void> initialize() async {
     userId = await Utils.getUser();
-
     setState(() {
       dateStr = "${today.year}-${today.month}-${today.day}";
     });
@@ -189,6 +188,7 @@ class _BuyAddCartDialogWidgetState extends State<BuyAddCartDialogWidget> {
                             const Spacer(),
                             QuantityWidget(
                                 txtQauntity: cartQuantityItems.toString(),
+                                colorTxt: Colors.green,
                                 onPressIncrement: () {
                                   context
                                       .read<QuantityBloc>()
