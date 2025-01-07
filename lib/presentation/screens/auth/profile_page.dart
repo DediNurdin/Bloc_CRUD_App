@@ -1,12 +1,20 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_map/flutter_map.dart';
+import 'package:latlong2/latlong.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../bloc/auth/auth_bloc.dart';
 
-class ProfilePage extends StatelessWidget {
+class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
 
+  @override
+  State<ProfilePage> createState() => _ProfilePageState();
+}
+
+class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -19,7 +27,8 @@ class ProfilePage extends StatelessWidget {
               return Center(child: CircularProgressIndicator());
             } else if (state is AuthSuccess) {
               final auth = state.auth;
-              return ListView(
+
+              return Column(
                 children: [
                   CupertinoFormSection(header: Text('Profile'), children: [
                     CupertinoFormRow(
@@ -50,7 +59,49 @@ class ProfilePage extends StatelessWidget {
                       child: Text(
                           '${auth.address.street}, ${auth.address.city}, ${auth.address.zipcode}'),
                     ),
-                  ])
+                  ]),
+                  Container(
+                      margin: const EdgeInsets.symmetric(horizontal: 10),
+                      height: 500,
+                      child: FlutterMap(
+                        options: MapOptions(
+                          initialCenter: LatLng(
+                              double.parse(auth.address.geolocation.lat),
+                              double.parse(auth.address.geolocation.long)),
+                          initialZoom: 9.2,
+                        ),
+                        children: [
+                          TileLayer(
+                            urlTemplate:
+                                'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+                            userAgentPackageName: 'com.example.app',
+                          ),
+                          MarkerLayer(markers: [
+                            Marker(
+                              point: LatLng(
+                                  double.parse(auth.address.geolocation.lat),
+                                  double.parse(auth.address.geolocation.long)),
+                              width: 80,
+                              height: 80,
+                              child: IconButton(
+                                onPressed: () {},
+                                icon: Icon(Icons.location_on),
+                                color: Colors.red,
+                                iconSize: 35,
+                              ),
+                            ),
+                          ]),
+                          RichAttributionWidget(
+                            attributions: [
+                              TextSourceAttribution(
+                                'OpenStreetMap contributors',
+                                onTap: () => launchUrl(Uri.parse(
+                                    'https://openstreetmap.org/copyright')),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ))
                 ],
               );
             } else if (state is AuthError) {

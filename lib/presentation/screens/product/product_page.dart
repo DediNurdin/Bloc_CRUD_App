@@ -69,6 +69,7 @@ class _ProductPageState extends State<ProductPage> {
                     ),
                   );
                 }
+
                 return const Center(
                   child: Text('No Data'),
                 );
@@ -110,6 +111,11 @@ class _ProductPageState extends State<ProductPage> {
                     );
                   }
 
+                  if (state is ProductFailure) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text(state.error)),
+                    );
+                  }
                   return const Center(
                     child: Text('No Data'),
                   );

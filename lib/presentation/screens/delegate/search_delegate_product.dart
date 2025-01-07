@@ -6,14 +6,13 @@ import '../../../models/product_model.dart';
 import '../../../utils/colors.dart';
 import '../../../utils/utils.dart';
 import '../product/product_detail_page.dart';
+import '../product/search_product_page.dart';
 
 class SearchDelegateProduct extends SearchDelegate<String> {
-  final TextEditingController? provController;
-  final TextEditingController? provIdController;
+  final String initQuery;
 
   SearchDelegateProduct({
-    this.provController,
-    this.provIdController,
+    this.initQuery = '',
   });
 
   @override
@@ -27,10 +26,19 @@ class SearchDelegateProduct extends SearchDelegate<String> {
   }
 
   @override
-  List<Widget>? buildActions(BuildContext context) {
+  List<Widget>? buildActions(
+    BuildContext context,
+  ) {
     return Utils.styleBuildActionAppBarSearch(
       () {
-        query = '';
+        if (query != '') {
+          Navigator.of(context).push(
+            MaterialPageRoute(
+                builder: (context) => SearchProductPage(
+                      query: query,
+                    )),
+          );
+        }
       },
     );
   }
@@ -55,43 +63,25 @@ class SearchDelegateProduct extends SearchDelegate<String> {
           context.read<ProductSearchBloc>().add(GetProductSearchEvent());
         }
         if (state is ProductSearchSuccess) {
-          final List<Product> allProvResult = state.products
-              .where((item) =>
-                  item.title.toLowerCase().contains(query.toLowerCase()))
+          final List<Product> allProdResult = state.products
+              .where((item) => item.title.toLowerCase().contains(initQuery != ''
+                  ? initQuery.toLowerCase()
+                  : query.toLowerCase()))
               .toList();
           return ListView.builder(
-            itemCount: allProvResult.length,
+            itemCount: allProdResult.length,
             itemBuilder: (context, index) {
               return InkWell(
                 onTap: () {
                   Navigator.push(context, MaterialPageRoute(builder: (context) {
-                    return ProductDetailPage(product: allProvResult[index]);
+                    return ProductDetailPage(product: allProdResult[index]);
                   }));
                 },
                 child: Card(
-                  margin: const EdgeInsets.only(bottom: 5, left: 5, right: 5),
-                  child: Padding(
-                      padding: const EdgeInsets.all(10),
-                      child: Row(
-                        children: [
-                          ClipRRect(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(5)),
-                              child: SizedBox(
-                                height: 70,
-                                width: 60,
-                                child: Image.network(
-                                  allProvResult[index].image,
-                                  fit: BoxFit.fill,
-                                ),
-                              )),
-                          const SizedBox(
-                            width: 10,
-                          ),
-                          Expanded(child: Text(allProvResult[index].title))
-                        ],
-                      )),
-                ),
+                    margin: const EdgeInsets.only(bottom: 5, left: 5, right: 5),
+                    child: Padding(
+                        padding: const EdgeInsets.all(10),
+                        child: Text(allProdResult[index].title))),
               );
             },
           );
@@ -114,43 +104,25 @@ class SearchDelegateProduct extends SearchDelegate<String> {
           context.read<ProductSearchBloc>().add(GetProductSearchEvent());
         }
         if (state is ProductSearchSuccess) {
-          final List<Product> allProvSugest = state.products
-              .where((item) =>
-                  item.title.toLowerCase().contains(query.toLowerCase()))
+          final List<Product> allProdSugest = state.products
+              .where((item) => item.title.toLowerCase().contains(initQuery != ''
+                  ? initQuery.toLowerCase()
+                  : query.toLowerCase()))
               .toList();
           return ListView.builder(
-            itemCount: allProvSugest.length,
+            itemCount: allProdSugest.length,
             itemBuilder: (context, index) {
               return InkWell(
                 onTap: () {
                   Navigator.push(context, MaterialPageRoute(builder: (context) {
-                    return ProductDetailPage(product: allProvSugest[index]);
+                    return ProductDetailPage(product: allProdSugest[index]);
                   }));
                 },
                 child: Card(
-                  margin: const EdgeInsets.only(bottom: 5, left: 5, right: 5),
-                  child: Padding(
-                      padding: const EdgeInsets.all(10),
-                      child: Row(
-                        children: [
-                          ClipRRect(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(5)),
-                              child: SizedBox(
-                                height: 70,
-                                width: 60,
-                                child: Image.network(
-                                  allProvSugest[index].image,
-                                  fit: BoxFit.fill,
-                                ),
-                              )),
-                          const SizedBox(
-                            width: 10,
-                          ),
-                          Expanded(child: Text(allProvSugest[index].title))
-                        ],
-                      )),
-                ),
+                    margin: const EdgeInsets.only(bottom: 5, left: 5, right: 5),
+                    child: Padding(
+                        padding: const EdgeInsets.all(10),
+                        child: Text(allProdSugest[index].title))),
               );
             },
           );

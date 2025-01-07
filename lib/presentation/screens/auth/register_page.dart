@@ -1,10 +1,11 @@
-import '../../../utils/colors.dart';
-import '../../../utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../bloc/user/user_bloc.dart';
 import '../../../models/user_model.dart';
+import '../../../utils/colors.dart';
+import '../../../utils/text_form_field_widget.dart';
+import '../../../utils/utils.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage(
@@ -29,6 +30,8 @@ class _RegisterPageState extends State<RegisterPage> {
   final TextEditingController latController = TextEditingController();
   final TextEditingController longController = TextEditingController();
   final TextEditingController phoneController = TextEditingController();
+
+  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
@@ -94,153 +97,147 @@ class _RegisterPageState extends State<RegisterPage> {
               child: Column(
                 children: [
                   Expanded(
-                    child: ListView(
-                      children: [
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        TextField(
-                            controller: emailController,
-                            textInputAction: TextInputAction.next,
-                            keyboardType: TextInputType.emailAddress,
-                            decoration:
-                                const InputDecoration(labelText: 'Email')),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        TextField(
+                    child: Form(
+                      key: formKey,
+                      child: ListView(
+                        children: [
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          TextFormFieldWidget(
+                              controller: emailController,
+                              textInputAction: TextInputAction.next,
+                              keyboardType: TextInputType.emailAddress,
+                              labelText: 'Email'),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          TextFormFieldWidget(
                             textInputAction: TextInputAction.next,
                             controller: usernameController,
-                            decoration: const InputDecoration(
-                              labelText: 'Username',
-                            )),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        TextField(
-                          controller: passwordController,
-                          textInputAction: TextInputAction.next,
-                          keyboardType: TextInputType.visiblePassword,
-                          decoration: InputDecoration(
-                              labelText: 'Password',
-                              suffixIcon: IconButton(
-                                  onPressed: () {
-                                    setState(() {
-                                      isObsecure = !isObsecure;
-                                    });
-                                  },
-                                  icon: Icon(isObsecure
-                                      ? Icons.visibility_off
-                                      : Icons.visibility))),
-                          obscureText: isObsecure,
-                        ),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        TextField(
-                            controller: firstnameController,
+                            keyboardType: TextInputType.text,
+                            labelText: 'Username',
+                          ),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          TextFormFieldWidget(
+                            controller: passwordController,
                             textInputAction: TextInputAction.next,
-                            decoration:
-                                const InputDecoration(labelText: 'First Name')),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        TextField(
-                            controller: lastnameController,
-                            textInputAction: TextInputAction.next,
-                            decoration:
-                                const InputDecoration(labelText: 'Last Name')),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        TextField(
-                            controller: cityController,
-                            textInputAction: TextInputAction.next,
-                            decoration:
-                                const InputDecoration(labelText: 'City')),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        TextField(
-                            controller: streetController,
-                            textInputAction: TextInputAction.next,
-                            decoration:
-                                const InputDecoration(labelText: 'Street')),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        TextField(
-                            controller: numberController,
-                            textInputAction: TextInputAction.next,
-                            decoration:
-                                const InputDecoration(labelText: 'Number')),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        TextField(
-                            controller: zipcodeController,
-                            textInputAction: TextInputAction.next,
-                            decoration:
-                                const InputDecoration(labelText: 'Zipcode')),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        TextField(
-                            controller: latController,
-                            textInputAction: TextInputAction.next,
-                            decoration:
-                                const InputDecoration(labelText: 'Latitude')),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        TextField(
-                            controller: longController,
-                            textInputAction: TextInputAction.next,
-                            decoration:
-                                const InputDecoration(labelText: 'Longitude')),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        TextField(
-                            controller: phoneController,
-                            textInputAction: TextInputAction.done,
-                            decoration:
-                                const InputDecoration(labelText: 'Phone')),
-                        const SizedBox(height: 16),
-                      ],
+                            keyboardType: TextInputType.visiblePassword,
+                            labelText: 'Password',
+                            isPassword: true,
+                          ),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          TextFormFieldWidget(
+                              controller: firstnameController,
+                              textInputAction: TextInputAction.next,
+                              keyboardType: TextInputType.text,
+                              labelText: 'First Name'),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          TextFormFieldWidget(
+                              controller: lastnameController,
+                              textInputAction: TextInputAction.next,
+                              keyboardType: TextInputType.text,
+                              labelText: 'First Name'),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          TextFormFieldWidget(
+                              controller: cityController,
+                              textInputAction: TextInputAction.next,
+                              keyboardType: TextInputType.text,
+                              labelText: 'First Name'),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          TextFormFieldWidget(
+                              controller: streetController,
+                              textInputAction: TextInputAction.next,
+                              keyboardType: TextInputType.text,
+                              labelText: 'First Name'),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          TextFormFieldWidget(
+                              controller: numberController,
+                              textInputAction: TextInputAction.next,
+                              keyboardType: TextInputType.text,
+                              labelText: 'First Name'),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          TextFormFieldWidget(
+                              controller: zipcodeController,
+                              textInputAction: TextInputAction.next,
+                              keyboardType: TextInputType.text,
+                              labelText: 'First Name'),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          TextFormFieldWidget(
+                              controller: latController,
+                              textInputAction: TextInputAction.next,
+                              keyboardType: TextInputType.text,
+                              labelText: 'First Name'),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          TextFormFieldWidget(
+                              controller: longController,
+                              textInputAction: TextInputAction.next,
+                              keyboardType: TextInputType.text,
+                              labelText: 'Longitude'),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          TextFormFieldWidget(
+                              controller: phoneController,
+                              textInputAction: TextInputAction.done,
+                              keyboardType: TextInputType.text,
+                              labelText: 'Phone'),
+                          const SizedBox(height: 16),
+                        ],
+                      ),
                     ),
                   ),
                   SizedBox(
                     width: double.infinity,
                     child: ElevatedButton(
                       onPressed: () {
-                        final user = UserRegisterModel(
-                          email: emailController.text,
-                          username: usernameController.text,
-                          password: passwordController.text,
-                          name: Name(
-                            firstname: firstnameController.text,
-                            lastname: lastnameController.text,
-                          ),
-                          address: AddressRegister(
-                            city: cityController.text,
-                            street: streetController.text,
-                            number: int.tryParse(numberController.text) ?? 0,
-                            zipcode: zipcodeController.text,
-                            geolocation: Geolocation(
-                              lat: latController.text,
-                              long: longController.text,
+                        if (formKey.currentState!.validate()) {
+                          final user = UserRegisterModel(
+                            email: emailController.text,
+                            username: usernameController.text,
+                            password: passwordController.text,
+                            name: Name(
+                              firstname: firstnameController.text,
+                              lastname: lastnameController.text,
                             ),
-                          ),
-                          phone: phoneController.text,
-                        );
-                        widget.type == 'Edit'
-                            ? context
-                                .read<RegisterBloc>()
-                                .add(SubmitEditUserEvent(widget.userId, user))
-                            : context
-                                .read<RegisterBloc>()
-                                .add(SubmitRegisterEvent(user));
+                            address: AddressRegister(
+                              city: cityController.text,
+                              street: streetController.text,
+                              number: int.tryParse(numberController.text) ?? 0,
+                              zipcode: zipcodeController.text,
+                              geolocation: Geolocation(
+                                lat: latController.text,
+                                long: longController.text,
+                              ),
+                            ),
+                            phone: phoneController.text,
+                          );
+                          widget.type == 'Edit'
+                              ? context
+                                  .read<RegisterBloc>()
+                                  .add(SubmitEditUserEvent(widget.userId, user))
+                              : context
+                                  .read<RegisterBloc>()
+                                  .add(SubmitRegisterEvent(user));
+                        }
                       },
                       child: Text('${widget.type} User'),
                     ),

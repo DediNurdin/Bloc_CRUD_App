@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -23,7 +22,10 @@ class Utils {
         onTap: onPressed,
         child: const Padding(
           padding: EdgeInsets.only(right: 15),
-          child: Icon(CupertinoIcons.search),
+          child: Text(
+            'Search',
+            style: TextStyle(fontSize: 12),
+          ),
         ),
       ),
     ];

@@ -26,12 +26,38 @@ class ProductSuccess extends ProductState {
   });
 }
 
+class ProductFailure extends ProductState {
+  final String error;
+
+  ProductFailure(this.error);
+}
+
+class ProductSortSuccess extends ProductSearchState {
+  final List<Product> products;
+
+  ProductSortSuccess({
+    required this.products,
+  });
+}
+
+class ProductSortFailure extends ProductSearchState {
+  final String error;
+
+  ProductSortFailure(this.error);
+}
+
 class ProductSearchSuccess extends ProductSearchState {
   final List<Product> products;
 
   ProductSearchSuccess({
     required this.products,
   });
+}
+
+class ProductSearchFailure extends ProductSearchState {
+  final String error;
+
+  ProductSearchFailure(this.error);
 }
 
 class ProductDetailSuccess extends ProductDetailState {}
@@ -83,8 +109,6 @@ class QuantityState {
 class QuantityUpdated extends QuantityState {
   QuantityUpdated({required super.quantity, required super.price});
 }
-
-class AddCartLoading extends ProductDetailState {}
 
 class AddCartSuccess extends ProductDetailState {
   final String message;

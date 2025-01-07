@@ -89,10 +89,6 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
           } else if (state is ProductDetailInitial) {
             context.read<ProductDetailBloc>().add(GetProductDetailEvent());
             return const Center(child: CircularProgressIndicator());
-          } else if (state is AddCartLoading) {
-            return Stack(
-              children: [main(), Center(child: CircularProgressIndicator())],
-            );
           }
           return const Center(
             child: Text('No Data'),

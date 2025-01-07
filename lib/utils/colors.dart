@@ -9,6 +9,12 @@ class ThemeUtils {
       fontFamily: GoogleFonts.roboto().fontFamily,
       useMaterial3: true,
       splashColor: Colors.transparent,
+      drawerTheme:
+          DrawerThemeData(backgroundColor: CupertinoColors.systemBackground),
+      tabBarTheme: TabBarTheme(
+          overlayColor: WidgetStatePropertyAll(Colors.transparent),
+          labelColor: Colors.green,
+          indicatorColor: Colors.green),
       pageTransitionsTheme: const PageTransitionsTheme(builders: {
         TargetPlatform.android: CupertinoPageTransitionsBuilder(),
         TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
@@ -113,6 +119,12 @@ class ThemeUtils {
         fontFamily: GoogleFonts.roboto().fontFamily,
         useMaterial3: true,
         splashColor: Colors.transparent,
+        drawerTheme: DrawerThemeData(
+            backgroundColor: CupertinoColors.darkBackgroundGray),
+        tabBarTheme: TabBarTheme(
+            overlayColor: WidgetStatePropertyAll(Colors.transparent),
+            labelColor: Colors.green,
+            indicatorColor: Colors.green),
         pageTransitionsTheme: const PageTransitionsTheme(builders: {
           TargetPlatform.android: CupertinoPageTransitionsBuilder(),
           TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),

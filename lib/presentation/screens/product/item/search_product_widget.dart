@@ -1,17 +1,26 @@
-import '../../delegate/search_delegate_product.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class SearchProductWidget extends StatelessWidget {
-  const SearchProductWidget({super.key, this.isMain = true});
+import '../../delegate/search_delegate_product.dart';
 
+class SearchProductWidget extends StatelessWidget {
+  const SearchProductWidget({super.key, this.query = '', this.isMain = true});
+
+  final String query;
   final bool isMain;
   @override
   Widget build(BuildContext context) {
     return InkWell(
       splashColor: Colors.transparent,
       onTap: () async {
-        await showSearch(context: context, delegate: SearchDelegateProduct());
+        if (query == '') {
+          await showSearch(
+              context: context,
+              delegate: SearchDelegateProduct(initQuery: query));
+        } else {
+          if (!context.mounted) return;
+          Navigator.of(context).pop();
+        }
       },
       child: Container(
         height: 40,
@@ -20,7 +29,12 @@ class SearchProductWidget extends StatelessWidget {
           color: isMain
               ? Colors.transparent
               : Colors.grey.shade700.withOpacity(0.1),
-          border: Border.all(color: isMain ? Colors.grey : Colors.transparent),
+          border: Border.all(
+              color: isMain
+                  ? query != ''
+                      ? Colors.green
+                      : Colors.grey
+                  : Colors.transparent),
           borderRadius: BorderRadius.circular(5),
         ),
         child: Row(
@@ -34,7 +48,7 @@ class SearchProductWidget extends StatelessWidget {
               width: 10,
             ),
             Text(
-              'Search Product',
+              query != '' ? query : 'Search Product',
               style: TextStyle(fontSize: 14, color: Colors.grey),
             )
           ],

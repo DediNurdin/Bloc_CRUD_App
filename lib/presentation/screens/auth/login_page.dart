@@ -1,9 +1,11 @@
-import '../../../utils/colors.dart';
-import '../../../utils/utils.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../bloc/user/user_bloc.dart';
+import '../../../utils/colors.dart';
+import '../../../utils/text_form_field_widget.dart';
+import '../../../utils/utils.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -15,7 +17,7 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final TextEditingController usernameController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
-  var isObsecure = true;
+  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
@@ -41,62 +43,64 @@ class _LoginPageState extends State<LoginPage> {
         },
         builder: (context, state) {
           if (state is LoginLoading) {
-            return const Center(child: CircularProgressIndicator());
+            return main(true);
           }
 
-          return Padding(
-            padding: const EdgeInsets.all(16),
-            child: ListView(
-              children: [
-                Text('Welcome Back!',
-                    style: Theme.of(context).textTheme.headlineLarge),
-                Text('Login to your account',
-                    style: Theme.of(context).textTheme.bodyMedium),
-                const SizedBox(height: 16),
-                TextField(
-                  controller: usernameController,
-                  textInputAction: TextInputAction.next,
-                  decoration: const InputDecoration(
-                    labelText: 'Username',
-                  ),
-                ),
-                const SizedBox(height: 16),
-                TextField(
-                  controller: passwordController,
-                  textInputAction: TextInputAction.done,
-                  decoration: InputDecoration(
-                      labelText: 'Password',
-                      suffixIcon: IconButton(
-                          onPressed: () {
-                            setState(() {
-                              isObsecure = !isObsecure;
-                            });
-                          },
-                          icon: Icon(isObsecure
-                              ? Icons.visibility_off
-                              : Icons.visibility))),
-                  obscureText: isObsecure,
-                ),
-                const SizedBox(height: 32),
-                SizedBox(
-                  width: double.infinity,
-                  child: ElevatedButton(
-                    onPressed: () {
-                      final username = usernameController.text;
-                      final password = passwordController.text;
-
-                      context.read<LoginBloc>().add(
-                            SubmitLoginEvent(
-                                username: username, password: password),
-                          );
-                    },
-                    child: const Text('Login'),
-                  ),
-                ),
-              ],
-            ),
-          );
+          return main(false);
         },
+      ),
+    );
+  }
+
+  Widget main(bool isLoading) {
+    return Padding(
+      padding: const EdgeInsets.all(16),
+      child: Form(
+        key: formKey,
+        child: ListView(
+          children: [
+            Text('Welcome Back!',
+                style: Theme.of(context).textTheme.headlineLarge),
+            Text('Login to your account',
+                style: Theme.of(context).textTheme.bodyMedium),
+            const SizedBox(height: 16),
+            TextFormFieldWidget(
+              controller: usernameController,
+              labelText: 'Username',
+              textInputAction: TextInputAction.next,
+              keyboardType: TextInputType.text,
+            ),
+            const SizedBox(height: 16),
+            TextFormFieldWidget(
+              controller: passwordController,
+              labelText: 'Password',
+              textInputAction: TextInputAction.done,
+              keyboardType: TextInputType.visiblePassword,
+              isPassword: true,
+            ),
+            const SizedBox(height: 32),
+            bottom(isLoading)
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget bottom(bool isLoading) {
+    return SizedBox(
+      width: double.infinity,
+      child: ElevatedButton(
+        onPressed: () {
+          if (formKey.currentState!.validate()) {
+            final username = usernameController.text;
+            final password = passwordController.text;
+
+            context.read<LoginBloc>().add(
+                  SubmitLoginEvent(username: username, password: password),
+                );
+          }
+        },
+        child: isLoading ? CupertinoActivityIndicator() : Text('Login'),
       ),
     );
   }

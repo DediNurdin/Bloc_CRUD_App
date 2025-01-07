@@ -14,13 +14,21 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
   ProductBloc() : super(ProductInitial()) {
     on<GetProductEvent>((event, emit) async {
       emit(ProductLoading());
-      final response = await http.get(
-        Uri.parse('${Utils.baseUrlFakeApi}/products'),
-        headers: {
-          "Content-Type": "application/json",
-        },
-      );
-      emit(ProductSuccess(products: productFromJson(response.body)));
+      try {
+        final response = await http.get(
+          Uri.parse('${Utils.baseUrlFakeApi}/products'),
+          headers: {
+            "Content-Type": "application/json",
+          },
+        );
+        if (response.statusCode == 200) {
+          emit(ProductSuccess(products: productFromJson(response.body)));
+        } else {
+          emit(ProductFailure('An error occurred: ${response.reasonPhrase}'));
+        }
+      } catch (e) {
+        emit(ProductFailure('An error occurred: $e'));
+      }
     });
   }
 }
@@ -29,13 +37,41 @@ class ProductSearchBloc extends Bloc<ProductSearchEvent, ProductSearchState> {
   ProductSearchBloc() : super(ProductSearchInitial()) {
     on<GetProductSearchEvent>((event, emit) async {
       emit(ProductSearchLoading());
-      final response = await http.get(
-        Uri.parse('${Utils.baseUrlFakeApi}/products'),
-        headers: {
-          "Content-Type": "application/json",
-        },
-      );
-      emit(ProductSearchSuccess(products: productFromJson(response.body)));
+      try {
+        final response = await http.get(
+          Uri.parse('${Utils.baseUrlFakeApi}/products'),
+          headers: {
+            "Content-Type": "application/json",
+          },
+        );
+        if (response.statusCode == 200) {
+          emit(ProductSearchSuccess(products: productFromJson(response.body)));
+        } else {
+          emit(ProductSearchFailure(
+              'An error occurred: ${response.reasonPhrase}'));
+        }
+      } catch (e) {
+        emit(ProductSearchFailure('An error occurred: $e'));
+      }
+    });
+
+    on<SortProductEvent>((event, emit) async {
+      try {
+        final response = await http.get(
+          Uri.parse('${Utils.baseUrlFakeApi}/products?sort=${event.type}'),
+          headers: {
+            "Content-Type": "application/json",
+          },
+        );
+        if (response.statusCode == 200) {
+          emit(ProductSearchSuccess(products: productFromJson(response.body)));
+        } else {
+          emit(ProductSortFailure(
+              'An error occurred: ${response.reasonPhrase}'));
+        }
+      } catch (e) {
+        emit(ProductSortFailure('An error occurred: $e'));
+      }
     });
   }
 }
@@ -44,7 +80,6 @@ class ProductDetailBloc extends Bloc<ProductDetailEvent, ProductDetailState> {
   ProductDetailBloc() : super(ProductDetailInitial()) {
     on<GetProductDetailEvent>((event, emit) async {
       emit(ProductDetailLoading());
-
       emit(ProductDetailSuccess());
     });
 
@@ -59,7 +94,6 @@ class ProductDetailBloc extends Bloc<ProductDetailEvent, ProductDetailState> {
     });
 
     on<AddCartEvent>((event, emit) async {
-      emit(AddCartLoading());
       try {
         final response = await http.post(
           Uri.parse('${Utils.baseUrlFakeApi}/carts'),

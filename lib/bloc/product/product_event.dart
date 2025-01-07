@@ -24,6 +24,11 @@ class GetProductByCategoriesEvent extends ProductByCategoriesEvent {
   GetProductByCategoriesEvent({required this.category});
 }
 
+class SortProductEvent extends ProductSearchEvent {
+  final String type;
+  SortProductEvent({required this.type});
+}
+
 class ShowBottomSheetBuyProductEvent extends ProductDetailEvent {}
 
 class ShowBottomSheetAddCartProductEvent extends ProductDetailEvent {}
