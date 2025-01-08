@@ -23,7 +23,7 @@ class ProductItemWidget extends StatelessWidget {
       child: Card(
         elevation: 0,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(4),
+          borderRadius: BorderRadius.circular(10),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -34,8 +34,8 @@ class ProductItemWidget extends StatelessWidget {
                 width: double.infinity,
                 child: ClipRRect(
                   borderRadius: const BorderRadius.only(
-                      topLeft: Radius.circular(4),
-                      topRight: Radius.circular(4)),
+                      topLeft: Radius.circular(10),
+                      topRight: Radius.circular(10)),
                   child: Image.network(
                     product.image,
                     fit: BoxFit.fill,

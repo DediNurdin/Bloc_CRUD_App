@@ -1,30 +1,35 @@
-import 'package:flutter/cupertino.dart';
+import '../voucher/voucher_page.dart';
+import '../wallet/wallet_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../bloc/bottom_nav/bottom_nav_bloc.dart';
 import '../product/product_page.dart';
 import '../settings/setting_page.dart';
-import '../user/user_page.dart';
 
 List<BottomNavigationBarItem> bottomNavItems = <BottomNavigationBarItem>[
   BottomNavigationBarItem(
-    icon: Icon(CupertinoIcons.house_fill),
+    icon: Icon(Icons.space_dashboard_rounded),
     label: 'Home',
   ),
   BottomNavigationBarItem(
-    icon: Icon(CupertinoIcons.person_fill),
-    label: 'User',
+    icon: Icon(Icons.wallet_giftcard_rounded),
+    label: 'Voucher',
   ),
   BottomNavigationBarItem(
-    icon: Icon(CupertinoIcons.settings),
+    icon: Icon(Icons.wallet_rounded),
+    label: 'Wallet',
+  ),
+  BottomNavigationBarItem(
+    icon: Icon(Icons.settings_rounded),
     label: 'Setting',
   ),
 ];
 
 const List<Widget> bottomNavScreen = [
   ProductPage(),
-  UserPage(),
+  VoucherPage(),
+  WalletPage(),
   SettingsPage()
 ];
 

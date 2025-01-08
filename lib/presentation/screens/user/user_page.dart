@@ -23,7 +23,6 @@ class _UserPageState extends State<UserPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        scrolledUnderElevation: 0,
         automaticallyImplyLeading: false,
         title: const Text('User'),
       ),

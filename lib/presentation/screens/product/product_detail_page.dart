@@ -239,191 +239,180 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                       padding:
                           const EdgeInsets.only(left: 10, top: 10, right: 10),
                       child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Expanded(
-                                    child: Text(
-                                      'USD ${widget.product.price}',
-                                      style: const TextStyle(
-                                          color: Colors.green,
-                                          fontSize: 15,
-                                          fontWeight: FontWeight.w700),
-                                    ),
-                                  ),
-                                  Expanded(
-                                    child: BlocProvider(
-                                      create: (context) =>
-                                          LikeProductBloc(false),
-                                      child: BlocBuilder<LikeProductBloc,
-                                          LikeProductState>(
-                                        builder: (context, state) {
-                                          final isLiked =
-                                              state is LikeProductUpdated
-                                                  ? state.isLiked
-                                                  : false;
-                                          return Row(
-                                            mainAxisSize: MainAxisSize.min,
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.end,
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.center,
-                                            children: [
-                                              Text(
-                                                '${widget.product.rating.count} Sold',
-                                                style: TextStyle(
-                                                    fontSize: 11,
-                                                    fontWeight:
-                                                        FontWeight.w500),
-                                              ),
-                                              const SizedBox(
-                                                width: 5,
-                                              ),
-                                              InkWell(
-                                                  splashColor:
-                                                      Colors.transparent,
-                                                  onTap: () {
-                                                    context
-                                                        .read<LikeProductBloc>()
-                                                        .add(
-                                                            LikedProductEvent());
-                                                  },
-                                                  child: isLiked
-                                                      ? Icon(
-                                                          CupertinoIcons
-                                                              .heart_fill,
-                                                          color: Colors.red,
-                                                          size: 15,
-                                                        )
-                                                      : Icon(
-                                                          CupertinoIcons.heart,
-                                                          size: 15,
-                                                        ))
-                                            ],
-                                          );
-                                        },
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(
-                                height: 10,
-                              ),
-                              Text(
-                                widget.product.title,
-                                maxLines: 2,
-                                style: const TextStyle(
-                                  fontSize: 17,
-                                  fontWeight: FontWeight.bold,
+                              Expanded(
+                                child: Text(
+                                  'USD ${widget.product.price}',
+                                  style: const TextStyle(
+                                      color: Colors.green,
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.w700),
                                 ),
                               ),
-                              const SizedBox(height: 20),
-                              Text(
-                                widget.product.description,
-                                style: const TextStyle(
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.normal,
-                                ),
-                                textAlign: TextAlign.justify,
-                                overflow: TextOverflow.ellipsis,
-                                maxLines: 5,
-                              ),
-                              const SizedBox(height: 20),
-                              Row(
-                                children: [
-                                  Text(
-                                    '${widget.product.rating.rate}',
-                                    style: TextStyle(
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  const SizedBox(
-                                    width: 5,
-                                  ),
-                                  Icon(
-                                    CupertinoIcons.star_fill,
-                                    color: Colors.yellow,
-                                    size: 15,
-                                  ),
-                                  const SizedBox(
-                                    width: 5,
-                                  ),
-                                  Text(
-                                    'Product Ratings (2862)',
-                                    style: TextStyle(
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(height: 20),
-                              ReviewWidget(),
-                              const SizedBox(height: 20),
-                              Row(
-                                children: [
-                                  Expanded(child: Divider()),
-                                  const SizedBox(
-                                    width: 10,
-                                  ),
-                                  Text(
-                                    'You May Also Like',
-                                    style: TextStyle(
-                                      fontSize: 15,
-                                    ),
-                                  ),
-                                  const SizedBox(
-                                    width: 10,
-                                  ),
-                                  Expanded(child: Divider()),
-                                ],
-                              ),
-                              BlocProvider(
-                                create: (context) => ProductByCategoriesBloc()
-                                  ..add(GetProductByCategoriesEvent(
-                                      category: widget.product.category)),
-                                child: BlocBuilder<ProductByCategoriesBloc,
-                                    ProductByCategoriesState>(
-                                  builder: (context, state) {
-                                    if (state is ProductByCategoriesLoading) {
-                                      return const LinearProgressIndicator();
-                                    }
-                                    if (state is ProductByCategoriesSuccess) {
-                                      return GridView.builder(
-                                        shrinkWrap: true,
-                                        physics:
-                                            const NeverScrollableScrollPhysics(),
-                                        gridDelegate:
-                                            const SliverGridDelegateWithFixedCrossAxisCount(
-                                          mainAxisSpacing: 4,
-                                          crossAxisSpacing: 4,
-                                          crossAxisCount: 2,
-                                          childAspectRatio: 0.79,
-                                        ),
-                                        itemBuilder: (context, index) {
-                                          return ProductItemWidget(
-                                              product: state
-                                                  .productByCategories[index]);
-                                        },
-                                        itemCount:
-                                            state.productByCategories.length,
+                              Expanded(
+                                child: BlocProvider(
+                                  create: (context) => LikeProductBloc(false),
+                                  child: BlocBuilder<LikeProductBloc,
+                                      LikeProductState>(
+                                    builder: (context, state) {
+                                      final isLiked =
+                                          state is LikeProductUpdated
+                                              ? state.isLiked
+                                              : false;
+                                      return Row(
+                                        mainAxisSize: MainAxisSize.min,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.end,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: [
+                                          Text(
+                                            '${widget.product.rating.count} Sold',
+                                            style: TextStyle(
+                                                fontSize: 11,
+                                                fontWeight: FontWeight.w500),
+                                          ),
+                                          const SizedBox(
+                                            width: 5,
+                                          ),
+                                          InkWell(
+                                              splashColor: Colors.transparent,
+                                              onTap: () {
+                                                context
+                                                    .read<LikeProductBloc>()
+                                                    .add(LikedProductEvent());
+                                              },
+                                              child: isLiked
+                                                  ? Icon(
+                                                      CupertinoIcons.heart_fill,
+                                                      color: Colors.red,
+                                                      size: 15,
+                                                    )
+                                                  : Icon(
+                                                      CupertinoIcons.heart,
+                                                      size: 15,
+                                                    ))
+                                        ],
                                       );
-                                    }
-                                    return const Center(
-                                      child: Text('No Data'),
-                                    );
-                                  },
+                                    },
+                                  ),
                                 ),
                               ),
                             ],
-                          )
+                          ),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          Text(
+                            widget.product.title,
+                            maxLines: 2,
+                            style: const TextStyle(
+                              fontSize: 17,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          const SizedBox(height: 20),
+                          Text(
+                            widget.product.description,
+                            style: const TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.normal,
+                            ),
+                            textAlign: TextAlign.justify,
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 5,
+                          ),
+                          const SizedBox(height: 20),
+                          Row(
+                            children: [
+                              Text(
+                                '${widget.product.rating.rate}',
+                                style: TextStyle(
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              const SizedBox(
+                                width: 5,
+                              ),
+                              Icon(
+                                CupertinoIcons.star_fill,
+                                color: Colors.yellow,
+                                size: 15,
+                              ),
+                              const SizedBox(
+                                width: 5,
+                              ),
+                              Text(
+                                'Product Ratings (2862)',
+                                style: TextStyle(
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 20),
+                          ReviewWidget(),
+                          const SizedBox(height: 20),
+                          Row(
+                            children: [
+                              Expanded(child: Divider()),
+                              const SizedBox(
+                                width: 10,
+                              ),
+                              Text(
+                                'You May Also Like',
+                                style: TextStyle(
+                                  fontSize: 15,
+                                ),
+                              ),
+                              const SizedBox(
+                                width: 10,
+                              ),
+                              Expanded(child: Divider()),
+                            ],
+                          ),
+                          BlocProvider(
+                            create: (context) => ProductByCategoriesBloc()
+                              ..add(GetProductByCategoriesEvent(
+                                  category: widget.product.category)),
+                            child: BlocBuilder<ProductByCategoriesBloc,
+                                ProductByCategoriesState>(
+                              builder: (context, state) {
+                                if (state is ProductByCategoriesLoading) {
+                                  return const LinearProgressIndicator();
+                                }
+                                if (state is ProductByCategoriesSuccess) {
+                                  return GridView.builder(
+                                    shrinkWrap: true,
+                                    physics:
+                                        const NeverScrollableScrollPhysics(),
+                                    gridDelegate:
+                                        const SliverGridDelegateWithFixedCrossAxisCount(
+                                      mainAxisSpacing: 4,
+                                      crossAxisSpacing: 4,
+                                      crossAxisCount: 2,
+                                      childAspectRatio: 0.79,
+                                    ),
+                                    itemBuilder: (context, index) {
+                                      return ProductItemWidget(
+                                          product:
+                                              state.productByCategories[index]);
+                                    },
+                                    itemCount: state.productByCategories.length,
+                                  );
+                                }
+                                return const Center(
+                                  child: Text('No Data'),
+                                );
+                              },
+                            ),
+                          ),
                         ],
                       )),
                 ]),
@@ -431,16 +420,15 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
             ),
           ),
           SizedBox(
-            height: 70,
+            height: 60,
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 Expanded(
                     flex: 2,
-                    child: Container(
+                    child: SizedBox(
                         height: double.infinity,
-                        color: Colors.yellow.shade800,
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           crossAxisAlignment: CrossAxisAlignment.center,
@@ -449,17 +437,18 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                             Text('Chat Seller')
                           ],
                         ))),
+                SizedBox(height: 30, child: const VerticalDivider()),
                 Expanded(
                     flex: 2,
                     child: InkWell(
+                      overlayColor: WidgetStatePropertyAll(Colors.transparent),
                       onTap: () {
                         context
                             .read<ProductDetailBloc>()
                             .add(ShowBottomSheetAddCartProductEvent());
                       },
-                      child: Container(
+                      child: SizedBox(
                           height: double.infinity,
-                          color: Colors.blue.shade800,
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             crossAxisAlignment: CrossAxisAlignment.center,
@@ -472,6 +461,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                 Expanded(
                     flex: 4,
                     child: InkWell(
+                      overlayColor: WidgetStatePropertyAll(Colors.transparent),
                       onTap: () {
                         context
                             .read<ProductDetailBloc>()

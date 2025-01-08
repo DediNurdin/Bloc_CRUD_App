@@ -53,6 +53,8 @@ class ThemeUtils {
       bottomSheetTheme: BottomSheetThemeData(
           backgroundColor: CupertinoColors.systemBackground),
       bottomNavigationBarTheme: BottomNavigationBarThemeData(
+          type: BottomNavigationBarType.fixed,
+          selectedLabelStyle: TextStyle(color: Colors.grey, fontSize: 11),
           selectedItemColor: Colors.green,
           unselectedItemColor: Colors.grey.shade600,
           backgroundColor: CupertinoColors.systemBackground),
@@ -164,6 +166,8 @@ class ThemeUtils {
         bottomSheetTheme: BottomSheetThemeData(
             backgroundColor: CupertinoColors.darkBackgroundGray),
         bottomNavigationBarTheme: BottomNavigationBarThemeData(
+            type: BottomNavigationBarType.fixed,
+            selectedLabelStyle: TextStyle(color: Colors.grey, fontSize: 11),
             backgroundColor: CupertinoColors.darkBackgroundGray,
             selectedItemColor: Colors.green,
             unselectedItemColor: Colors.grey.shade600),
