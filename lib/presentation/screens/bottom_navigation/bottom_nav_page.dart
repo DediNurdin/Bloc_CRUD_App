@@ -1,57 +1,96 @@
-import '../voucher/voucher_page.dart';
-import '../wallet/wallet_page.dart';
+import 'package:bloc_online_store/utils/utils.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 import '../../../bloc/bottom_nav/bottom_nav_bloc.dart';
+import '../feed/feed_page.dart';
+import '../mall/mall_page.dart';
 import '../product/product_page.dart';
-import '../settings/setting_page.dart';
+import '../transactions/transactions_page.dart';
+import '../wishlist/wish_list_page.dart';
 
-List<BottomNavigationBarItem> bottomNavItems = <BottomNavigationBarItem>[
-  BottomNavigationBarItem(
-    icon: Icon(Icons.space_dashboard_rounded),
+List<NavigationDestination> bottomNavItems = <NavigationDestination>[
+  NavigationDestination(
+    icon: Icon(Icons.space_dashboard_outlined),
+    selectedIcon: Icon(Icons.space_dashboard_rounded),
     label: 'Home',
   ),
-  BottomNavigationBarItem(
-    icon: Icon(Icons.wallet_giftcard_rounded),
-    label: 'Voucher',
+  NavigationDestination(
+    icon: Icon(CupertinoIcons.play_rectangle),
+    selectedIcon: Icon(CupertinoIcons.play_rectangle_fill),
+    label: 'Feed',
   ),
-  BottomNavigationBarItem(
-    icon: Icon(Icons.wallet_rounded),
-    label: 'Wallet',
+  NavigationDestination(
+    icon: Icon(CupertinoIcons.hexagon),
+    selectedIcon: Icon(CupertinoIcons.hexagon_fill),
+    label: 'Mall',
   ),
-  BottomNavigationBarItem(
-    icon: Icon(Icons.settings_rounded),
-    label: 'Setting',
+  NavigationDestination(
+    icon: Icon(CupertinoIcons.heart),
+    selectedIcon: Icon(CupertinoIcons.heart_fill),
+    label: 'Wishlist',
+  ),
+  NavigationDestination(
+    icon: Icon(CupertinoIcons.doc_text),
+    selectedIcon: Icon(CupertinoIcons.doc_text_fill),
+    label: 'Transaction',
   ),
 ];
 
 const List<Widget> bottomNavScreen = [
   ProductPage(),
-  VoucherPage(),
-  WalletPage(),
-  SettingsPage()
+  FeedPage(),
+  MallPage(),
+  WishListPage(),
+  TransactionsPage()
 ];
 
-class BottomNavigationPage extends StatelessWidget {
+class BottomNavigationPage extends StatefulWidget {
   const BottomNavigationPage({
     super.key,
   });
+
+  @override
+  State<BottomNavigationPage> createState() => _BottomNavigationPageState();
+}
+
+class _BottomNavigationPageState extends State<BottomNavigationPage> {
+  DateTime timeBackPressed = DateTime.now();
 
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<BottomNavBloc, BottomNavState>(
       listener: (context, state) {},
       builder: (context, state) {
-        return Scaffold(
-          body: Center(child: bottomNavScreen.elementAt(state.tabIndex)),
-          bottomNavigationBar: BottomNavigationBar(
-            items: bottomNavItems,
-            currentIndex: state.tabIndex,
-            onTap: (index) {
-              BlocProvider.of<BottomNavBloc>(context)
-                  .add(TabChange(tabIndex: index));
-            },
+        return PopScope(
+          canPop: false,
+          onPopInvokedWithResult: (bool didPop, dynamic ok) {
+            final difference = DateTime.now().difference(timeBackPressed);
+            final isExitWarning = difference >= const Duration(seconds: 2);
+            timeBackPressed = DateTime.now();
+            if (isExitWarning) {
+              Utils.showToast('Press back again to close');
+
+              didPop = false;
+            } else {
+              Fluttertoast.cancel();
+              SystemNavigator.pop();
+              didPop = true;
+            }
+          },
+          child: Scaffold(
+            body: Center(child: bottomNavScreen.elementAt(state.tabIndex)),
+            bottomNavigationBar: NavigationBar(
+              destinations: bottomNavItems,
+              selectedIndex: state.tabIndex,
+              onDestinationSelected: (index) {
+                BlocProvider.of<BottomNavBloc>(context)
+                    .add(TabChange(tabIndex: index));
+              },
+            ),
           ),
         );
       },

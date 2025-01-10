@@ -24,17 +24,13 @@ class SearchProductWidget extends StatelessWidget {
       },
       child: Container(
         height: 40,
-        padding: const EdgeInsets.only(left: 10, right: 10, top: 5, bottom: 5),
+        padding: EdgeInsets.only(left: 10, right: 10, top: 5, bottom: 5),
         decoration: BoxDecoration(
           color: isMain
               ? Colors.transparent
               : Colors.grey.shade700.withOpacity(0.1),
           border: Border.all(
-              color: isMain
-                  ? query != ''
-                      ? Colors.green
-                      : Colors.grey
-                  : Colors.transparent),
+              color: isMain ? Colors.grey.shade700 : Colors.transparent),
           borderRadius: BorderRadius.circular(5),
         ),
         child: Row(

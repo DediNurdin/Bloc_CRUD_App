@@ -6,6 +6,7 @@ import 'package:latlong2/latlong.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../bloc/auth/auth_bloc.dart';
+import '../../../utils/utils.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -35,8 +36,8 @@ class _ProfilePageState extends State<ProfilePage> {
                       prefix: Text(
                         'Name',
                       ),
-                      child:
-                          Text('${auth.name.firstname} ${auth.name.lastname}'),
+                      child: Text(
+                          '${auth.name.firstname.capitalize()} ${auth.name.lastname.capitalize()}'),
                     ),
                     CupertinoFormRow(
                       prefix: Text(
@@ -57,11 +58,10 @@ class _ProfilePageState extends State<ProfilePage> {
                         'Full Adress',
                       ),
                       child: Text(
-                          '${auth.address.street}, ${auth.address.city}, ${auth.address.zipcode}'),
+                          '${auth.address.street.capitalize()}, ${auth.address.city.capitalize()}, ${auth.address.zipcode.capitalize()}'),
                     ),
                   ]),
-                  Container(
-                      margin: const EdgeInsets.symmetric(horizontal: 10),
+                  SizedBox(
                       height: 500,
                       child: FlutterMap(
                         options: MapOptions(

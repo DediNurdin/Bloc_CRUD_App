@@ -1,3 +1,4 @@
+import 'package:bloc_online_store/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -29,13 +30,9 @@ class _UserPageState extends State<UserPage> {
       body: BlocListener<UserBloc, UserState>(
         listener: (context, state) {
           if (state is DeleteUserSuccess) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('Delete User Successful!')),
-            );
+            Utils.showToast('Delete User Successful');
           } else if (state is DeleteUserFailure) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(state.error)),
-            );
+            Utils.showToast(state.error);
           }
         },
         child: BlocBuilder<UserBloc, UserState>(

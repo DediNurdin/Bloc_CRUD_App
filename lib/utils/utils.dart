@@ -4,11 +4,56 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+extension StringExtension on String {
+  String capitalize() {
+    return "${this[0].toUpperCase()}${substring(1).toLowerCase()}";
+  }
+}
+
+class MainMenuItemWidget extends StatelessWidget {
+  const MainMenuItemWidget({
+    super.key,
+    required this.icon,
+    required this.title,
+  });
+
+  final IconData icon;
+  final String title;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Container(
+          padding: const EdgeInsets.all(4),
+          child: Icon(
+            icon,
+          ),
+        ),
+        const SizedBox(width: 15),
+        Text(
+          title,
+          style: TextStyle(fontSize: 14),
+        )
+      ],
+    );
+  }
+}
+
 class Utils {
+  static Future showToast(String msg) {
+    return Fluttertoast.showToast(
+        msg: msg,
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.CENTER,
+        fontSize: 15);
+  }
+
   static String baseUrlFakeApi = 'https://fakestoreapi.com';
 
   static bool isDarkMode(BuildContext context) {

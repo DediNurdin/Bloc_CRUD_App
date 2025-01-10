@@ -31,21 +31,16 @@ class _LoginPageState extends State<LoginPage> {
       body: BlocConsumer<LoginBloc, LoginState>(
         listener: (context, state) {
           if (state is LoginSuccess) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('Login Successful')),
-            );
+            Utils.showToast('Login Successful');
             Navigator.pushReplacementNamed(context, '/bottomnav');
           } else if (state is LoginFailure) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(state.error)),
-            );
+            Utils.showToast(state.error);
           }
         },
         builder: (context, state) {
           if (state is LoginLoading) {
             return main(true);
           }
-
           return main(false);
         },
       ),
@@ -79,14 +74,14 @@ class _LoginPageState extends State<LoginPage> {
               isPassword: true,
             ),
             const SizedBox(height: 32),
-            bottom(isLoading)
+            botton(isLoading)
           ],
         ),
       ),
     );
   }
 
-  Widget bottom(bool isLoading) {
+  Widget botton(bool isLoading) {
     return SizedBox(
       width: double.infinity,
       child: ElevatedButton(

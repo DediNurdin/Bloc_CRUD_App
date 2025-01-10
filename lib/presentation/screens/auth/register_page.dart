@@ -67,25 +67,19 @@ class _RegisterPageState extends State<RegisterPage> {
       body: BlocConsumer<RegisterBloc, RegisterState>(
         listener: (context, state) {
           if (state is RegisterSuccess) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('Registration Successful!')),
-            );
+            Utils.showToast('Registration Successful');
+
             Navigator.pushReplacementNamed(context, '/bottomnav');
           } else if (state is RegisterFailure) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(state.error)),
-            );
+            Utils.showToast(state.error);
           }
 
           if (state is EditUserSuccess) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('Edit User Successful!')),
-            );
+            Utils.showToast('Edit User Successful');
+
             Navigator.pushReplacementNamed(context, '/bottomnav');
           } else if (state is EditUserFailure) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(state.error)),
-            );
+            Utils.showToast(state.error);
           }
         },
         builder: (context, state) {

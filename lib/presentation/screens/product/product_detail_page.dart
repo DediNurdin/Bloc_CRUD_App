@@ -1,4 +1,5 @@
 import 'package:add_to_cart_animation/add_to_cart_animation.dart';
+import 'package:bloc_online_store/utils/utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -6,6 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../bloc/product/product_bloc.dart';
 import '../../../models/product_model.dart';
+import '../../../utils/shimmer_widget.dart';
 import '../cart/cart_page.dart';
 import 'item/buy_add_cart_dialog_widget.dart';
 import 'item/product_item_widget.dart';
@@ -55,13 +57,8 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
             addCartAnim(state.key, state.quantity);
             if (!context.mounted) return;
             Navigator.of(context).pop();
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(state.message)),
-            );
           } else if (state is AddCartError) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(state.error)),
-            );
+            Utils.showToast(state.error);
           }
 
           if (state is ShowBottomSheetBuyProduct) {
@@ -358,63 +355,61 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                           ),
                           const SizedBox(height: 20),
                           ReviewWidget(),
-                          const SizedBox(height: 20),
-                          Row(
-                            children: [
-                              Expanded(child: Divider()),
-                              const SizedBox(
-                                width: 10,
-                              ),
-                              Text(
-                                'You May Also Like',
-                                style: TextStyle(
-                                  fontSize: 15,
-                                ),
-                              ),
-                              const SizedBox(
-                                width: 10,
-                              ),
-                              Expanded(child: Divider()),
-                            ],
-                          ),
-                          BlocProvider(
-                            create: (context) => ProductByCategoriesBloc()
-                              ..add(GetProductByCategoriesEvent(
-                                  category: widget.product.category)),
-                            child: BlocBuilder<ProductByCategoriesBloc,
-                                ProductByCategoriesState>(
-                              builder: (context, state) {
-                                if (state is ProductByCategoriesLoading) {
-                                  return const LinearProgressIndicator();
-                                }
-                                if (state is ProductByCategoriesSuccess) {
-                                  return GridView.builder(
-                                    shrinkWrap: true,
-                                    physics:
-                                        const NeverScrollableScrollPhysics(),
-                                    gridDelegate:
-                                        const SliverGridDelegateWithFixedCrossAxisCount(
-                                      mainAxisSpacing: 4,
-                                      crossAxisSpacing: 4,
-                                      crossAxisCount: 2,
-                                      childAspectRatio: 0.79,
-                                    ),
-                                    itemBuilder: (context, index) {
-                                      return ProductItemWidget(
-                                          product:
-                                              state.productByCategories[index]);
-                                    },
-                                    itemCount: state.productByCategories.length,
-                                  );
-                                }
-                                return const Center(
-                                  child: Text('No Data'),
-                                );
-                              },
-                            ),
-                          ),
                         ],
                       )),
+                  const SizedBox(height: 20),
+                  Row(
+                    children: [
+                      Expanded(child: Divider()),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      Text(
+                        'You May Also Like',
+                        style: TextStyle(
+                          fontSize: 15,
+                        ),
+                      ),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      Expanded(child: Divider()),
+                    ],
+                  ),
+                  BlocProvider(
+                    create: (context) => ProductByCategoriesBloc()
+                      ..add(GetProductByCategoriesEvent(
+                          category: widget.product.category)),
+                    child: BlocBuilder<ProductByCategoriesBloc,
+                        ProductByCategoriesState>(
+                      builder: (context, state) {
+                        if (state is ProductByCategoriesLoading) {
+                          return ShimmerWidget.gridShimmer(context);
+                        }
+                        if (state is ProductByCategoriesSuccess) {
+                          return GridView.builder(
+                            shrinkWrap: true,
+                            physics: const NeverScrollableScrollPhysics(),
+                            gridDelegate:
+                                const SliverGridDelegateWithFixedCrossAxisCount(
+                              mainAxisSpacing: 4,
+                              crossAxisSpacing: 4,
+                              crossAxisCount: 2,
+                              childAspectRatio: 0.79,
+                            ),
+                            itemBuilder: (context, index) {
+                              return ProductItemWidget(
+                                  product: state.productByCategories[index]);
+                            },
+                            itemCount: state.productByCategories.length,
+                          );
+                        }
+                        return const Center(
+                          child: Text('No Data'),
+                        );
+                      },
+                    ),
+                  ),
                 ]),
               ],
             ),
@@ -476,7 +471,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                             children: [
                               Text(
                                 'Buy USD ${widget.product.price}',
-                                style: TextStyle(fontSize: 20),
+                                style: TextStyle(fontSize: 17),
                               ),
                             ],
                           )),

@@ -7,6 +7,7 @@ import 'package:http/http.dart' as http;
 
 import '../../../bloc/cart/cart_bloc.dart';
 import '../../../models/cart_model.dart';
+import '../../../utils/shimmer_widget.dart';
 import '../../../utils/utils.dart';
 import '../product/item/quantity_widget.dart';
 
@@ -39,7 +40,7 @@ class _CartPageState extends State<CartPage> {
         child: BlocBuilder<CartBloc, CartState>(
           builder: (context, state) {
             if (state is CartLoading) {
-              return Center(child: CircularProgressIndicator());
+              return ShimmerWidget.listShimmer(context, false);
             } else if (state is CartSuccess) {
               return Column(
                 children: [
@@ -53,7 +54,7 @@ class _CartPageState extends State<CartPage> {
                           return Card(
                             elevation: 0,
                             shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(3),
+                              borderRadius: BorderRadius.circular(10),
                             ),
                             child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,

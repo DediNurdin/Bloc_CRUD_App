@@ -1,17 +1,19 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 class ThemeUtils {
   static ThemeData lightTheme(bool isAppSearch) {
     return ThemeData(
-      fontFamily: GoogleFonts.roboto().fontFamily,
+      fontFamily: 'Roboto-Regular',
+      dividerColor: Colors.transparent,
       useMaterial3: true,
       splashColor: Colors.transparent,
       drawerTheme:
           DrawerThemeData(backgroundColor: CupertinoColors.systemBackground),
       tabBarTheme: TabBarTheme(
+          labelStyle: TextStyle(fontSize: 13),
+          unselectedLabelStyle: TextStyle(fontSize: 13),
           overlayColor: WidgetStatePropertyAll(Colors.transparent),
           labelColor: Colors.green,
           indicatorColor: Colors.green),
@@ -20,7 +22,11 @@ class ThemeUtils {
         TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
       }),
       scaffoldBackgroundColor: CupertinoColors.systemBackground,
+      expansionTileTheme: ExpansionTileThemeData(
+        iconColor: Colors.black,
+      ),
       appBarTheme: AppBarTheme(
+          titleTextStyle: TextStyle(fontSize: 17, color: Colors.black),
           scrolledUnderElevation: 0,
           backgroundColor: CupertinoColors.systemBackground,
           systemOverlayStyle: SystemUiOverlayStyle(
@@ -44,11 +50,11 @@ class ThemeUtils {
             return Colors.transparent;
           })),
       chipTheme: ChipThemeData(
+          labelStyle: TextStyle(fontSize: 12, color: Colors.black),
           shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(5),
-              side: BorderSide(color: Colors.grey)),
-          iconTheme: const IconThemeData(color: Colors.green),
-          backgroundColor: CupertinoColors.systemBackground,
+              borderRadius: BorderRadius.circular(10),
+              side: BorderSide(color: Colors.transparent)),
+          backgroundColor: CupertinoColors.secondarySystemBackground,
           brightness: Brightness.light),
       bottomSheetTheme: BottomSheetThemeData(
           backgroundColor: CupertinoColors.systemBackground),
@@ -95,7 +101,8 @@ class ThemeUtils {
           ),
         ),
         focusedBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: Colors.blue),
+          borderSide: BorderSide(
+              color: isAppSearch ? Colors.grey.shade600 : Colors.blue),
           borderRadius: BorderRadius.only(
             topRight: Radius.circular(isAppSearch ? 5 : 10),
             topLeft: Radius.circular(isAppSearch ? 5 : 10),
@@ -118,12 +125,15 @@ class ThemeUtils {
 
   static ThemeData darkTheme(bool isAppSearch) {
     return ThemeData(
-        fontFamily: GoogleFonts.roboto().fontFamily,
+        fontFamily: 'Roboto-Regular',
+        dividerColor: Colors.transparent,
         useMaterial3: true,
         splashColor: Colors.transparent,
         drawerTheme: DrawerThemeData(
             backgroundColor: CupertinoColors.darkBackgroundGray),
         tabBarTheme: TabBarTheme(
+            labelStyle: TextStyle(fontSize: 13),
+            unselectedLabelStyle: TextStyle(fontSize: 13),
             overlayColor: WidgetStatePropertyAll(Colors.transparent),
             labelColor: Colors.green,
             indicatorColor: Colors.green),
@@ -132,7 +142,11 @@ class ThemeUtils {
           TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
         }),
         scaffoldBackgroundColor: CupertinoColors.darkBackgroundGray,
+        expansionTileTheme: ExpansionTileThemeData(
+          iconColor: Colors.white,
+        ),
         appBarTheme: AppBarTheme(
+            titleTextStyle: TextStyle(fontSize: 17, color: Colors.white),
             scrolledUnderElevation: 0,
             backgroundColor: CupertinoColors.darkBackgroundGray,
             systemOverlayStyle: SystemUiOverlayStyle(
@@ -157,11 +171,11 @@ class ThemeUtils {
               return Colors.transparent;
             })),
         chipTheme: ChipThemeData(
+            labelStyle: TextStyle(fontSize: 12, color: Colors.white),
             shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(5),
-                side: BorderSide(color: Colors.grey)),
-            iconTheme: const IconThemeData(color: Colors.green),
-            backgroundColor: CupertinoColors.darkBackgroundGray,
+                borderRadius: BorderRadius.circular(10),
+                side: BorderSide(color: Colors.transparent)),
+            backgroundColor: Colors.grey.shade800,
             brightness: Brightness.dark),
         bottomSheetTheme: BottomSheetThemeData(
             backgroundColor: CupertinoColors.darkBackgroundGray),
@@ -208,7 +222,8 @@ class ThemeUtils {
             ),
           ),
           focusedBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: Colors.blue),
+            borderSide: BorderSide(
+                color: isAppSearch ? Colors.grey.shade600 : Colors.blue),
             borderRadius: BorderRadius.only(
               topRight: Radius.circular(isAppSearch ? 5 : 10),
               topLeft: Radius.circular(isAppSearch ? 5 : 10),

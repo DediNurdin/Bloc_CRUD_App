@@ -43,6 +43,8 @@ class _TextFormFieldWidgetState extends State<TextFormFieldWidget> {
       keyboardType: widget.keyboardType,
       obscuringCharacter: '*',
       obscureText: isPasswordVisible,
+      cursorColor: Colors.grey.shade600,
+      cursorWidth: 0.5,
       readOnly: widget.isReadOnly,
       decoration: InputDecoration(
           enabledBorder: OutlineInputBorder(

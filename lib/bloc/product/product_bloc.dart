@@ -56,6 +56,7 @@ class ProductSearchBloc extends Bloc<ProductSearchEvent, ProductSearchState> {
     });
 
     on<SortProductEvent>((event, emit) async {
+      emit(ProductSearchLoading());
       try {
         final response = await http.get(
           Uri.parse('${Utils.baseUrlFakeApi}/products?sort=${event.type}'),
@@ -157,6 +158,21 @@ class ProductByCategoriesBloc
       );
       emit(ProductByCategoriesSuccess(
           productByCategories: productFromJson(response.body)));
+    });
+  }
+}
+
+class ProductLimitBloc extends Bloc<ProductLimitEvent, ProductLimitState> {
+  ProductLimitBloc() : super(ProductLimitInitial()) {
+    on<GetProductLimitEvent>((event, emit) async {
+      emit(ProductLimitLoading());
+      final response = await http.get(
+        Uri.parse('${Utils.baseUrlFakeApi}/products?limit=7'),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      );
+      emit(ProductLimitSuccess(productLimit: productFromJson(response.body)));
     });
   }
 }

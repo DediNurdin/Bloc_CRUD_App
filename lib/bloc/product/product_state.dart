@@ -88,6 +88,19 @@ class ProductByCategoriesSuccess extends ProductByCategoriesState {
   });
 }
 
+abstract class ProductLimitState {}
+
+class ProductLimitInitial extends ProductLimitState {}
+
+class ProductLimitLoading extends ProductLimitState {}
+
+class ProductLimitSuccess extends ProductLimitState {
+  final List<Product> productLimit;
+  ProductLimitSuccess({
+    required this.productLimit,
+  });
+}
+
 class ShowBottomSheetBuyProduct extends ProductDetailState {}
 
 class ShowBottomSheetAddCartProduct extends ProductDetailState {}

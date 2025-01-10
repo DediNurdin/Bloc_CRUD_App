@@ -1,3 +1,6 @@
+import '../bottom_navigation/main_menu.dart';
+import '../../../utils/shimmer_widget.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -31,23 +34,36 @@ class _SearchProductPageState extends State<SearchProductPage>
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          iconTheme: IconThemeData(color: Colors.green),
           title: SearchProductWidget(
             query: widget.query,
           ),
           actions: [
             Builder(builder: (context) {
-              return IconButton(
-                  onPressed: () {
-                    Scaffold.of(context).openEndDrawer();
-                  },
-                  icon: Row(
-                    children: [Icon(Icons.filter_alt_outlined), Text('Filter')],
-                  ));
+              return InkWell(
+                overlayColor: WidgetStatePropertyAll(Colors.transparent),
+                onTap: () {
+                  Scaffold.of(context).openEndDrawer();
+                },
+                child: Padding(
+                    padding: const EdgeInsets.only(right: 10),
+                    child: Icon(Icons.filter_alt_outlined)),
+              );
             }),
-            const SizedBox(
-              width: 15,
-            )
+            InkWell(
+              overlayColor: WidgetStatePropertyAll(Colors.transparent),
+              onTap: () {
+                showModalBottomSheet(
+                    context: context,
+                    isScrollControlled: true,
+                    useSafeArea: true,
+                    elevation: 0,
+                    shape: BeveledRectangleBorder(),
+                    builder: (context) => MainMenu());
+              },
+              child: Padding(
+                  padding: const EdgeInsets.only(right: 10),
+                  child: Icon(CupertinoIcons.line_horizontal_3)),
+            ),
           ],
           bottom: TabBar(controller: tabController, tabs: [
             Tab(
@@ -140,9 +156,7 @@ class _SearchProductPageState extends State<SearchProductPage>
           BlocBuilder<ProductSearchBloc, ProductSearchState>(
             builder: (context, state) {
               if (state is ProductSearchLoading) {
-                return Center(
-                  child: CircularProgressIndicator(),
-                );
+                return ShimmerWidget.gridShimmer(context);
               }
               if (state is ProductInitial) {
                 context.read<ProductSearchBloc>().add(GetProductSearchEvent());
@@ -174,14 +188,10 @@ class _SearchProductPageState extends State<SearchProductPage>
                 );
               }
               if (state is ProductSearchFailure) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text(state.error)),
-                );
+                return Center(child: Text('No Data'));
               }
               if (state is ProductSortFailure) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text(state.error)),
-                );
+                return Center(child: Text('No Data'));
               }
               return Center(child: Text('No Data'));
             },

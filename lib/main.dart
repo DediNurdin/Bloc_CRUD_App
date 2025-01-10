@@ -50,6 +50,9 @@ class MyApp extends StatelessWidget {
           create: (context) => ProductBloc()..add(GetProductEvent()),
         ),
         BlocProvider(
+          create: (context) => ProductLimitBloc()..add(GetProductLimitEvent()),
+        ),
+        BlocProvider(
           create: (context) =>
               ProductCategoriesBloc()..add(GetProductCategoriesEvent()),
         ),

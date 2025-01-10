@@ -10,6 +10,8 @@ abstract class ProductCategoriesEvent {}
 
 abstract class ProductByCategoriesEvent {}
 
+abstract class ProductLimitEvent {}
+
 class GetProductEvent extends ProductEvent {}
 
 class GetProductSearchEvent extends ProductSearchEvent {}
@@ -23,6 +25,8 @@ class GetProductByCategoriesEvent extends ProductByCategoriesEvent {
 
   GetProductByCategoriesEvent({required this.category});
 }
+
+class GetProductLimitEvent extends ProductLimitEvent {}
 
 class SortProductEvent extends ProductSearchEvent {
   final String type;

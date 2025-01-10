@@ -9,6 +9,68 @@
 
 import 'package:flutter/widgets.dart';
 
+class $AssetsFontsGen {
+  const $AssetsFontsGen();
+
+  /// File path: assets/fonts/Roboto-Regular.ttf
+  String get robotoRegular => 'assets/fonts/Roboto-Regular.ttf';
+
+  /// List of all assets
+  List<String> get values => [robotoRegular];
+}
+
+class $AssetsIconsGen {
+  const $AssetsIconsGen();
+
+  /// File path: assets/icons/bitcoin.png
+  AssetGenImage get bitcoin => const AssetGenImage('assets/icons/bitcoin.png');
+
+  /// File path: assets/icons/charity.png
+  AssetGenImage get charity => const AssetGenImage('assets/icons/charity.png');
+
+  /// File path: assets/icons/gift.png
+  AssetGenImage get gift => const AssetGenImage('assets/icons/gift.png');
+
+  /// File path: assets/icons/insurance.png
+  AssetGenImage get insurance =>
+      const AssetGenImage('assets/icons/insurance.png');
+
+  /// File path: assets/icons/investment.png
+  AssetGenImage get investment =>
+      const AssetGenImage('assets/icons/investment.png');
+
+  /// File path: assets/icons/location-pin.png
+  AssetGenImage get locationPin =>
+      const AssetGenImage('assets/icons/location-pin.png');
+
+  /// File path: assets/icons/remote-control.png
+  AssetGenImage get remoteControl =>
+      const AssetGenImage('assets/icons/remote-control.png');
+
+  /// File path: assets/icons/shop.png
+  AssetGenImage get shop => const AssetGenImage('assets/icons/shop.png');
+
+  /// File path: assets/icons/trolley.png
+  AssetGenImage get trolley => const AssetGenImage('assets/icons/trolley.png');
+
+  /// File path: assets/icons/wallet.png
+  AssetGenImage get wallet => const AssetGenImage('assets/icons/wallet.png');
+
+  /// List of all assets
+  List<AssetGenImage> get values => [
+        bitcoin,
+        charity,
+        gift,
+        insurance,
+        investment,
+        locationPin,
+        remoteControl,
+        shop,
+        trolley,
+        wallet
+      ];
+}
+
 class $AssetsImagesGen {
   const $AssetsImagesGen();
 
@@ -31,6 +93,8 @@ class $AssetsImagesGen {
 class Assets {
   Assets._();
 
+  static const $AssetsFontsGen fonts = $AssetsFontsGen();
+  static const $AssetsIconsGen icons = $AssetsIconsGen();
   static const $AssetsImagesGen images = $AssetsImagesGen();
 }
 
