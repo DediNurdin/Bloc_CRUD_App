@@ -9,7 +9,9 @@ class CartLoading extends CartState {}
 class CartSuccess extends CartState {
   final List<Cart> carts;
 
-  CartSuccess(this.carts);
+  CartSuccess(
+    this.carts,
+  );
 }
 
 class CartError extends CartState {

@@ -1,11 +1,11 @@
-import '../product/item/product_item_widget.dart';
+import '../product/recomended_page.dart';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../bloc/auth/auth_bloc.dart';
 import '../../../bloc/cubit/theme_cubit.dart';
-import '../../../bloc/product/product_bloc.dart';
 import '../../../utils/shimmer_widget.dart';
 import '../../../utils/utils.dart';
 import '../auth/profile_page.dart';
@@ -127,12 +127,13 @@ class MyAccountPage extends StatelessWidget {
                               isDestructiveAction: true,
                               child: Text('Yes'),
                               onPressed: () async {
+                                await Utils.removeTokenData();
+
                                 if (!context.mounted) return;
                                 Navigator.of(context, rootNavigator: true)
                                     .pop();
                                 Navigator.pushReplacementNamed(
                                     context, '/login');
-                                await Utils.removeTokenData();
                               },
                             )
                           ],
@@ -143,67 +144,7 @@ class MyAccountPage extends StatelessWidget {
               trailing: Icon(Icons.chevron_right),
             ),
           ]),
-          CupertinoFormSection(children: [
-            SizedBox(
-              height: kToolbarHeight,
-              child: Row(
-                children: [
-                  Expanded(child: Divider()),
-                  const SizedBox(
-                    width: 10,
-                  ),
-                  Text(
-                    'Recomended For You',
-                    style: TextStyle(
-                      fontSize: 15,
-                    ),
-                  ),
-                  const SizedBox(
-                    width: 10,
-                  ),
-                  Expanded(child: Divider()),
-                ],
-              ),
-            ),
-            BlocProvider(
-              create: (context) => ProductBloc()..add(GetProductEvent()),
-              child: BlocBuilder<ProductBloc, ProductState>(
-                builder: (context, state) {
-                  if (state is ProductLoading) {
-                    return ShimmerWidget.gridShimmer(context);
-                  }
-                  if (state is ProductSuccess) {
-                    return Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 10),
-                      child: GridView.builder(
-                        shrinkWrap: true,
-                        physics: const NeverScrollableScrollPhysics(),
-                        gridDelegate:
-                            const SliverGridDelegateWithFixedCrossAxisCount(
-                          mainAxisSpacing: 4,
-                          crossAxisSpacing: 4,
-                          crossAxisCount: 2,
-                          childAspectRatio: 0.79,
-                        ),
-                        itemBuilder: (context, index) {
-                          return ProductItemWidget(
-                              product: state.products[index]);
-                        },
-                        itemCount: state.products.length,
-                      ),
-                    );
-                  }
-
-                  if (state is ProductFailure) {
-                    return Center(
-                      child: Text('No Data'),
-                    );
-                  }
-                  return Container();
-                },
-              ),
-            )
-          ]),
+          RecomendedPage()
         ],
       ),
     );

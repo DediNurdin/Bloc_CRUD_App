@@ -95,6 +95,7 @@ class ProductDetailBloc extends Bloc<ProductDetailEvent, ProductDetailState> {
     });
 
     on<AddCartEvent>((event, emit) async {
+      emit(AddCartLoading());
       try {
         final response = await http.post(
           Uri.parse('${Utils.baseUrlFakeApi}/carts'),

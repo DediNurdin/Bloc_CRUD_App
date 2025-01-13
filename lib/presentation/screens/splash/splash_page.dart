@@ -1,8 +1,8 @@
-import 'package:bloc_online_store/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../bloc/splash/splash_bloc.dart';
+import '../../../utils/utils.dart';
 
 class SplashScreen extends StatelessWidget {
   const SplashScreen({super.key});

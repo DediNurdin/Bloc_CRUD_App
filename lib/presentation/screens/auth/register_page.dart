@@ -201,40 +201,37 @@ class _RegisterPageState extends State<RegisterPage> {
                   ),
                   SizedBox(
                     width: double.infinity,
-                    child: ElevatedButton(
-                      onPressed: () {
-                        if (formKey.currentState!.validate()) {
-                          final user = UserRegisterModel(
-                            email: emailController.text,
-                            username: usernameController.text,
-                            password: passwordController.text,
-                            name: Name(
-                              firstname: firstnameController.text,
-                              lastname: lastnameController.text,
+                    child: Utils.buttonWigget(() {
+                      if (formKey.currentState!.validate()) {
+                        final user = UserRegisterModel(
+                          email: emailController.text,
+                          username: usernameController.text,
+                          password: passwordController.text,
+                          name: Name(
+                            firstname: firstnameController.text,
+                            lastname: lastnameController.text,
+                          ),
+                          address: AddressRegister(
+                            city: cityController.text,
+                            street: streetController.text,
+                            number: int.tryParse(numberController.text) ?? 0,
+                            zipcode: zipcodeController.text,
+                            geolocation: Geolocation(
+                              lat: latController.text,
+                              long: longController.text,
                             ),
-                            address: AddressRegister(
-                              city: cityController.text,
-                              street: streetController.text,
-                              number: int.tryParse(numberController.text) ?? 0,
-                              zipcode: zipcodeController.text,
-                              geolocation: Geolocation(
-                                lat: latController.text,
-                                long: longController.text,
-                              ),
-                            ),
-                            phone: phoneController.text,
-                          );
-                          widget.type == 'Edit'
-                              ? context
-                                  .read<RegisterBloc>()
-                                  .add(SubmitEditUserEvent(widget.userId, user))
-                              : context
-                                  .read<RegisterBloc>()
-                                  .add(SubmitRegisterEvent(user));
-                        }
-                      },
-                      child: Text('${widget.type} User'),
-                    ),
+                          ),
+                          phone: phoneController.text,
+                        );
+                        widget.type == 'Edit'
+                            ? context
+                                .read<RegisterBloc>()
+                                .add(SubmitEditUserEvent(widget.userId, user))
+                            : context
+                                .read<RegisterBloc>()
+                                .add(SubmitRegisterEvent(user));
+                      }
+                    }, Text('${widget.type} User'), false),
                   ),
                 ],
               ));

@@ -39,6 +39,7 @@ class ShimmerWidget {
   static listShimmer(
     BuildContext context,
     bool isHorizon,
+    int itemCount,
   ) {
     return Shimmer.fromColors(
         baseColor: Utils.isDarkMode(context)
@@ -66,7 +67,7 @@ class ShimmerWidget {
               ),
             );
           },
-          itemCount: 5,
+          itemCount: itemCount,
         ));
   }
 

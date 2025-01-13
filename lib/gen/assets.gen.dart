@@ -28,6 +28,10 @@ class $AssetsIconsGen {
   /// File path: assets/icons/charity.png
   AssetGenImage get charity => const AssetGenImage('assets/icons/charity.png');
 
+  /// File path: assets/icons/empty-cart.png
+  AssetGenImage get emptyCart =>
+      const AssetGenImage('assets/icons/empty-cart.png');
+
   /// File path: assets/icons/gift.png
   AssetGenImage get gift => const AssetGenImage('assets/icons/gift.png');
 
@@ -60,6 +64,7 @@ class $AssetsIconsGen {
   List<AssetGenImage> get values => [
         bitcoin,
         charity,
+        emptyCart,
         gift,
         insurance,
         investment,

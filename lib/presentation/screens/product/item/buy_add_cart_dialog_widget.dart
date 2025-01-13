@@ -25,6 +25,7 @@ class BuyAddCartDialogWidget extends StatefulWidget {
 class _BuyAddCartDialogWidgetState extends State<BuyAddCartDialogWidget> {
   final GlobalKey widgetKey = GlobalKey();
   int cartQuantityItems = 1;
+
   @override
   void initState() {
     super.initState();
@@ -187,6 +188,7 @@ class _BuyAddCartDialogWidgetState extends State<BuyAddCartDialogWidget> {
                             ),
                             const Spacer(),
                             QuantityWidget(
+                                isCart: false,
                                 txtQauntity: cartQuantityItems.toString(),
                                 colorTxt: Colors.green,
                                 onPressIncrement: () {
@@ -208,23 +210,33 @@ class _BuyAddCartDialogWidgetState extends State<BuyAddCartDialogWidget> {
                     ),
                     SizedBox(
                       width: MediaQuery.of(context).size.width,
-                      child: ElevatedButton(
-                          onPressed: () {
-                            widget.title == 'Buy'
-                                ? Navigator.pop(context)
-                                : context.read<ProductDetailBloc>().add(
-                                    AddCartEvent(
-                                        userId: userId!,
-                                        date: dateStr,
-                                        quantity: cartQuantityItems,
-                                        products: [
-                                          ProductAddCart(
-                                              id: widget.product.id,
-                                              quantity: cartQuantityItems)
-                                        ],
-                                        wgtKey: widgetKey));
-                          },
-                          child: Text(widget.title)),
+                      child: Utils.buttonWigget(() {
+                        widget.title == 'Buy'
+                            ? Navigator.pop(context)
+                            : context.read<ProductDetailBloc>().add(
+                                AddCartEvent(
+                                    userId: userId!,
+                                    date: dateStr,
+                                    quantity: cartQuantityItems,
+                                    products: [
+                                      ProductAddCart(
+                                          id: widget.product.id,
+                                          quantity: cartQuantityItems)
+                                    ],
+                                    wgtKey: widgetKey));
+                      },
+                          widget.title == 'Buy'
+                              ? Text(widget.title)
+                              : BlocBuilder<ProductDetailBloc,
+                                  ProductDetailState>(
+                                  builder: (context, state) {
+                                    if (state is AddCartLoading) {
+                                      return CupertinoActivityIndicator();
+                                    }
+                                    return Text(widget.title);
+                                  },
+                                ),
+                          false),
                     ),
                     const SizedBox(
                       height: 20,

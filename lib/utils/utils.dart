@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'dart:io';
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -58,6 +57,23 @@ class Utils {
 
   static bool isDarkMode(BuildContext context) {
     return Theme.of(context).brightness == Brightness.dark;
+  }
+
+  static Widget buttonWigget(
+    void Function() onPressed,
+    Widget child,
+    bool isOutline,
+  ) {
+    return isOutline
+        ? OutlinedButton(
+            onPressed: onPressed,
+            style: ButtonStyle(
+              foregroundColor: WidgetStatePropertyAll(Colors.green),
+              side: WidgetStatePropertyAll(BorderSide(color: Colors.green)),
+            ),
+            child: child,
+          )
+        : ElevatedButton(onPressed: onPressed, child: child);
   }
 
   static List<Widget> styleBuildActionAppBarSearch(void Function() onPressed) {
@@ -164,5 +180,10 @@ class Utils {
     int? userDataUser = prefs.getInt(keyUser);
 
     return userDataUser;
+  }
+
+  static Future<void> removeUserData() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.remove(keyUser);
   }
 }

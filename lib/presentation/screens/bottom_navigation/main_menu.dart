@@ -1,10 +1,10 @@
-import '../../../bloc/auth/auth_bloc.dart';
-import '../../../utils/shimmer_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../bloc/auth/auth_bloc.dart';
 import '../../../gen/assets.gen.dart';
+import '../../../utils/shimmer_widget.dart';
 import '../../../utils/utils.dart';
 import '../myaccount/myaccount_page.dart';
 
@@ -46,7 +46,6 @@ class _MainMenuState extends State<MainMenu> {
                   return ShimmerWidget.chipShimmer(context);
                 } else if (state is AuthSuccess) {
                   final auth = state.auth;
-
                   return Container(
                     margin: const EdgeInsets.symmetric(horizontal: 15),
                     child: Column(
@@ -105,29 +104,24 @@ class _MainMenuState extends State<MainMenu> {
                                 icon: Icon(Icons.settings_outlined))
                           ],
                         ),
-                        Container(
+                        SizedBox(
                             width: 200,
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 7, vertical: 5),
-                            decoration: BoxDecoration(
-                                border: Border.all(color: Colors.grey),
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(10))),
-                            child: Row(
-                              children: [
-                                Text('Open Shop',
-                                    style: TextStyle(
-                                        color: Utils.isDarkMode(context)
-                                            ? Colors.white
-                                            : Colors.black)),
-                                const Spacer(),
-                                Icon(
-                                  Icons.chevron_right,
-                                  color: Utils.isDarkMode(context)
-                                      ? Colors.white
-                                      : Colors.black,
-                                )
-                              ],
+                            child: OutlinedButton.icon(
+                              style: ButtonStyle(
+                                  minimumSize:
+                                      WidgetStatePropertyAll(Size(0, 30))),
+                              onPressed: () {},
+                              iconAlignment: IconAlignment.end,
+                              label: Row(
+                                children: [
+                                  Text(
+                                    'Open Shop',
+                                  ),
+                                ],
+                              ),
+                              icon: Icon(
+                                Icons.chevron_right,
+                              ),
                             )),
                         const SizedBox(
                           height: 15,

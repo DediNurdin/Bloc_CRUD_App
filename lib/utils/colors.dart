@@ -6,14 +6,18 @@ class ThemeUtils {
   static ThemeData lightTheme(bool isAppSearch) {
     return ThemeData(
       fontFamily: 'Roboto-Regular',
+      cupertinoOverrideTheme: const CupertinoThemeData(
+        primaryColor: Colors.green,
+      ),
       dividerColor: Colors.transparent,
       useMaterial3: true,
       splashColor: Colors.transparent,
       drawerTheme:
           DrawerThemeData(backgroundColor: CupertinoColors.systemBackground),
       tabBarTheme: TabBarTheme(
-          labelStyle: TextStyle(fontSize: 13),
-          unselectedLabelStyle: TextStyle(fontSize: 13),
+          labelStyle: TextStyle(fontSize: 12),
+          dividerColor: Colors.transparent,
+          unselectedLabelStyle: TextStyle(fontSize: 12),
           overlayColor: WidgetStatePropertyAll(Colors.transparent),
           labelColor: Colors.green,
           indicatorColor: Colors.green),
@@ -77,9 +81,15 @@ class ThemeUtils {
           refreshBackgroundColor: CupertinoColors.extraLightBackgroundGray,
           circularTrackColor: Colors.transparent,
           linearTrackColor: Colors.transparent),
+      outlinedButtonTheme: OutlinedButtonThemeData(
+          style: ButtonStyle(
+        foregroundColor: WidgetStatePropertyAll(Colors.black),
+        shape: WidgetStatePropertyAll(RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10),
+        )),
+      )),
       elevatedButtonTheme: ElevatedButtonThemeData(
           style: ButtonStyle(
-              minimumSize: WidgetStatePropertyAll(Size(0, 50)),
               shape: WidgetStatePropertyAll(RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10))),
               backgroundColor: WidgetStatePropertyAll(Colors.green),
@@ -126,14 +136,18 @@ class ThemeUtils {
   static ThemeData darkTheme(bool isAppSearch) {
     return ThemeData(
         fontFamily: 'Roboto-Regular',
+        cupertinoOverrideTheme: const CupertinoThemeData(
+          primaryColor: Colors.green,
+        ),
         dividerColor: Colors.transparent,
         useMaterial3: true,
         splashColor: Colors.transparent,
         drawerTheme: DrawerThemeData(
             backgroundColor: CupertinoColors.darkBackgroundGray),
         tabBarTheme: TabBarTheme(
-            labelStyle: TextStyle(fontSize: 13),
-            unselectedLabelStyle: TextStyle(fontSize: 13),
+            labelStyle: TextStyle(fontSize: 12),
+            dividerColor: Colors.transparent,
+            unselectedLabelStyle: TextStyle(fontSize: 12),
             overlayColor: WidgetStatePropertyAll(Colors.transparent),
             labelColor: Colors.green,
             indicatorColor: Colors.green),
@@ -198,9 +212,14 @@ class ThemeUtils {
             refreshBackgroundColor: CupertinoColors.darkBackgroundGray,
             circularTrackColor: Colors.transparent,
             linearTrackColor: Colors.transparent),
+        outlinedButtonTheme: OutlinedButtonThemeData(
+            style: ButtonStyle(
+          foregroundColor: WidgetStatePropertyAll(Colors.white),
+          shape: WidgetStatePropertyAll(
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
+        )),
         elevatedButtonTheme: ElevatedButtonThemeData(
             style: ButtonStyle(
-                minimumSize: WidgetStatePropertyAll(Size(0, 50)),
                 shape: WidgetStatePropertyAll(RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10))),
                 backgroundColor: WidgetStatePropertyAll(Colors.green),

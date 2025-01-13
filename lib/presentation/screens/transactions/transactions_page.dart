@@ -1,17 +1,15 @@
 import 'package:flutter/material.dart';
 
-class TransactionsPage extends StatefulWidget {
-  const TransactionsPage({super.key});
+class TransactionPage extends StatefulWidget {
+  const TransactionPage({super.key});
 
   @override
-  State<TransactionsPage> createState() => _TransactionsPageState();
+  State<TransactionPage> createState() => _TransactionPageState();
 }
 
-class _TransactionsPageState extends State<TransactionsPage> {
+class _TransactionPageState extends State<TransactionPage> {
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Text('Transactions'),
-    );
+    return Scaffold();
   }
 }

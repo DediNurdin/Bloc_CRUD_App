@@ -10,8 +10,6 @@ class MallPage extends StatefulWidget {
 class _MallPageState extends State<MallPage> {
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Text('Mall'),
-    );
+    return Scaffold();
   }
 }

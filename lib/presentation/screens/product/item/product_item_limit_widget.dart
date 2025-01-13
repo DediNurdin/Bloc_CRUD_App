@@ -23,17 +23,17 @@ class ProductItemLimitWidget extends StatelessWidget {
       child: SizedBox(
         width: 130,
         height: 130,
-        child: Card(
-          elevation: 0,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10),
-          ),
-          child: Stack(
-            alignment: Alignment.bottomCenter,
-            children: [
-              SizedBox(
-                width: double.infinity,
-                height: double.infinity,
+        child: ListView(
+          physics: const NeverScrollableScrollPhysics(),
+          children: [
+            SizedBox(
+              height: 120,
+              width: 120,
+              child: Card(
+                elevation: 0,
+                shape: RoundedRectangleBorder(
+                  borderRadius: const BorderRadius.all(Radius.circular(10)),
+                ),
                 child: ClipRRect(
                   borderRadius: const BorderRadius.all(Radius.circular(10)),
                   child: Image.network(
@@ -71,29 +71,20 @@ class ProductItemLimitWidget extends StatelessWidget {
                   ),
                 ),
               ),
-              ClipRRect(
-                borderRadius: BorderRadius.only(
-                    bottomLeft: Radius.circular(10),
-                    bottomRight: Radius.circular(10)),
-                child: Container(
-                  color: Colors.grey,
-                  width: double.infinity,
-                  child: Padding(
-                    padding: const EdgeInsets.all(5),
-                    child: Text(
-                      product.title,
-                      maxLines: 1,
-                      textAlign: TextAlign.start,
-                      style: const TextStyle(
-                        fontSize: 10,
-                        fontWeight: FontWeight.normal,
-                      ),
-                    ),
-                  ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(5),
+              child: Text(
+                product.title,
+                maxLines: 1,
+                textAlign: TextAlign.start,
+                style: const TextStyle(
+                  fontSize: 10,
+                  fontWeight: FontWeight.normal,
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

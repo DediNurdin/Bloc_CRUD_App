@@ -8,12 +8,14 @@ class QuantityWidget extends StatefulWidget {
     required this.onPressIncrement,
     required this.onPressDecrement,
     this.colorTxt,
+    this.isCart = false,
   });
 
   final String txtQauntity;
   final Function() onPressIncrement;
   final Function() onPressDecrement;
   final Color? colorTxt;
+  final bool isCart;
 
   @override
   State<QuantityWidget> createState() => _QuantityWidgetState();
@@ -25,7 +27,7 @@ class _QuantityWidgetState extends State<QuantityWidget> {
     return Container(
       decoration: BoxDecoration(
         border: Border.all(color: Colors.grey),
-        borderRadius: BorderRadius.circular(3),
+        borderRadius: BorderRadius.circular(widget.isCart ? 20 : 3),
       ),
       child: Row(
         children: [
@@ -35,19 +37,31 @@ class _QuantityWidgetState extends State<QuantityWidget> {
             child: IconButton(
               padding: EdgeInsets.zero,
               onPressed: widget.onPressDecrement,
-              icon: const Icon(
-                CupertinoIcons.minus,
-                size: 15,
-              ),
+              icon: widget.isCart
+                  ? widget.txtQauntity == '1'
+                      ? Icon(
+                          CupertinoIcons.trash,
+                          size: 15,
+                        )
+                      : Icon(
+                          CupertinoIcons.minus,
+                          size: 15,
+                        )
+                  : Icon(
+                      CupertinoIcons.minus,
+                      size: 15,
+                    ),
             ),
           ),
           Container(
             width: 30,
             height: 25,
-            decoration: BoxDecoration(
-                border: Border(
-                    left: BorderSide(color: Colors.grey),
-                    right: BorderSide(color: Colors.grey))),
+            decoration: widget.isCart
+                ? null
+                : BoxDecoration(
+                    border: Border(
+                        left: BorderSide(color: Colors.grey),
+                        right: BorderSide(color: Colors.grey))),
             child: Center(
               child: Text(
                 widget.txtQauntity,

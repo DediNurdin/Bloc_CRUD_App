@@ -1,11 +1,12 @@
-import '../bottom_navigation/main_menu.dart';
-import '../../../utils/shimmer_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../bloc/product/product_bloc.dart';
 import '../../../models/product_model.dart';
+import '../../../utils/shimmer_widget.dart';
+import '../../../utils/utils.dart';
+import '../bottom_navigation/main_menu.dart';
 import 'item/product_item_widget.dart';
 import 'item/search_product_widget.dart';
 
@@ -65,14 +66,18 @@ class _SearchProductPageState extends State<SearchProductPage>
                   child: Icon(CupertinoIcons.line_horizontal_3)),
             ),
           ],
-          bottom: TabBar(controller: tabController, tabs: [
-            Tab(
-              text: 'Product',
-            ),
-            Tab(
-              text: 'Seller',
-            )
-          ]),
+          bottom: TabBar(
+              tabAlignment: TabAlignment.start,
+              isScrollable: true,
+              controller: tabController,
+              tabs: [
+                Tab(
+                  text: 'Product',
+                ),
+                Tab(
+                  text: 'Seller',
+                )
+              ]),
         ),
         endDrawer: Drawer(
             width: MediaQuery.of(context).size.width - 100,
@@ -82,7 +87,6 @@ class _SearchProductPageState extends State<SearchProductPage>
                 SizedBox(
                   width: MediaQuery.of(context).size.width,
                   child: DrawerHeader(
-                    decoration: BoxDecoration(color: Colors.grey),
                     child: Padding(
                         padding: const EdgeInsets.all(10),
                         child: Text('Search Filter')),
@@ -103,25 +107,22 @@ class _SearchProductPageState extends State<SearchProductPage>
                           return Row(
                             children: [
                               Expanded(
-                                  child: ElevatedButton(
-                                      onPressed: () {
-                                        context.read<ProductSearchBloc>().add(
-                                            SortProductEvent(type: 'desc'));
-                                        Navigator.pop(context);
-                                      },
-                                      child: Text('Descending'))),
+                                  child: Utils.buttonWigget(() {
+                                context
+                                    .read<ProductSearchBloc>()
+                                    .add(SortProductEvent(type: 'desc'));
+                                Navigator.pop(context);
+                              }, Text('Descending'), true)),
                               const SizedBox(
                                 width: 10,
                               ),
                               Expanded(
-                                  child: ElevatedButton(
-                                      onPressed: () {
-                                        context
-                                            .read<ProductSearchBloc>()
-                                            .add(SortProductEvent(type: 'asc'));
-                                        Navigator.pop(context);
-                                      },
-                                      child: Text('Ascending')))
+                                  child: Utils.buttonWigget(() {
+                                context
+                                    .read<ProductSearchBloc>()
+                                    .add(SortProductEvent(type: 'asc'));
+                                Navigator.pop(context);
+                              }, Text('Ascending'), false))
                             ],
                           );
                         },
@@ -129,27 +130,6 @@ class _SearchProductPageState extends State<SearchProductPage>
                     )
                   ],
                 )),
-                SizedBox(
-                  height: 60,
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: Container(
-                          color: Colors.yellow,
-                          height: 60,
-                          child: Center(child: Text('Reset')),
-                        ),
-                      ),
-                      Expanded(
-                        child: Container(
-                          height: 60,
-                          color: Colors.green,
-                          child: Center(child: Text('Apply')),
-                        ),
-                      )
-                    ],
-                  ),
-                ),
               ],
             )),
         body: TabBarView(controller: tabController, children: [

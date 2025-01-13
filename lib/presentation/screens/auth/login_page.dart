@@ -1,6 +1,9 @@
+import '../../../gen/assets.gen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 import '../../../bloc/user/user_bloc.dart';
 import '../../../utils/colors.dart';
@@ -19,30 +22,46 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController passwordController = TextEditingController();
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
+  DateTime timeBackPressed = DateTime.now();
+
   @override
   Widget build(BuildContext context) {
     Utils.isDarkMode(context)
         ? ThemeUtils.darkTheme(false)
         : ThemeUtils.lightTheme(false);
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Login'),
-      ),
-      body: BlocConsumer<LoginBloc, LoginState>(
-        listener: (context, state) {
-          if (state is LoginSuccess) {
-            Utils.showToast('Login Successful');
-            Navigator.pushReplacementNamed(context, '/bottomnav');
-          } else if (state is LoginFailure) {
-            Utils.showToast(state.error);
-          }
-        },
-        builder: (context, state) {
-          if (state is LoginLoading) {
-            return main(true);
-          }
-          return main(false);
-        },
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (bool didPop, dynamic ok) {
+        final difference = DateTime.now().difference(timeBackPressed);
+        final isExitWarning = difference >= const Duration(seconds: 2);
+        timeBackPressed = DateTime.now();
+        if (isExitWarning) {
+          Utils.showToast('Press back again to close');
+
+          didPop = false;
+        } else {
+          Fluttertoast.cancel();
+          SystemNavigator.pop();
+          didPop = true;
+        }
+      },
+      child: Scaffold(
+        body: BlocConsumer<LoginBloc, LoginState>(
+          listener: (context, state) {
+            if (state is LoginSuccess) {
+              Utils.showToast('Login Successful');
+              Navigator.pushReplacementNamed(context, '/bottomnav');
+            } else if (state is LoginFailure) {
+              Utils.showToast(state.error);
+            }
+          },
+          builder: (context, state) {
+            if (state is LoginLoading) {
+              return main(true);
+            }
+            return main(false);
+          },
+        ),
       ),
     );
   }
@@ -54,6 +73,15 @@ class _LoginPageState extends State<LoginPage> {
         key: formKey,
         child: ListView(
           children: [
+            Container(
+                height: 200,
+                width: 200,
+                decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    border: Border.all(color: Colors.grey)),
+                margin: const EdgeInsets.symmetric(vertical: 20),
+                padding: const EdgeInsets.all(30),
+                child: Assets.icons.shop.image()),
             Text('Welcome Back!',
                 style: Theme.of(context).textTheme.headlineLarge),
             Text('Login to your account',
@@ -83,9 +111,8 @@ class _LoginPageState extends State<LoginPage> {
 
   Widget botton(bool isLoading) {
     return SizedBox(
-      width: double.infinity,
-      child: ElevatedButton(
-        onPressed: () {
+        width: double.infinity,
+        child: Utils.buttonWigget(() {
           if (formKey.currentState!.validate()) {
             final username = usernameController.text;
             final password = passwordController.text;
@@ -94,9 +121,6 @@ class _LoginPageState extends State<LoginPage> {
                   SubmitLoginEvent(username: username, password: password),
                 );
           }
-        },
-        child: isLoading ? CupertinoActivityIndicator() : Text('Login'),
-      ),
-    );
+        }, isLoading ? CupertinoActivityIndicator() : Text('Login'), false));
   }
 }

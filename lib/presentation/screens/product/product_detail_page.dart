@@ -1,5 +1,5 @@
 import 'package:add_to_cart_animation/add_to_cart_animation.dart';
-import 'package:bloc_online_store/utils/utils.dart';
+import '../../../utils/utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -86,6 +86,8 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
           } else if (state is ProductDetailInitial) {
             context.read<ProductDetailBloc>().add(GetProductDetailEvent());
             return const Center(child: CircularProgressIndicator());
+          } else if (state is AddCartLoading) {
+            return main();
           }
           return const Center(
             child: Text('No Data'),
@@ -418,64 +420,36 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
             height: 60,
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 Expanded(
-                    flex: 2,
-                    child: SizedBox(
-                        height: double.infinity,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Icon(CupertinoIcons.chat_bubble_text),
-                            Text('Chat Seller')
-                          ],
-                        ))),
-                SizedBox(height: 30, child: const VerticalDivider()),
+                    flex: 1,
+                    child: OutlinedButton(
+                        onPressed: () {},
+                        child: Icon(CupertinoIcons.chat_bubble_text))),
+                const SizedBox(
+                  width: 10,
+                ),
                 Expanded(
-                    flex: 2,
-                    child: InkWell(
-                      overlayColor: WidgetStatePropertyAll(Colors.transparent),
-                      onTap: () {
-                        context
-                            .read<ProductDetailBloc>()
-                            .add(ShowBottomSheetAddCartProductEvent());
-                      },
-                      child: SizedBox(
-                          height: double.infinity,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Icon(CupertinoIcons.shopping_cart),
-                              Text('Add To Cart')
-                            ],
-                          )),
-                    )),
+                    flex: 3,
+                    child: Utils.buttonWigget(() {
+                      context
+                          .read<ProductDetailBloc>()
+                          .add(ShowBottomSheetAddCartProductEvent());
+                    }, Text('Add To Cart'), true)),
+                const SizedBox(
+                  width: 10,
+                ),
                 Expanded(
-                    flex: 4,
-                    child: InkWell(
-                      overlayColor: WidgetStatePropertyAll(Colors.transparent),
-                      onTap: () {
-                        context
-                            .read<ProductDetailBloc>()
-                            .add(ShowBottomSheetBuyProductEvent());
-                      },
-                      child: Container(
-                          height: double.infinity,
-                          color: Colors.green.shade800,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Text(
-                                'Buy USD ${widget.product.price}',
-                                style: TextStyle(fontSize: 17),
-                              ),
-                            ],
-                          )),
-                    )),
+                    flex: 3,
+                    child: Utils.buttonWigget(() {
+                      context
+                          .read<ProductDetailBloc>()
+                          .add(ShowBottomSheetBuyProductEvent());
+                    },
+                        Text(
+                          'Buy USD ${widget.product.price}',
+                        ),
+                        false)),
               ],
             ),
           )

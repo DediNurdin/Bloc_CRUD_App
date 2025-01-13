@@ -1,17 +1,15 @@
 import 'package:flutter/material.dart';
 
-class WishListPage extends StatefulWidget {
-  const WishListPage({super.key});
+class WishlistPage extends StatefulWidget {
+  const WishlistPage({super.key});
 
   @override
-  State<WishListPage> createState() => _WishListPageState();
+  State<WishlistPage> createState() => _WishlistPageState();
 }
 
-class _WishListPageState extends State<WishListPage> {
+class _WishlistPageState extends State<WishlistPage> {
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Text('WishList'),
-    );
+    return Scaffold();
   }
 }

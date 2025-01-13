@@ -1,5 +1,6 @@
 import 'package:device_preview_minus/device_preview_minus.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'bloc/auth/auth_bloc.dart';
@@ -16,6 +17,9 @@ import 'repository/user_repository.dart';
 import 'utils/colors.dart';
 
 void main() {
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+  ]);
   runApp(
     DevicePreview(
       enabled: false,

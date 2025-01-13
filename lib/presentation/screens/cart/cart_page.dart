@@ -6,10 +6,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart' as http;
 
 import '../../../bloc/cart/cart_bloc.dart';
+import '../../../gen/assets.gen.dart';
 import '../../../models/cart_model.dart';
 import '../../../utils/shimmer_widget.dart';
 import '../../../utils/utils.dart';
 import '../product/item/quantity_widget.dart';
+import '../product/recomended_page.dart';
 
 class CartPage extends StatefulWidget {
   const CartPage({super.key});
@@ -23,42 +25,91 @@ class _CartPageState extends State<CartPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          'Shopping Cart',
+        appBar: AppBar(
+          title: Text(
+            'Shopping Cart',
+          ),
+          actions: [
+            Padding(
+                padding: const EdgeInsets.only(right: 15),
+                child: Icon(
+                  CupertinoIcons.chat_bubble_2,
+                ))
+          ],
         ),
-        actions: [
-          Padding(
-              padding: const EdgeInsets.only(right: 15),
-              child: Icon(
-                CupertinoIcons.chat_bubble_2,
-              ))
-        ],
-      ),
-      body: BlocProvider(
-        create: (context) => CartBloc()..add(GetCartEvent()),
-        child: BlocBuilder<CartBloc, CartState>(
-          builder: (context, state) {
-            if (state is CartLoading) {
-              return ShimmerWidget.listShimmer(context, false);
-            } else if (state is CartSuccess) {
-              return Column(
-                children: [
-                  Expanded(
-                    child: Container(
-                      margin: const EdgeInsets.symmetric(horizontal: 10),
-                      child: ListView.builder(
-                        itemCount: state.carts.length,
-                        itemBuilder: (context, index) {
-                          final cart = state.carts[index];
-                          return Card(
-                            elevation: 0,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
+        body: Column(
+          children: [
+            Expanded(
+              child: CustomScrollView(
+                shrinkWrap: true,
+                slivers: [
+                  SliverList.list(children: [
+                    BlocBuilder<CartBloc, CartState>(
+                      builder: (context, state) {
+                        if (state is CartLoading) {
+                          return ShimmerWidget.listShimmer(context, false, 2);
+                        } else if (state is CartSuccess) {
+                          if (state.carts.isEmpty) {
+                            return Container(
+                                margin: const EdgeInsets.symmetric(
+                                    horizontal: 15, vertical: 10),
+                                child: Column(
+                                  children: [
+                                    Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Assets.icons.emptyCart
+                                            .image(height: 100, width: 70),
+                                        const SizedBox(
+                                          width: 10,
+                                        ),
+                                        Column(
+                                          children: [
+                                            Text(
+                                              'Wow, your shopping basket is empty',
+                                              style: TextStyle(fontSize: 11),
+                                            ),
+                                            Text(
+                                              'Come on, fill it with your dream items',
+                                              style: TextStyle(
+                                                  fontSize: 10,
+                                                  color: Utils.isDarkMode(
+                                                          context)
+                                                      ? Colors.white
+                                                          .withOpacity(0.5)
+                                                      : Colors.black
+                                                          .withOpacity(0.5)),
+                                            )
+                                          ],
+                                        )
+                                      ],
+                                    ),
+                                    Container(
+                                      margin: const EdgeInsets.only(top: 15),
+                                      width: double.infinity,
+                                      child: Utils.buttonWigget(() {
+                                        Navigator.pushReplacementNamed(
+                                            context, '/bottomnav');
+                                      },
+                                          Text(
+                                            'Start Shopping',
+                                            style: TextStyle(fontSize: 12),
+                                          ),
+                                          false),
+                                    )
+                                  ],
+                                ));
+                          } else {
+                            return ListView.builder(
+                              physics: const NeverScrollableScrollPhysics(),
+                              shrinkWrap: true,
+                              itemCount: state.carts.length,
+                              itemBuilder: (context, index) {
+                                final cart = state.carts[index];
+                                return CupertinoFormSection(children: [
                                   Row(
                                     children: [
                                       BlocProvider(
@@ -252,7 +303,8 @@ class _CartPageState extends State<CartPage> {
                                                           margin:
                                                               const EdgeInsets
                                                                   .only(
-                                                                  right: 10),
+                                                            right: 10,
+                                                          ),
                                                           child: Text(
                                                             productDetail.title,
                                                             style: TextStyle(
@@ -263,35 +315,42 @@ class _CartPageState extends State<CartPage> {
                                                           ),
                                                         ),
                                                         subtitle: Row(
+                                                          crossAxisAlignment:
+                                                              CrossAxisAlignment
+                                                                  .start,
                                                           children: [
                                                             Text(
                                                               'USD $totalPrice',
                                                               style: TextStyle(
-                                                                  fontSize: 12,
+                                                                  fontSize: 10,
                                                                   color: Colors
                                                                       .green),
                                                             ),
                                                             const Spacer(),
-                                                            QuantityWidget(
-                                                                txtQauntity:
-                                                                    quantity
-                                                                        .toString(),
-                                                                onPressIncrement:
-                                                                    () {
-                                                                  context
-                                                                      .read<
-                                                                          QuantityCartBloc>()
-                                                                      .add(
-                                                                          IncrementCartQuantity());
-                                                                },
-                                                                onPressDecrement:
-                                                                    () {
-                                                                  context
-                                                                      .read<
-                                                                          QuantityCartBloc>()
-                                                                      .add(
-                                                                          DecrementCartQuantity());
-                                                                }),
+                                                            Padding(
+                                                              padding:
+                                                                  const EdgeInsets
+                                                                      .all(10),
+                                                              child:
+                                                                  QuantityWidget(
+                                                                      isCart:
+                                                                          true,
+                                                                      txtQauntity:
+                                                                          quantity
+                                                                              .toString(),
+                                                                      onPressIncrement:
+                                                                          () {
+                                                                        context
+                                                                            .read<QuantityCartBloc>()
+                                                                            .add(IncrementCartQuantity());
+                                                                      },
+                                                                      onPressDecrement:
+                                                                          () {
+                                                                        context
+                                                                            .read<QuantityCartBloc>()
+                                                                            .add(DecrementCartQuantity());
+                                                                      }),
+                                                            ),
                                                             const SizedBox(
                                                               width: 10,
                                                             )
@@ -306,82 +365,92 @@ class _CartPageState extends State<CartPage> {
                                           });
                                     }).toList(),
                                   )
-                                ]),
-                          );
-                        },
-                      ),
+                                ]);
+                              },
+                            );
+                          }
+                        } else if (state is CartError) {
+                          return Center(child: Text(state.message));
+                        }
+                        return Center(child: Text('No data'));
+                      },
                     ),
-                  ),
-                  SizedBox(
-                    height: 70,
-                    child: Row(
-                      children: [
-                        Expanded(
-                            flex: 2,
-                            child: Row(
-                              children: [
-                                BlocProvider(
-                                  create: (context) => CartCheckBloc(),
-                                  child: BlocListener<CartCheckBloc,
-                                          CartCheckState>(
-                                      listener: (context, state) {},
-                                      child: BlocBuilder<CartCheckBloc,
-                                          CartCheckState>(
-                                        builder: (context, state) {
-                                          return Checkbox(
-                                            value: state.isAllChecked,
-                                            onChanged: (value) {
-                                              context
-                                                  .read<CartCheckBloc>()
-                                                  .add(ToggleAllCheck(value!));
-                                            },
-                                          );
-                                        },
-                                      )),
-                                ),
-                                Text('All')
-                              ],
-                            )),
-                        Expanded(
-                            flex: 3,
-                            child: BlocProvider(
-                              create: (context) => CartCheckBloc(),
-                              child: BlocBuilder<CartCheckBloc, CartCheckState>(
-                                builder: (context, state) {
-                                  return Padding(
-                                    padding: const EdgeInsets.only(right: 10),
-                                    child: Text(
-                                        "Total: USD ${context.watch<CartCheckBloc>().state.totalPrice}",
-                                        textAlign: TextAlign.end,
-                                        style: TextStyle(
-                                            fontSize: 13,
-                                            fontWeight: FontWeight.w600)),
-                                  );
-                                },
-                              ),
-                            )),
-                        Expanded(
-                            flex: 3,
-                            child: Container(
-                                height: double.infinity,
-                                color: Colors.green,
-                                child: Center(
-                                    child: Text(
-                                  'Check Out',
-                                  style: TextStyle(
-                                      fontSize: 13,
-                                      fontWeight: FontWeight.w600),
-                                ))))
-                      ],
-                    ),
-                  )
+                    RecomendedPage(),
+                  ]),
                 ],
-              );
-            } else if (state is CartError) {
-              return Center(child: Text(state.message));
-            }
-            return Center(child: Text('No data'));
-          },
+              ),
+            ),
+            BlocBuilder<CartBloc, CartState>(
+              builder: (context, state) {
+                if (state is CartSuccess) {
+                  return buttonCheckOut(state.carts.isEmpty ? false : true);
+                }
+                return Container();
+              },
+            )
+          ],
+        ));
+  }
+
+  Widget buttonCheckOut(bool visibleCheckOut) {
+    return Visibility(
+      visible: visibleCheckOut,
+      child: SizedBox(
+        height: 60,
+        child: Row(
+          children: [
+            Expanded(
+                flex: 2,
+                child: Row(
+                  children: [
+                    BlocProvider(
+                      create: (context) => CartCheckBloc(),
+                      child: BlocListener<CartCheckBloc, CartCheckState>(
+                          listener: (context, state) {},
+                          child: BlocBuilder<CartCheckBloc, CartCheckState>(
+                            builder: (context, state) {
+                              return Checkbox(
+                                value: state.isAllChecked,
+                                onChanged: (value) {
+                                  context
+                                      .read<CartCheckBloc>()
+                                      .add(ToggleAllCheck(value!));
+                                },
+                              );
+                            },
+                          )),
+                    ),
+                    Text('All')
+                  ],
+                )),
+            Expanded(
+                flex: 3,
+                child: BlocProvider(
+                  create: (context) => CartCheckBloc(),
+                  child: BlocBuilder<CartCheckBloc, CartCheckState>(
+                    builder: (context, state) {
+                      return Padding(
+                        padding: const EdgeInsets.only(right: 10),
+                        child: Text(
+                            "USD ${context.watch<CartCheckBloc>().state.totalPrice}",
+                            textAlign: TextAlign.end,
+                            style: TextStyle(
+                                fontSize: 13, fontWeight: FontWeight.w600)),
+                      );
+                    },
+                  ),
+                )),
+            Expanded(
+                flex: 3,
+                child: Utils.buttonWigget(
+                    () {},
+                    Text(
+                      'Check Out',
+                      style:
+                          TextStyle(fontSize: 13, fontWeight: FontWeight.w600),
+                    ),
+                    false))
+          ],
         ),
       ),
     );

@@ -88,6 +88,8 @@ class ProductByCategoriesSuccess extends ProductByCategoriesState {
   });
 }
 
+class ProductByCategoriesError extends ProductByCategoriesState {}
+
 abstract class ProductLimitState {}
 
 class ProductLimitInitial extends ProductLimitState {}
@@ -121,6 +123,10 @@ class QuantityState {
 
 class QuantityUpdated extends QuantityState {
   QuantityUpdated({required super.quantity, required super.price});
+}
+
+class AddCartLoading extends ProductDetailState {
+  AddCartLoading();
 }
 
 class AddCartSuccess extends ProductDetailState {
