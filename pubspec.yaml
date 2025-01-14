@@ -11,11 +11,11 @@ dependencies:
     sdk: flutter
 
   add_to_cart_animation: ^2.0.4
-  bloc: ^8.1.4
+  bloc: ^9.0.0
   cupertino_icons: ^1.0.8
   device_preview_minus: ^1.0.0
   equatable: ^2.0.7
-  flutter_bloc: ^8.1.6
+  flutter_bloc: ^9.0.0
   flutter_map: ^7.0.2
   flutter_gen: ^5.8.0
   flutter_native_splash: ^2.4.4
@@ -31,7 +31,7 @@ dependencies:
   url_launcher: ^6.3.1
   shared_preferences: ^2.1.2
   smooth_page_indicator: ^1.2.0+3
-  shimmer: ^3.0.0
+  flutter_skeleton_plus: ^0.0.2
   whitecodel_reels: ^0.0.6
 
 dev_dependencies:

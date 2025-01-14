@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_skeleton_plus/flutter_skeleton_plus.dart';
 
 import '../../../../models/product_model.dart';
 import '../product_detail_page.dart';
@@ -23,51 +24,46 @@ class ProductItemLimitWidget extends StatelessWidget {
       child: SizedBox(
         width: 130,
         height: 130,
-        child: ListView(
-          physics: const NeverScrollableScrollPhysics(),
+        child: Column(
           children: [
-            SizedBox(
-              height: 120,
-              width: 120,
-              child: Card(
-                elevation: 0,
-                shape: RoundedRectangleBorder(
-                  borderRadius: const BorderRadius.all(Radius.circular(10)),
-                ),
-                child: ClipRRect(
-                  borderRadius: const BorderRadius.all(Radius.circular(10)),
-                  child: Image.network(
-                    product.image,
-                    fit: BoxFit.fill,
-                    errorBuilder: (context, error, stackTrace) {
-                      return const SizedBox(
-                        height: 50,
-                        child: Icon(
-                          Icons.image,
-                          size: 40,
-                          color: Colors.green,
-                        ),
-                      );
-                    },
-                    loadingBuilder: (BuildContext context, Widget child,
-                        ImageChunkEvent? loadingProgress) {
-                      if (loadingProgress == null) {
-                        return child;
-                      }
-                      return SizedBox(
-                        height: 50,
-                        child: Center(
-                          child: CircularProgressIndicator(
+            Expanded(
+              child: SizedBox(
+                width: double.infinity,
+                child: Card(
+                  elevation: 0,
+                  color: Colors.transparent,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: const BorderRadius.all(Radius.circular(10)),
+                  ),
+                  child: ClipRRect(
+                    borderRadius: const BorderRadius.all(Radius.circular(10)),
+                    child: Image.network(
+                      product.image,
+                      fit: BoxFit.fill,
+                      errorBuilder: (context, error, stackTrace) {
+                        return const SizedBox(
+                          height: 50,
+                          child: Icon(
+                            Icons.image,
+                            size: 40,
                             color: Colors.green,
-                            strokeWidth: 1.5,
-                            value: loadingProgress.expectedTotalBytes != null
-                                ? loadingProgress.cumulativeBytesLoaded /
-                                    loadingProgress.expectedTotalBytes!
-                                : null,
                           ),
-                        ),
-                      );
-                    },
+                        );
+                      },
+                      loadingBuilder: (BuildContext context, Widget child,
+                          ImageChunkEvent? loadingProgress) {
+                        if (loadingProgress == null) {
+                          return child;
+                        }
+                        return SizedBox(
+                            height: 50,
+                            child: SkeletonAvatar(
+                              style: SkeletonAvatarStyle(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(20))),
+                            ));
+                      },
+                    ),
                   ),
                 ),
               ),

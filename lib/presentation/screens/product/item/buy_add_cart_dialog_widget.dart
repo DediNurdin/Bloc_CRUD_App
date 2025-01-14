@@ -104,7 +104,6 @@ class _BuyAddCartDialogWidgetState extends State<BuyAddCartDialogWidget> {
                                       height: 100,
                                       child: Center(
                                         child: CircularProgressIndicator(
-                                          color: Colors.green,
                                           strokeWidth: 1.5,
                                           value: loadingProgress
                                                       .expectedTotalBytes !=

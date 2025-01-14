@@ -56,7 +56,6 @@ class _DetailProductSrcWidgetState extends State<DetailProductSrcWidget> {
                     height: 100,
                     child: Center(
                       child: CircularProgressIndicator(
-                        color: Colors.green,
                         strokeWidth: 1.5,
                         value: loadingProgress.expectedTotalBytes != null
                             ? loadingProgress.cumulativeBytesLoaded /

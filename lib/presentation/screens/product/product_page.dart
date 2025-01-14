@@ -8,7 +8,7 @@ import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import '../../../bloc/auth/auth_bloc.dart';
 import '../../../bloc/product/product_bloc.dart';
 import '../../../gen/assets.gen.dart';
-import '../../../utils/shimmer_widget.dart';
+import '../../../utils/skeleton_widget.dart';
 import '../../../utils/utils.dart';
 import 'all_product_page.dart';
 import 'item/product_item_limit_widget.dart';
@@ -108,7 +108,7 @@ class _ProductPageState extends State<ProductPage> {
                   BlocBuilder<AuthBloc, AuthState>(
                     builder: (context, state) {
                       if (state is AuthLoading) {
-                        return ShimmerWidget.chipShimmer(context);
+                        return SkeletonWidget.chipSkeleton(context);
                       } else if (state is AuthSuccess) {
                         final auth = state.auth;
                         return Container(
@@ -223,7 +223,7 @@ class _ProductPageState extends State<ProductPage> {
                       if (state is ProductLimitLoading) {
                         return SizedBox(
                           height: 130,
-                          child: ShimmerWidget.listShimmer(context, true, 4),
+                          child: SkeletonWidget.listSkeleton(context, true, 4),
                         );
                       }
                       if (state is ProductLimitSuccess) {
@@ -257,6 +257,10 @@ class _ProductPageState extends State<ProductPage> {
                     },
                   ),
                 ]),
+                if (categoryState is ProductCategoriesLoading)
+                  SliverToBoxAdapter(
+                    child: SkeletonWidget.chipSkeleton(context),
+                  ),
                 if (categoryState is ProductCategoriesSuccess)
                   SliverPersistentHeader(
                     pinned: true,
@@ -312,7 +316,7 @@ class _ProductPageState extends State<ProductPage> {
                               ProductByCategoriesState>(
                             builder: (context, productState) {
                               if (productState is ProductByCategoriesLoading) {
-                                return ShimmerWidget.gridShimmer(context);
+                                return SkeletonWidget.gridSkeleton(context);
                               } else if (productState
                                   is ProductByCategoriesSuccess) {
                                 return Container(
@@ -339,11 +343,7 @@ class _ProductPageState extends State<ProductPage> {
                                   ),
                                 );
                               } else {
-                                return Center(
-                                    child: Text(
-                                  "Failed to load products",
-                                  style: TextStyle(fontSize: 12),
-                                ));
+                                return Container();
                               }
                             },
                           ),

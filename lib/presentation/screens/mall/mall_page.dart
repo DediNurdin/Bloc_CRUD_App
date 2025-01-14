@@ -1,3 +1,4 @@
+import '../product/recomended_page.dart';
 import 'package:flutter/material.dart';
 
 class MallPage extends StatefulWidget {
@@ -10,6 +11,16 @@ class MallPage extends StatefulWidget {
 class _MallPageState extends State<MallPage> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold();
+    return Scaffold(
+      body: CustomScrollView(
+        slivers: [
+          SliverList.list(children: [
+            RecomendedPage(
+              visibleTitle: false,
+            )
+          ])
+        ],
+      ),
+    );
   }
 }

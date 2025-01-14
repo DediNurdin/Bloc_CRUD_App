@@ -1,4 +1,7 @@
+import 'package:bloc_online_store/utils/utils.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_skeleton_plus/flutter_skeleton_plus.dart';
 
 import '../../../../models/product_model.dart';
 import '../product_detail_page.dart';
@@ -22,6 +25,7 @@ class ProductItemWidget extends StatelessWidget {
       },
       child: Card(
         elevation: 0,
+        color: Colors.transparent,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10),
         ),
@@ -33,9 +37,9 @@ class ProductItemWidget extends StatelessWidget {
               child: SizedBox(
                 width: double.infinity,
                 child: ClipRRect(
-                  borderRadius: const BorderRadius.only(
-                      topLeft: Radius.circular(10),
-                      topRight: Radius.circular(10)),
+                  borderRadius: const BorderRadius.all(
+                    Radius.circular(10),
+                  ),
                   child: Image.network(
                     product.image,
                     fit: BoxFit.fill,
@@ -55,25 +59,19 @@ class ProductItemWidget extends StatelessWidget {
                         return child;
                       }
                       return SizedBox(
-                        height: 50,
-                        child: Center(
-                          child: CircularProgressIndicator(
-                            color: Colors.green,
-                            strokeWidth: 1.5,
-                            value: loadingProgress.expectedTotalBytes != null
-                                ? loadingProgress.cumulativeBytesLoaded /
-                                    loadingProgress.expectedTotalBytes!
-                                : null,
-                          ),
-                        ),
-                      );
+                          height: 50,
+                          child: SkeletonAvatar(
+                            style: SkeletonAvatarStyle(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(20))),
+                          ));
                     },
                   ),
                 ),
               ),
             ),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 7),
+              padding: const EdgeInsets.symmetric(vertical: 7),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.end,
@@ -83,56 +81,58 @@ class ProductItemWidget extends StatelessWidget {
                     maxLines: 2,
                     textAlign: TextAlign.start,
                     style: const TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.w500,
+                      fontSize: 11,
+                      fontWeight: FontWeight.normal,
                     ),
                   ),
-                  const SizedBox(
-                    height: 10,
+                  Text(
+                    'USD ${product.price}',
+                    overflow: TextOverflow.fade,
+                    style: const TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Expanded(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Text(
-                              'USD ${product.price}',
-                              overflow: TextOverflow.fade,
-                              style: const TextStyle(
-                                color: Colors.green,
-                                fontSize: 10,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                          ],
+                      Icon(
+                        CupertinoIcons.star_fill,
+                        color: Colors.amber,
+                        size: 10,
+                      ),
+                      Text(
+                        '${product.rating.rate} • ${product.rating.count} sold',
+                        overflow: TextOverflow.fade,
+                        style: TextStyle(
+                          fontSize: 10,
+                          fontWeight: FontWeight.normal,
                         ),
                       ),
+                    ],
+                  ),
+                  Row(
+                    children: [
                       Expanded(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Text(
-                              '${product.rating.count} Sold',
-                              textAlign: TextAlign.right,
-                              style: const TextStyle(
-                                color: Colors.blue,
-                                fontSize: 10,
-                                fontWeight: FontWeight.w300,
-                              ),
-                            ),
-                            const SizedBox(
-                              width: 5,
-                            ),
-                            const Icon(
-                              Icons.more_horiz,
-                              size: 18,
-                            )
-                          ],
+                        child: Text(
+                          product.category.capitalize(),
+                          overflow: TextOverflow.fade,
+                          style: const TextStyle(
+                            fontSize: 10,
+                            fontWeight: FontWeight.normal,
+                          ),
                         ),
-                      )
+                      ),
+                      const Spacer(),
+                      Expanded(
+                          child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          Icon(
+                            Icons.more_horiz,
+                            size: 18,
+                          )
+                        ],
+                      ))
                     ],
                   )
                 ],

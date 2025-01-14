@@ -4,7 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../bloc/auth/auth_bloc.dart';
 import '../../../gen/assets.gen.dart';
-import '../../../utils/shimmer_widget.dart';
+import '../../../utils/skeleton_widget.dart';
 import '../../../utils/utils.dart';
 import '../myaccount/myaccount_page.dart';
 
@@ -43,7 +43,7 @@ class _MainMenuState extends State<MainMenu> {
             BlocBuilder<AuthBloc, AuthState>(
               builder: (context, state) {
                 if (state is AuthLoading) {
-                  return ShimmerWidget.chipShimmer(context);
+                  return SkeletonWidget.chipSkeleton(context);
                 } else if (state is AuthSuccess) {
                   final auth = state.auth;
                   return Container(

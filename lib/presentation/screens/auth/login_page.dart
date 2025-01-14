@@ -1,4 +1,3 @@
-import '../../../gen/assets.gen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -6,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 import '../../../bloc/user/user_bloc.dart';
+import '../../../gen/assets.gen.dart';
 import '../../../utils/colors.dart';
 import '../../../utils/text_form_field_widget.dart';
 import '../../../utils/utils.dart';

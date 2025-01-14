@@ -7,8 +7,9 @@ class ThemeUtils {
     return ThemeData(
       fontFamily: 'Roboto-Regular',
       cupertinoOverrideTheme: const CupertinoThemeData(
-        primaryColor: Colors.green,
-      ),
+          primaryColor: Colors.green,
+          textTheme:
+              CupertinoTextThemeData(actionTextStyle: TextStyle(fontSize: 13))),
       dividerColor: Colors.transparent,
       useMaterial3: true,
       splashColor: Colors.transparent,
@@ -64,13 +65,17 @@ class ThemeUtils {
           backgroundColor: CupertinoColors.systemBackground),
       bottomNavigationBarTheme: BottomNavigationBarThemeData(
           type: BottomNavigationBarType.fixed,
-          selectedLabelStyle: TextStyle(color: Colors.grey, fontSize: 11),
+          selectedLabelStyle: TextStyle(color: Colors.green, fontSize: 11),
           selectedItemColor: Colors.green,
           unselectedItemColor: Colors.grey.shade600,
+          unselectedLabelStyle: TextStyle(color: Colors.grey, fontSize: 11),
           backgroundColor: CupertinoColors.systemBackground),
       navigationBarTheme: const NavigationBarThemeData(
-          indicatorColor: Colors.green,
-          elevation: 2,
+          labelTextStyle: WidgetStatePropertyAll(TextStyle(
+            fontSize: 11,
+          )),
+          indicatorColor: CupertinoColors.secondarySystemBackground,
+          elevation: 0,
           backgroundColor: CupertinoColors.secondarySystemBackground),
       floatingActionButtonTheme: const FloatingActionButtonThemeData(
           backgroundColor: Colors.green, foregroundColor: Colors.white),
@@ -137,8 +142,9 @@ class ThemeUtils {
     return ThemeData(
         fontFamily: 'Roboto-Regular',
         cupertinoOverrideTheme: const CupertinoThemeData(
-          primaryColor: Colors.green,
-        ),
+            primaryColor: Colors.green,
+            textTheme: CupertinoTextThemeData(
+                actionTextStyle: TextStyle(fontSize: 13))),
         dividerColor: Colors.transparent,
         useMaterial3: true,
         splashColor: Colors.transparent,
@@ -195,14 +201,18 @@ class ThemeUtils {
             backgroundColor: CupertinoColors.darkBackgroundGray),
         bottomNavigationBarTheme: BottomNavigationBarThemeData(
             type: BottomNavigationBarType.fixed,
-            selectedLabelStyle: TextStyle(color: Colors.grey, fontSize: 11),
-            backgroundColor: CupertinoColors.darkBackgroundGray,
+            selectedLabelStyle: TextStyle(color: Colors.green, fontSize: 11),
             selectedItemColor: Colors.green,
-            unselectedItemColor: Colors.grey.shade600),
+            unselectedItemColor: Colors.grey.shade600,
+            unselectedLabelStyle: TextStyle(color: Colors.grey, fontSize: 11),
+            backgroundColor: CupertinoColors.darkBackgroundGray),
         navigationBarTheme: const NavigationBarThemeData(
-            indicatorColor: Colors.green,
-            elevation: 2,
-            backgroundColor: CupertinoColors.black),
+            labelTextStyle: WidgetStatePropertyAll(TextStyle(
+              fontSize: 11,
+            )),
+            indicatorColor: CupertinoColors.darkBackgroundGray,
+            elevation: 0,
+            backgroundColor: CupertinoColors.darkBackgroundGray),
         floatingActionButtonTheme: const FloatingActionButtonThemeData(
             backgroundColor: Colors.green, foregroundColor: Colors.white),
         cardTheme: CardTheme(color: Colors.grey.shade600),

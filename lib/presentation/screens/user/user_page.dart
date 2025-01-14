@@ -1,9 +1,9 @@
-import '../../../utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../bloc/user/user_bloc.dart';
 import '../../../models/user_model.dart';
+import '../../../utils/utils.dart';
 import '../auth/register_page.dart';
 
 class UserPage extends StatefulWidget {

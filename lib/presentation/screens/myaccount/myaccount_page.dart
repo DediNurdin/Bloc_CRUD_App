@@ -1,14 +1,14 @@
-import '../product/recomended_page.dart';
-
+import 'theme_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../bloc/auth/auth_bloc.dart';
 import '../../../bloc/cubit/theme_cubit.dart';
-import '../../../utils/shimmer_widget.dart';
+import '../../../utils/skeleton_widget.dart';
 import '../../../utils/utils.dart';
 import '../auth/profile_page.dart';
+import '../product/recomended_page.dart';
 
 class MyAccountPage extends StatelessWidget {
   const MyAccountPage({super.key});
@@ -26,7 +26,7 @@ class MyAccountPage extends StatelessWidget {
             child: BlocBuilder<AuthBloc, AuthState>(
               builder: (context, state) {
                 if (state is AuthLoading) {
-                  return ShimmerWidget.chipShimmer(context);
+                  return SkeletonWidget.chipSkeleton(context);
                 } else if (state is AuthSuccess) {
                   final auth = state.auth;
                   return Row(
@@ -84,7 +84,10 @@ class MyAccountPage extends StatelessWidget {
             Column(
               children: [
                 ListTile(
-                  title: Text('Account Setting'),
+                  title: Text(
+                    'Account Setting',
+                    style: TextStyle(fontSize: 15),
+                  ),
                 ),
                 SettingsOption(
                     icon: CupertinoIcons.house, title: 'Your Adress'),
@@ -99,7 +102,8 @@ class MyAccountPage extends StatelessWidget {
           ]),
           CupertinoFormSection(children: [
             ExpansionTile(
-              title: Text('Application Setting'),
+              title:
+                  Text('Application Setting', style: TextStyle(fontSize: 15)),
               children: [
                 const SettingsOption(
                     icon: Icons.light_mode,
@@ -128,7 +132,7 @@ class MyAccountPage extends StatelessWidget {
                               child: Text('Yes'),
                               onPressed: () async {
                                 await Utils.removeTokenData();
-
+                                await Utils.removeUserData();
                                 if (!context.mounted) return;
                                 Navigator.of(context, rootNavigator: true)
                                     .pop();
@@ -139,7 +143,7 @@ class MyAccountPage extends StatelessWidget {
                           ],
                         ));
               },
-              title: Text('Logout'),
+              title: Text('Logout', style: TextStyle(fontSize: 15)),
               leading: Icon(Icons.logout_outlined),
               trailing: Icon(Icons.chevron_right),
             ),
@@ -162,8 +166,7 @@ class SectionTitle extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
       child: Text(
         title,
-        style:
-            Theme.of(context).textTheme.bodySmall?.copyWith(color: Colors.grey),
+        style: TextStyle(fontSize: 14, color: Colors.grey),
       ),
     );
   }
@@ -184,10 +187,14 @@ class SettingsOption extends StatelessWidget {
             state.themeMode == ThemeMode.dark ? "Dark Mode" : "Light Mode";
 
         return ListTile(
-          leading: Icon(icon),
+          leading: Container(
+              padding: const EdgeInsets.all(4),
+              child: Icon(
+                icon,
+              )),
           title: Text(
             title,
-            style: TextStyle(fontSize: 15),
+            style: TextStyle(fontSize: 13),
           ),
           trailing: trailingText != null
               ? Text(
@@ -198,28 +205,8 @@ class SettingsOption extends StatelessWidget {
           onTap: () {
             switch (title) {
               case 'Theme':
-                showCupertinoModalPopup(
-                  context: context,
-                  builder: (BuildContext context) => CupertinoActionSheet(
-                    title: const Text('Select Theme'),
-                    message: const Text('Your theme preference'),
-                    actions: [
-                      CupertinoActionSheetAction(
-                        child: const Text('Dark Mode'),
-                        onPressed: () {
-                          context.read<ThemeCubit>().switchThemeDark();
-                          Navigator.pop(context);
-                        },
-                      ),
-                      CupertinoActionSheetAction(
-                        child: const Text('Light Mode'),
-                        onPressed: () {
-                          context.read<ThemeCubit>().switchThemeLight();
-                          Navigator.pop(context);
-                        },
-                      ),
-                    ],
-                  ),
+                Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => ThemePage()),
                 );
                 break;
             }

@@ -1,12 +1,3 @@
-import 'main_menu.dart';
-import '../cart/cart_page.dart';
-import '../mall/item/search_mall_widget.dart';
-import '../product/item/search_product_widget.dart';
-import '../transactions/item/search_transaction_widget.dart';
-
-import '../../../utils/colors.dart';
-
-import '../../../utils/utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -14,39 +5,18 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 import '../../../bloc/bottom_nav/bottom_nav_bloc.dart';
+import '../../../utils/colors.dart';
+import '../../../utils/utils.dart';
+import '../cart/cart_page.dart';
 import '../feed/feed_page.dart';
+import '../mall/item/search_mall_widget.dart';
 import '../mall/mall_page.dart';
+import '../product/item/search_product_widget.dart';
 import '../product/product_page.dart';
+import '../transactions/item/search_transaction_widget.dart';
 import '../transactions/transactions_page.dart';
 import '../wishlist/wish_list_page.dart';
-
-List<NavigationDestination> bottomNavItems = <NavigationDestination>[
-  NavigationDestination(
-    icon: Icon(Icons.space_dashboard_outlined),
-    selectedIcon: Icon(Icons.space_dashboard_rounded),
-    label: 'Home',
-  ),
-  NavigationDestination(
-    icon: Icon(CupertinoIcons.play_rectangle),
-    selectedIcon: Icon(CupertinoIcons.play_rectangle_fill),
-    label: 'Feed',
-  ),
-  NavigationDestination(
-    icon: Icon(CupertinoIcons.hexagon),
-    selectedIcon: Icon(CupertinoIcons.hexagon_fill),
-    label: 'Mall',
-  ),
-  NavigationDestination(
-    icon: Icon(CupertinoIcons.heart),
-    selectedIcon: Icon(CupertinoIcons.heart_fill),
-    label: 'Wishlist',
-  ),
-  NavigationDestination(
-    icon: Icon(CupertinoIcons.doc_text),
-    selectedIcon: Icon(CupertinoIcons.doc_text_fill),
-    label: 'Transaction',
-  ),
-];
+import 'main_menu.dart';
 
 const List<Widget> bottomNavScreen = [
   ProductPage(),
@@ -145,12 +115,41 @@ class _BottomNavigationPageState extends State<BottomNavigationPage> {
                     )
                   : null,
               body: Center(child: bottomNavScreen.elementAt(stateNav.tabIndex)),
-              bottomNavigationBar: NavigationBar(
-                indicatorShape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(10))),
-                destinations: bottomNavItems,
-                selectedIndex: stateNav.tabIndex,
-                onDestinationSelected: (index) {
+              bottomNavigationBar: BottomNavigationBar(
+                items: [
+                  BottomNavigationBarItem(
+                    icon: stateNav.tabIndex == 0
+                        ? Icon(Icons.space_dashboard_rounded)
+                        : Icon(Icons.space_dashboard_outlined),
+                    label: 'Home',
+                  ),
+                  BottomNavigationBarItem(
+                    icon: stateNav.tabIndex == 1
+                        ? Icon(CupertinoIcons.play_rectangle_fill)
+                        : Icon(CupertinoIcons.play_rectangle),
+                    label: 'Feed',
+                  ),
+                  BottomNavigationBarItem(
+                    icon: stateNav.tabIndex == 2
+                        ? Icon(CupertinoIcons.hexagon_fill)
+                        : Icon(CupertinoIcons.hexagon),
+                    label: 'Mall',
+                  ),
+                  BottomNavigationBarItem(
+                    icon: stateNav.tabIndex == 3
+                        ? Icon(CupertinoIcons.heart_fill)
+                        : Icon(CupertinoIcons.heart),
+                    label: 'Wishlist',
+                  ),
+                  BottomNavigationBarItem(
+                    icon: stateNav.tabIndex == 4
+                        ? Icon(CupertinoIcons.doc_text_fill)
+                        : Icon(CupertinoIcons.doc_text),
+                    label: 'Transaction',
+                  ),
+                ],
+                currentIndex: stateNav.tabIndex,
+                onTap: (index) {
                   BlocProvider.of<BottomNavBloc>(context)
                       .add(TabChange(tabIndex: index));
                 },

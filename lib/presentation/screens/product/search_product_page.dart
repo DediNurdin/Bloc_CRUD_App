@@ -4,7 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../bloc/product/product_bloc.dart';
 import '../../../models/product_model.dart';
-import '../../../utils/shimmer_widget.dart';
+import '../../../utils/skeleton_widget.dart';
 import '../../../utils/utils.dart';
 import '../bottom_navigation/main_menu.dart';
 import 'item/product_item_widget.dart';
@@ -136,7 +136,7 @@ class _SearchProductPageState extends State<SearchProductPage>
           BlocBuilder<ProductSearchBloc, ProductSearchState>(
             builder: (context, state) {
               if (state is ProductSearchLoading) {
-                return ShimmerWidget.gridShimmer(context);
+                return SkeletonWidget.gridSkeleton(context);
               }
               if (state is ProductInitial) {
                 context.read<ProductSearchBloc>().add(GetProductSearchEvent());

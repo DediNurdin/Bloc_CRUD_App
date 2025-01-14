@@ -28,7 +28,7 @@ class SearchProductWidget extends StatelessWidget {
         decoration: BoxDecoration(
           color: isMain
               ? Colors.transparent
-              : Colors.grey.shade700.withOpacity(0.1),
+              : Colors.grey.shade700.withValues(alpha: 0.1),
           border: Border.all(
               color: isMain ? Colors.grey.shade700 : Colors.transparent),
           borderRadius: BorderRadius.circular(5),

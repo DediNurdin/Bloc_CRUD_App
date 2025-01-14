@@ -1,5 +1,4 @@
 import 'package:add_to_cart_animation/add_to_cart_animation.dart';
-import '../../../utils/utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -7,7 +6,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../bloc/product/product_bloc.dart';
 import '../../../models/product_model.dart';
-import '../../../utils/shimmer_widget.dart';
+import '../../../utils/skeleton_widget.dart';
+import '../../../utils/utils.dart';
 import '../cart/cart_page.dart';
 import 'item/buy_add_cart_dialog_widget.dart';
 import 'item/product_item_widget.dart';
@@ -212,7 +212,6 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                                   height: 150,
                                   child: Center(
                                     child: CircularProgressIndicator(
-                                      color: Colors.green,
                                       strokeWidth: 1.5,
                                       value:
                                           loadingProgress.expectedTotalBytes !=
@@ -386,7 +385,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                         ProductByCategoriesState>(
                       builder: (context, state) {
                         if (state is ProductByCategoriesLoading) {
-                          return ShimmerWidget.gridShimmer(context);
+                          return SkeletonWidget.gridSkeleton(context);
                         }
                         if (state is ProductByCategoriesSuccess) {
                           return GridView.builder(
@@ -418,39 +417,43 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
           ),
           SizedBox(
             height: 60,
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Expanded(
-                    flex: 1,
-                    child: OutlinedButton(
-                        onPressed: () {},
-                        child: Icon(CupertinoIcons.chat_bubble_text))),
-                const SizedBox(
-                  width: 10,
-                ),
-                Expanded(
-                    flex: 3,
-                    child: Utils.buttonWigget(() {
-                      context
-                          .read<ProductDetailBloc>()
-                          .add(ShowBottomSheetAddCartProductEvent());
-                    }, Text('Add To Cart'), true)),
-                const SizedBox(
-                  width: 10,
-                ),
-                Expanded(
-                    flex: 3,
-                    child: Utils.buttonWigget(() {
-                      context
-                          .read<ProductDetailBloc>()
-                          .add(ShowBottomSheetBuyProductEvent());
-                    },
-                        Text(
-                          'Buy USD ${widget.product.price}',
-                        ),
-                        false)),
-              ],
+            child: Container(
+              margin: const EdgeInsets.symmetric(horizontal: 10),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  OutlinedButton(
+                      onPressed: () {},
+                      child: Icon(
+                        CupertinoIcons.text_bubble,
+                        color: Colors.grey,
+                      )),
+                  const SizedBox(
+                    width: 10,
+                  ),
+                  Expanded(
+                      flex: 3,
+                      child: Utils.buttonWigget(() {
+                        context
+                            .read<ProductDetailBloc>()
+                            .add(ShowBottomSheetAddCartProductEvent());
+                      }, Text('Add To Cart'), true)),
+                  const SizedBox(
+                    width: 10,
+                  ),
+                  Expanded(
+                      flex: 3,
+                      child: Utils.buttonWigget(() {
+                        context
+                            .read<ProductDetailBloc>()
+                            .add(ShowBottomSheetBuyProductEvent());
+                      },
+                          Text(
+                            'Buy USD ${widget.product.price}',
+                          ),
+                          false)),
+                ],
+              ),
             ),
           )
         ],

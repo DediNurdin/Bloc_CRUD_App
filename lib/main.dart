@@ -2,6 +2,7 @@ import 'package:device_preview_minus/device_preview_minus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_skeleton_plus/flutter_skeleton_plus.dart';
 
 import 'bloc/auth/auth_bloc.dart';
 import 'bloc/cart/cart_bloc.dart';
@@ -89,14 +90,47 @@ class MyApp extends StatelessWidget {
                   ..getCurrentTheme())
       ],
       child: BlocBuilder<ThemeCubit, ThemeState>(
-        builder: (BuildContext context, ThemeState state) => MaterialApp(
-          theme: ThemeUtils.lightTheme(false),
-          darkTheme: ThemeUtils.darkTheme(false),
-          themeMode: state.themeMode,
-          title: 'Bloc STM Learn',
-          debugShowCheckedModeBanner: false,
-          initialRoute: '/',
-          onGenerateRoute: RouteGenerator().generateRoute,
+        builder: (BuildContext context, ThemeState state) => SkeletonTheme(
+          shimmerGradient: LinearGradient(
+            colors: [
+              Colors.grey.shade300,
+              Colors.grey.shade200,
+              Colors.grey.shade100,
+            ],
+            stops: [
+              0.1,
+              0.5,
+              0.9,
+            ],
+          ),
+          darkShimmerGradient: LinearGradient(
+            colors: [
+              Color(0xFF222222),
+              Color(0xFF242424),
+              Color(0xFF2B2B2B),
+              Color(0xFF242424),
+              Color(0xFF222222),
+            ],
+            stops: [
+              0.0,
+              0.2,
+              0.5,
+              0.8,
+              1,
+            ],
+            begin: Alignment(-2.4, -0.2),
+            end: Alignment(2.4, 0.2),
+            tileMode: TileMode.clamp,
+          ),
+          child: MaterialApp(
+            theme: ThemeUtils.lightTheme(false),
+            darkTheme: ThemeUtils.darkTheme(false),
+            themeMode: state.themeMode,
+            title: 'Bloc STM Learn',
+            debugShowCheckedModeBanner: false,
+            initialRoute: '/',
+            onGenerateRoute: RouteGenerator().generateRoute,
+          ),
         ),
       ),
     );

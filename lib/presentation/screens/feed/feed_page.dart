@@ -1,10 +1,12 @@
 import 'dart:async';
-import '../../../utils/colors.dart';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:whitecodel_reels/whitecodel_reels.dart';
+
+import '../../../utils/colors.dart';
 
 class FeedPage extends StatefulWidget {
   const FeedPage({super.key});
@@ -102,9 +104,9 @@ class _FeedPageState extends State<FeedPage> {
                                           begin: Alignment.topCenter,
                                           end: Alignment.bottomCenter,
                                           colors: [
-                                            Colors.black.withOpacity(0.0),
-                                            Colors.black.withOpacity(0.2),
-                                            Colors.black.withOpacity(0.5),
+                                            Colors.black.withValues(alpha: 0.0),
+                                            Colors.black.withValues(alpha: 0.2),
+                                            Colors.black.withValues(alpha: 0.5),
                                           ],
                                         ),
                                       ),
