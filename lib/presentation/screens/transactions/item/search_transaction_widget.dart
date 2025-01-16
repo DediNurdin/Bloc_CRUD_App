@@ -1,8 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import '../../delegate/search_delegate_product.dart';
-
 class SearchTransactionWidget extends StatelessWidget {
   const SearchTransactionWidget({
     super.key,
@@ -16,27 +14,25 @@ class SearchTransactionWidget extends StatelessWidget {
       splashColor: Colors.transparent,
       onTap: () async {
         if (query == '') {
-          await showSearch(
-              context: context,
-              delegate: SearchDelegateProduct(initQuery: query));
         } else {
           if (!context.mounted) return;
           Navigator.of(context).pop();
         }
       },
       child: Container(
-        height: 40,
-        padding: EdgeInsets.only(left: 10, right: 10, top: 5, bottom: 5),
+        height: 37,
+        margin: const EdgeInsets.symmetric(horizontal: 10),
+        padding: EdgeInsets.only(left: 10, right: 10, top: 4, bottom: 4),
         decoration: BoxDecoration(
           color: Colors.transparent,
           border: Border.all(color: Colors.grey.shade700),
-          borderRadius: BorderRadius.circular(5),
+          borderRadius: BorderRadius.circular(10),
         ),
         child: Row(
           children: [
             Icon(
               CupertinoIcons.search,
-              size: 17,
+              size: 15,
               color: Colors.grey,
             ),
             const SizedBox(
@@ -44,7 +40,7 @@ class SearchTransactionWidget extends StatelessWidget {
             ),
             Text(
               query != '' ? query : 'Search Transaction',
-              style: TextStyle(fontSize: 14, color: Colors.grey),
+              style: TextStyle(fontSize: 13, color: Colors.grey),
             )
           ],
         ),

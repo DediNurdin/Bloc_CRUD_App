@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../utils/utils.dart';
@@ -24,8 +25,8 @@ class _ItemTypeWidgetState extends State<ItemTypeWidget> {
           decoration: BoxDecoration(
               shape: BoxShape.circle,
               color: Utils.isDarkMode(context)
-                  ? Colors.grey.shade800
-                  : Colors.grey.shade300),
+                  ? Colors.grey.shade900
+                  : CupertinoColors.secondarySystemBackground),
           child: Image.asset(
             widget.icon,
           ),

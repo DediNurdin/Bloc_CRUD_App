@@ -1,12 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
 import '../../../bloc/product/product_bloc.dart';
 import '../../../models/product_model.dart';
 import '../../../utils/skeleton_widget.dart';
-import '../../../utils/utils.dart';
 import '../bottom_navigation/main_menu.dart';
+import '../cart/cart_page.dart';
 import 'item/product_item_widget.dart';
 import 'item/search_product_widget.dart';
 
@@ -39,17 +38,17 @@ class _SearchProductPageState extends State<SearchProductPage>
             query: widget.query,
           ),
           actions: [
-            Builder(builder: (context) {
-              return InkWell(
-                overlayColor: WidgetStatePropertyAll(Colors.transparent),
-                onTap: () {
-                  Scaffold.of(context).openEndDrawer();
-                },
-                child: Padding(
-                    padding: const EdgeInsets.only(right: 10),
-                    child: Icon(Icons.filter_alt_outlined)),
-              );
-            }),
+            InkWell(
+              overlayColor: WidgetStatePropertyAll(Colors.transparent),
+              onTap: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => CartPage()),
+                );
+              },
+              child: Padding(
+                  padding: const EdgeInsets.only(right: 10),
+                  child: Icon(CupertinoIcons.cart)),
+            ),
             InkWell(
               overlayColor: WidgetStatePropertyAll(Colors.transparent),
               onTap: () {
@@ -67,9 +66,8 @@ class _SearchProductPageState extends State<SearchProductPage>
             ),
           ],
           bottom: TabBar(
-              tabAlignment: TabAlignment.start,
-              isScrollable: true,
               controller: tabController,
+              indicatorSize: TabBarIndicatorSize.tab,
               tabs: [
                 Tab(
                   text: 'Product',
@@ -79,59 +77,6 @@ class _SearchProductPageState extends State<SearchProductPage>
                 )
               ]),
         ),
-        endDrawer: Drawer(
-            width: MediaQuery.of(context).size.width - 100,
-            shape: BeveledRectangleBorder(),
-            child: Column(
-              children: [
-                SizedBox(
-                  width: MediaQuery.of(context).size.width,
-                  child: DrawerHeader(
-                    child: Padding(
-                        padding: const EdgeInsets.all(10),
-                        child: Text('Search Filter')),
-                  ),
-                ),
-                Expanded(
-                    child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Padding(
-                        padding: const EdgeInsets.all(10),
-                        child: Text('Sort List Product')),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 10),
-                      child: BlocBuilder<ProductSearchBloc, ProductSearchState>(
-                        builder: (context, state) {
-                          return Row(
-                            children: [
-                              Expanded(
-                                  child: Utils.buttonWigget(() {
-                                context
-                                    .read<ProductSearchBloc>()
-                                    .add(SortProductEvent(type: 'desc'));
-                                Navigator.pop(context);
-                              }, Text('Descending'), true)),
-                              const SizedBox(
-                                width: 10,
-                              ),
-                              Expanded(
-                                  child: Utils.buttonWigget(() {
-                                context
-                                    .read<ProductSearchBloc>()
-                                    .add(SortProductEvent(type: 'asc'));
-                                Navigator.pop(context);
-                              }, Text('Ascending'), false))
-                            ],
-                          );
-                        },
-                      ),
-                    )
-                  ],
-                )),
-              ],
-            )),
         body: TabBarView(controller: tabController, children: [
           BlocBuilder<ProductSearchBloc, ProductSearchState>(
             builder: (context, state) {

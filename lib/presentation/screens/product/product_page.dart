@@ -105,51 +105,55 @@ class _ProductPageState extends State<ProductPage> {
                       ),
                     ],
                   ),
-                  BlocBuilder<AuthBloc, AuthState>(
-                    builder: (context, state) {
-                      if (state is AuthLoading) {
-                        return SkeletonWidget.chipSkeleton(context);
-                      } else if (state is AuthSuccess) {
-                        final auth = state.auth;
-                        return Container(
-                          margin: const EdgeInsets.only(top: 10),
-                          child: SingleChildScrollView(
-                              scrollDirection: Axis.horizontal,
-                              child: Row(
-                                children: [
-                                  const SizedBox(
-                                    width: 15,
-                                  ),
-                                  Chip(
-                                      avatar: Assets.icons.wallet.image(),
-                                      label: Text('USD 150.4892')),
-                                  const SizedBox(
-                                    width: 8,
-                                  ),
-                                  Chip(
-                                      avatar: Assets.icons.gift.image(),
-                                      label: Text('Check Voucher')),
-                                  const SizedBox(
-                                    width: 8,
-                                  ),
-                                  Chip(
-                                      avatar: Assets.icons.locationPin.image(),
-                                      label: Text(
-                                          'Send To ${auth.address.street.capitalize()}, ${auth.address.city.capitalize()}'))
-                                ],
-                              )),
-                        );
-                      }
-                      return SizedBox(
-                        height: 70,
-                        child: Center(
-                          child: Text(
-                            'Failed to load data',
-                            style: TextStyle(fontSize: 12),
+                  BlocProvider(
+                    create: (context) => AuthBloc()..add(GetAuthEvent()),
+                    child: BlocBuilder<AuthBloc, AuthState>(
+                      builder: (context, state) {
+                        if (state is AuthLoading) {
+                          return SkeletonWidget.chipSkeleton(context);
+                        } else if (state is AuthSuccess) {
+                          final auth = state.auth;
+                          return Container(
+                            margin: const EdgeInsets.only(top: 10),
+                            child: SingleChildScrollView(
+                                scrollDirection: Axis.horizontal,
+                                child: Row(
+                                  children: [
+                                    const SizedBox(
+                                      width: 15,
+                                    ),
+                                    Chip(
+                                        avatar: Assets.icons.wallet.image(),
+                                        label: Text('USD 150.4892')),
+                                    const SizedBox(
+                                      width: 8,
+                                    ),
+                                    Chip(
+                                        avatar: Assets.icons.gift.image(),
+                                        label: Text('Check Voucher')),
+                                    const SizedBox(
+                                      width: 8,
+                                    ),
+                                    Chip(
+                                        avatar:
+                                            Assets.icons.locationPin.image(),
+                                        label: Text(
+                                            'Send To ${auth.address.street.capitalize()}, ${auth.address.city.capitalize()}'))
+                                  ],
+                                )),
+                          );
+                        }
+                        return SizedBox(
+                          height: 70,
+                          child: Center(
+                            child: Text(
+                              'Failed to load data',
+                              style: TextStyle(fontSize: 12),
+                            ),
                           ),
-                        ),
-                      );
-                    },
+                        );
+                      },
+                    ),
                   ),
                   Container(
                     margin: const EdgeInsets.only(top: 10, bottom: 10),
@@ -228,7 +232,7 @@ class _ProductPageState extends State<ProductPage> {
                       }
                       if (state is ProductLimitSuccess) {
                         return SizedBox(
-                          height: 150,
+                          height: 130,
                           child: ListView.builder(
                             shrinkWrap: true,
                             scrollDirection: Axis.horizontal,

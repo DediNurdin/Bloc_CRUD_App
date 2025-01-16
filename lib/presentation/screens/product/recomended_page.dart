@@ -7,9 +7,12 @@ import '../../../utils/skeleton_widget.dart';
 import 'item/product_item_widget.dart';
 
 class RecomendedPage extends StatelessWidget {
-  const RecomendedPage({super.key, this.visibleTitle = true});
+  const RecomendedPage(
+      {super.key, this.visibleTitle = true, this.isCart = false});
 
   final bool visibleTitle;
+  final bool isCart;
+
   @override
   Widget build(BuildContext context) {
     return visibleTitle
@@ -54,14 +57,17 @@ class RecomendedPage extends StatelessWidget {
               child: GridView.builder(
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                   mainAxisSpacing: 4,
                   crossAxisSpacing: 4,
                   crossAxisCount: 2,
-                  childAspectRatio: 0.79,
+                  childAspectRatio: isCart ? 0.65 : 0.75,
                 ),
                 itemBuilder: (context, index) {
-                  return ProductItemWidget(product: state.products[index]);
+                  return ProductItemWidget(
+                    product: state.products[index],
+                    isCart: isCart,
+                  );
                 },
                 itemCount: state.products.length,
               ),

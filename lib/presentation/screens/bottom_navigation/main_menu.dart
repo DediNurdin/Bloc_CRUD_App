@@ -29,7 +29,7 @@ class _MainMenuState extends State<MainMenu> {
                 onPressed: () {
                   Navigator.pop(context);
                 },
-                icon: Icon(Icons.close)),
+                icon: Icon(CupertinoIcons.clear)),
             Text(
               'Main Menu',
               style: TextStyle(fontSize: 18),
@@ -40,160 +40,159 @@ class _MainMenuState extends State<MainMenu> {
             child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            BlocBuilder<AuthBloc, AuthState>(
-              builder: (context, state) {
-                if (state is AuthLoading) {
-                  return SkeletonWidget.chipSkeleton(context);
-                } else if (state is AuthSuccess) {
-                  final auth = state.auth;
-                  return Container(
-                    margin: const EdgeInsets.symmetric(horizontal: 15),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          children: [
-                            Container(
-                                height: 75,
-                                width: 60,
-                                decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    color: Utils.isDarkMode(context)
-                                        ? Colors.grey.shade800
-                                        : Colors.grey.shade300),
-                                child: Icon(CupertinoIcons.person_fill)),
-                            const SizedBox(
-                              width: 15,
-                            ),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Text(
-                                  '${auth.name.firstname.capitalize()} ${auth.name.lastname.capitalize()}',
-                                  style: TextStyle(
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.w400),
-                                ),
-                                Row(
-                                  children: [
-                                    Assets.icons.wallet
-                                        .image(height: 17, width: 17),
-                                    const SizedBox(
-                                      width: 8,
-                                    ),
-                                    Text(
-                                      'USD 150.4892',
-                                      style: TextStyle(
-                                          fontSize: 12,
-                                          fontWeight: FontWeight.w300),
-                                    )
-                                  ],
-                                )
-                              ],
-                            ),
-                            const Spacer(),
-                            IconButton(
-                                onPressed: () {
-                                  Navigator.pop(context);
-                                  Navigator.of(context).push(
-                                    MaterialPageRoute(
-                                        builder: (context) => MyAccountPage()),
-                                  );
-                                },
-                                icon: Icon(Icons.settings_outlined))
-                          ],
-                        ),
-                        SizedBox(
-                            width: 200,
-                            child: OutlinedButton.icon(
-                              style: ButtonStyle(
-                                  minimumSize:
-                                      WidgetStatePropertyAll(Size(0, 30))),
-                              onPressed: () {},
-                              iconAlignment: IconAlignment.end,
-                              label: Row(
+            BlocProvider(
+              create: (context) => AuthBloc()..add(GetAuthEvent()),
+              child: BlocBuilder<AuthBloc, AuthState>(
+                builder: (context, state) {
+                  if (state is AuthLoading) {
+                    return SkeletonWidget.userAuthSkeleton(context);
+                  } else if (state is AuthSuccess) {
+                    final auth = state.auth;
+                    return Container(
+                      margin: const EdgeInsets.symmetric(horizontal: 15),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            children: [
+                              Container(
+                                  height: 75,
+                                  width: 60,
+                                  decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      color: Utils.isDarkMode(context)
+                                          ? Colors.grey.shade800
+                                          : Colors.grey.shade300),
+                                  child: Icon(CupertinoIcons.person_fill)),
+                              const SizedBox(
+                                width: 15,
+                              ),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.start,
                                 children: [
                                   Text(
-                                    'Open Shop',
+                                    '${auth.name.firstname.capitalize()} ${auth.name.lastname.capitalize()}',
+                                    style: TextStyle(
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.w400),
                                   ),
+                                  Row(
+                                    children: [
+                                      Assets.icons.wallet
+                                          .image(height: 17, width: 17),
+                                      const SizedBox(
+                                        width: 8,
+                                      ),
+                                      Text(
+                                        'USD 150.4892',
+                                        style: TextStyle(
+                                            fontSize: 12,
+                                            fontWeight: FontWeight.w300),
+                                      )
+                                    ],
+                                  )
                                 ],
                               ),
-                              icon: Icon(
-                                Icons.chevron_right,
-                              ),
-                            )),
-                        const SizedBox(
-                          height: 15,
-                        )
-                      ],
-                    ),
-                  );
-                }
-                return Container();
-              },
+                              const Spacer(),
+                              IconButton(
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                    Navigator.of(context).push(
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              MyAccountPage()),
+                                    );
+                                  },
+                                  icon: Icon(CupertinoIcons.gear))
+                            ],
+                          ),
+                          SizedBox(
+                              width: 200,
+                              child: OutlinedButton.icon(
+                                style: ButtonStyle(
+                                    minimumSize:
+                                        WidgetStatePropertyAll(Size(0, 30))),
+                                onPressed: () {},
+                                iconAlignment: IconAlignment.end,
+                                label: Row(
+                                  children: [
+                                    Text(
+                                      'Open Shop',
+                                    ),
+                                  ],
+                                ),
+                                icon: Icon(
+                                  CupertinoIcons.right_chevron,
+                                  color: Utils.isDarkMode(context)
+                                      ? Colors.white
+                                      : Colors.black,
+                                ),
+                              )),
+                          const SizedBox(
+                            height: 15,
+                          )
+                        ],
+                      ),
+                    );
+                  }
+                  return Container();
+                },
+              ),
             ),
             CupertinoFormSection(
               children: [
                 CupertinoFormRow(
-                  prefix: MainMenuItemWidget(
+                  child: MainMenuItemWidget(
                     icon: CupertinoIcons.doc_append,
                     title: 'List Transactions',
                   ),
-                  child: Container(),
                 ),
                 CupertinoFormRow(
-                  prefix: MainMenuItemWidget(
+                  child: MainMenuItemWidget(
                     icon: CupertinoIcons.star,
                     title: 'Review',
                   ),
-                  child: Container(),
                 ),
                 CupertinoFormRow(
-                  prefix: MainMenuItemWidget(
+                  child: MainMenuItemWidget(
                     icon: CupertinoIcons.cart,
                     title: 'Buy Again',
                   ),
-                  child: Container(),
                 ),
                 CupertinoFormRow(
-                  prefix: MainMenuItemWidget(
+                  child: MainMenuItemWidget(
                     icon: CupertinoIcons.heart,
                     title: 'Wishlist',
                   ),
-                  child: Container(),
                 ),
                 CupertinoFormRow(
-                  prefix: MainMenuItemWidget(
+                  child: MainMenuItemWidget(
                     icon: CupertinoIcons.house_alt,
                     title: 'Store Folowing',
                   ),
-                  child: Container(),
                 ),
               ],
             ),
             CupertinoFormSection(
               children: [
                 CupertinoFormRow(
-                  prefix: MainMenuItemWidget(
+                  child: MainMenuItemWidget(
                     icon: CupertinoIcons.person_crop_circle_fill_badge_exclam,
                     title: 'Order Complained',
                   ),
-                  child: Container(),
                 ),
                 CupertinoFormRow(
-                  prefix: MainMenuItemWidget(
+                  child: MainMenuItemWidget(
                     icon: CupertinoIcons.headphones,
                     title: 'Help Care',
                   ),
-                  child: Container(),
                 ),
                 CupertinoFormRow(
-                  prefix: MainMenuItemWidget(
+                  child: MainMenuItemWidget(
                     icon: CupertinoIcons.qrcode_viewfinder,
                     title: 'Scan QR',
                   ),
-                  child: Container(),
                 ),
               ],
             ),

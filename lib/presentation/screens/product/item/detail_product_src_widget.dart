@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../models/product_model.dart';
@@ -26,7 +27,7 @@ class _DetailProductSrcWidgetState extends State<DetailProductSrcWidget> {
                 onPressed: () {
                   Navigator.pop(context);
                 },
-                icon: Icon(Icons.close))
+                icon: Icon(CupertinoIcons.clear))
           ],
         ),
         Expanded(

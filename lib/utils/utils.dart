@@ -46,6 +46,8 @@ class MainMenuItemWidget extends StatelessWidget {
 }
 
 class Utils {
+  static String baseUrlFakeApi = 'https://fakestoreapi.com';
+
   static Future showToast(String msg) {
     return Fluttertoast.showToast(
         msg: msg,
@@ -53,8 +55,6 @@ class Utils {
         gravity: ToastGravity.CENTER,
         fontSize: 15);
   }
-
-  static String baseUrlFakeApi = 'https://fakestoreapi.com';
 
   static bool isDarkMode(BuildContext context) {
     return Theme.of(context).brightness == Brightness.dark;
@@ -77,13 +77,15 @@ class Utils {
         : ElevatedButton(onPressed: onPressed, child: child);
   }
 
-  static List<Widget> styleBuildActionAppBarSearch(void Function() onPressed) {
+  static List<Widget> styleBuildActionAppBarSearch(
+    void Function() onPressed,
+  ) {
     return [
       InkWell(
         overlayColor: const WidgetStatePropertyAll(Colors.transparent),
         onTap: onPressed,
         child: const Padding(
-          padding: EdgeInsets.only(right: 15),
+          padding: EdgeInsets.symmetric(horizontal: 15),
           child: Text(
             'Search',
             style: TextStyle(fontSize: 12),
@@ -186,5 +188,14 @@ class Utils {
   static Future<void> removeUserData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.remove(keyUser);
+  }
+
+  static Future<void> removeAllKeyPrefs() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    for (String key in preferences.getKeys()) {
+      if (key != "user_key" && key != "token_key") {
+        preferences.remove(key);
+      }
+    }
   }
 }

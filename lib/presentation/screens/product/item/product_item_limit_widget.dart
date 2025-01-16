@@ -22,8 +22,8 @@ class ProductItemLimitWidget extends StatelessWidget {
         }));
       },
       child: SizedBox(
-        width: 130,
-        height: 130,
+        width: 110,
+        height: 120,
         child: Column(
           children: [
             Expanded(

@@ -10,6 +10,7 @@ import '../../../gen/assets.gen.dart';
 import '../../../models/cart_model.dart';
 import '../../../utils/skeleton_widget.dart';
 import '../../../utils/utils.dart';
+import '../bottom_navigation/main_menu.dart';
 import '../product/item/quantity_widget.dart';
 import '../product/recomended_page.dart';
 
@@ -22,6 +23,7 @@ class CartPage extends StatefulWidget {
 
 class _CartPageState extends State<CartPage> {
   bool isCheck = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -31,10 +33,28 @@ class _CartPageState extends State<CartPage> {
           ),
           actions: [
             Padding(
-                padding: const EdgeInsets.only(right: 15),
+                padding: const EdgeInsets.only(right: 10),
                 child: Icon(
-                  CupertinoIcons.chat_bubble_2,
-                ))
+                  CupertinoIcons.heart,
+                )),
+            InkWell(
+              overlayColor: WidgetStatePropertyAll(Colors.transparent),
+              onTap: () {
+                showModalBottomSheet(
+                    context: context,
+                    isScrollControlled: true,
+                    useSafeArea: true,
+                    elevation: 0,
+                    shape: BeveledRectangleBorder(),
+                    builder: (context) => MainMenu());
+              },
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 7),
+                child: Icon(
+                  CupertinoIcons.line_horizontal_3,
+                ),
+              ),
+            ),
           ],
         ),
         body: Column(
@@ -52,8 +72,10 @@ class _CartPageState extends State<CartPage> {
                       BlocBuilder<CartBloc, CartState>(
                         builder: (context, state) {
                           if (state is CartLoading) {
-                            return SkeletonWidget.listSkeleton(
-                                context, false, 2);
+                            return SizedBox(
+                              height: 70,
+                              child: CupertinoActivityIndicator(),
+                            );
                           } else if (state is CartSuccess) {
                             if (state.carts.isEmpty) {
                               return Container(
@@ -75,7 +97,7 @@ class _CartPageState extends State<CartPage> {
                                           Column(
                                             children: [
                                               Text(
-                                                'Wow, your shopping basket is empty',
+                                                'Wow, your shopping cart is empty',
                                                 style: TextStyle(fontSize: 11),
                                               ),
                                               Text(
@@ -193,166 +215,122 @@ class _CartPageState extends State<CartPage> {
                                                           productDetail.price *
                                                               quantity;
 
-                                                      return Dismissible(
-                                                        key: Key(product
-                                                            .productId
-                                                            .toString()),
-                                                        background: Container(
-                                                          color: Colors.red,
-                                                          child: Align(
-                                                            alignment: Alignment
-                                                                .centerRight,
-                                                            child: Padding(
-                                                              padding:
-                                                                  const EdgeInsets
-                                                                      .only(
-                                                                      right:
-                                                                          16),
-                                                              child: Column(
-                                                                crossAxisAlignment:
-                                                                    CrossAxisAlignment
-                                                                        .center,
-                                                                mainAxisAlignment:
-                                                                    MainAxisAlignment
-                                                                        .center,
-                                                                children: [
-                                                                  Icon(
-                                                                    Icons
-                                                                        .delete,
-                                                                    color: Colors
-                                                                        .white,
-                                                                  ),
-                                                                  Text(
-                                                                    'Delete',
-                                                                    style: TextStyle(
-                                                                        color: Colors
-                                                                            .white),
-                                                                  )
-                                                                ],
+                                                      return ListTile(
+                                                        contentPadding:
+                                                            const EdgeInsets
+                                                                .all(0),
+                                                        shape:
+                                                            RoundedRectangleBorder(
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(10),
+                                                        ),
+                                                        leading: Row(
+                                                          mainAxisSize:
+                                                              MainAxisSize.min,
+                                                          children: [
+                                                            BlocProvider(
+                                                              create: (context) =>
+                                                                  CartCheckBloc(),
+                                                              child: BlocBuilder<
+                                                                  CartCheckBloc,
+                                                                  CartCheckState>(
+                                                                builder:
+                                                                    (context,
+                                                                        state) {
+                                                                  return Checkbox(
+                                                                    value: state.productChecks[product
+                                                                            .productId
+                                                                            .toString()] ??
+                                                                        false,
+                                                                    onChanged:
+                                                                        (_) {
+                                                                      context
+                                                                          .read<
+                                                                              CartCheckBloc>()
+                                                                          .add(ToggleProductCheck(product
+                                                                              .productId
+                                                                              .toString()));
+                                                                    },
+                                                                  );
+                                                                },
                                                               ),
                                                             ),
+                                                            SizedBox(
+                                                              height: 120,
+                                                              width: 60,
+                                                              child: ClipRRect(
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            4),
+                                                                child: Image
+                                                                    .network(
+                                                                  productDetail
+                                                                      .image,
+                                                                  fit: BoxFit
+                                                                      .fill,
+                                                                ),
+                                                              ),
+                                                            )
+                                                          ],
+                                                        ),
+                                                        title: Container(
+                                                          margin:
+                                                              const EdgeInsets
+                                                                  .only(
+                                                            right: 10,
+                                                          ),
+                                                          child: Text(
+                                                            productDetail.title,
+                                                            style: TextStyle(
+                                                                fontSize: 12,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w700),
                                                           ),
                                                         ),
-                                                        child: ListTile(
-                                                          contentPadding:
-                                                              const EdgeInsets
-                                                                  .all(0),
-                                                          shape:
-                                                              RoundedRectangleBorder(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        10),
-                                                          ),
-                                                          leading: Row(
-                                                            mainAxisSize:
-                                                                MainAxisSize
-                                                                    .min,
-                                                            children: [
-                                                              BlocProvider(
-                                                                create: (context) =>
-                                                                    CartCheckBloc(),
-                                                                child: BlocBuilder<
-                                                                    CartCheckBloc,
-                                                                    CartCheckState>(
-                                                                  builder:
-                                                                      (context,
-                                                                          state) {
-                                                                    return Checkbox(
-                                                                      value: state.productChecks[product
-                                                                              .productId
-                                                                              .toString()] ??
-                                                                          false,
-                                                                      onChanged:
-                                                                          (_) {
-                                                                        context.read<CartCheckBloc>().add(ToggleProductCheck(product
-                                                                            .productId
-                                                                            .toString()));
-                                                                      },
-                                                                    );
-                                                                  },
-                                                                ),
-                                                              ),
-                                                              SizedBox(
-                                                                height: 120,
-                                                                width: 60,
-                                                                child:
-                                                                    ClipRRect(
-                                                                  borderRadius:
-                                                                      BorderRadius
-                                                                          .circular(
-                                                                              4),
-                                                                  child: Image
-                                                                      .network(
-                                                                    productDetail
-                                                                        .image,
-                                                                    fit: BoxFit
-                                                                        .fill,
-                                                                  ),
-                                                                ),
-                                                              )
-                                                            ],
-                                                          ),
-                                                          title: Container(
-                                                            margin:
-                                                                const EdgeInsets
-                                                                    .only(
-                                                              right: 10,
-                                                            ),
-                                                            child: Text(
-                                                              productDetail
-                                                                  .title,
+                                                        subtitle: Row(
+                                                          crossAxisAlignment:
+                                                              CrossAxisAlignment
+                                                                  .start,
+                                                          children: [
+                                                            Text(
+                                                              'USD $totalPrice',
                                                               style: TextStyle(
-                                                                  fontSize: 12,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .w700),
+                                                                  fontSize: 10,
+                                                                  color: Colors
+                                                                      .green),
                                                             ),
-                                                          ),
-                                                          subtitle: Row(
-                                                            crossAxisAlignment:
-                                                                CrossAxisAlignment
-                                                                    .start,
-                                                            children: [
-                                                              Text(
-                                                                'USD $totalPrice',
-                                                                style: TextStyle(
-                                                                    fontSize:
-                                                                        10,
-                                                                    color: Colors
-                                                                        .green),
-                                                              ),
-                                                              const Spacer(),
-                                                              Padding(
-                                                                padding:
-                                                                    const EdgeInsets
-                                                                        .all(
-                                                                        10),
-                                                                child:
-                                                                    QuantityWidget(
-                                                                        isCart:
-                                                                            true,
-                                                                        txtQauntity:
-                                                                            quantity
-                                                                                .toString(),
-                                                                        onPressIncrement:
-                                                                            () {
-                                                                          context
-                                                                              .read<QuantityCartBloc>()
-                                                                              .add(IncrementCartQuantity());
-                                                                        },
-                                                                        onPressDecrement:
-                                                                            () {
-                                                                          context
-                                                                              .read<QuantityCartBloc>()
-                                                                              .add(DecrementCartQuantity());
-                                                                        }),
-                                                              ),
-                                                              const SizedBox(
-                                                                width: 10,
-                                                              )
-                                                            ],
-                                                          ),
+                                                            const Spacer(),
+                                                            Padding(
+                                                              padding:
+                                                                  const EdgeInsets
+                                                                      .all(10),
+                                                              child:
+                                                                  QuantityWidget(
+                                                                      isCart:
+                                                                          true,
+                                                                      txtQauntity:
+                                                                          quantity
+                                                                              .toString(),
+                                                                      onPressIncrement:
+                                                                          () {
+                                                                        context
+                                                                            .read<QuantityCartBloc>()
+                                                                            .add(IncrementCartQuantity());
+                                                                      },
+                                                                      onPressDecrement:
+                                                                          () {
+                                                                        context
+                                                                            .read<QuantityCartBloc>()
+                                                                            .add(DecrementCartQuantity());
+                                                                      }),
+                                                            ),
+                                                            const SizedBox(
+                                                              width: 10,
+                                                            )
+                                                          ],
                                                         ),
                                                       );
                                                     },
@@ -372,7 +350,7 @@ class _CartPageState extends State<CartPage> {
                           return Center(child: Text('No data'));
                         },
                       ),
-                      RecomendedPage(),
+                      recomended(1)
                     ]),
                   ],
                 ),
@@ -389,11 +367,22 @@ class _CartPageState extends State<CartPage> {
           ],
         ));
   }
+}
 
-  Widget buttonCheckOut(bool visibleCheckOut) {
-    return Visibility(
-      visible: visibleCheckOut,
-      child: SizedBox(
+Widget recomended(int index) {
+  return RecomendedPage(
+    isCart: true,
+  );
+}
+
+Widget buttonCheckOut(bool visibleCheckOut) {
+  return Visibility(
+    visible: visibleCheckOut,
+    child: Container(
+      decoration: BoxDecoration(
+          border: Border(top: BorderSide(color: Colors.grey, width: 0.5))),
+      child: Container(
+        margin: const EdgeInsets.symmetric(horizontal: 10),
         height: 60,
         child: Row(
           children: [
@@ -451,6 +440,6 @@ class _CartPageState extends State<CartPage> {
           ],
         ),
       ),
-    );
-  }
+    ),
+  );
 }

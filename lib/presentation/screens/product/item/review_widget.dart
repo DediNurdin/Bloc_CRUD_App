@@ -37,15 +37,18 @@ class ReviewWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            ...reviews.map((review) => _buildReviewCard(context, review)),
-          ],
-        ),
-      ],
+    return Container(
+      margin: const EdgeInsets.symmetric(vertical: 10),
+      child: Column(
+        children: [
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              ...reviews.map((review) => _buildReviewCard(context, review)),
+            ],
+          ),
+        ],
+      ),
     );
   }
 
@@ -73,7 +76,6 @@ class ReviewWidget extends StatelessWidget {
             fontWeight: FontWeight.normal,
           ),
         ),
-        const Divider(),
         const SizedBox(height: 16),
       ],
     );

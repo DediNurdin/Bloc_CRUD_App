@@ -23,21 +23,22 @@ class SearchProductWidget extends StatelessWidget {
         }
       },
       child: Container(
-        height: 40,
-        padding: EdgeInsets.only(left: 10, right: 10, top: 5, bottom: 5),
+        height: 37,
+        margin: const EdgeInsets.symmetric(horizontal: 10),
+        padding: EdgeInsets.only(left: 10, right: 10, top: 4, bottom: 4),
         decoration: BoxDecoration(
           color: isMain
               ? Colors.transparent
               : Colors.grey.shade700.withValues(alpha: 0.1),
           border: Border.all(
               color: isMain ? Colors.grey.shade700 : Colors.transparent),
-          borderRadius: BorderRadius.circular(5),
+          borderRadius: BorderRadius.circular(10),
         ),
         child: Row(
           children: [
             Icon(
               CupertinoIcons.search,
-              size: 17,
+              size: 15,
               color: Colors.grey,
             ),
             const SizedBox(
@@ -45,7 +46,7 @@ class SearchProductWidget extends StatelessWidget {
             ),
             Text(
               query != '' ? query : 'Search Product',
-              style: TextStyle(fontSize: 14, color: Colors.grey),
+              style: TextStyle(fontSize: 13, color: Colors.grey),
             )
           ],
         ),

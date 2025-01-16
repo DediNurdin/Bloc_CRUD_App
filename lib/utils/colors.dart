@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_skeleton_plus/flutter_skeleton_plus.dart';
 
 class ThemeUtils {
   static ThemeData lightTheme(bool isAppSearch) {
@@ -31,7 +32,8 @@ class ThemeUtils {
         iconColor: Colors.black,
       ),
       appBarTheme: AppBarTheme(
-          titleTextStyle: TextStyle(fontSize: 17, color: Colors.black),
+          titleSpacing: 0,
+          titleTextStyle: TextStyle(fontSize: 15, color: Colors.black),
           scrolledUnderElevation: 0,
           backgroundColor: CupertinoColors.systemBackground,
           systemOverlayStyle: SystemUiOverlayStyle(
@@ -109,29 +111,29 @@ class ThemeUtils {
         enabledBorder: OutlineInputBorder(
           borderSide: BorderSide(color: Colors.grey.shade600),
           borderRadius: BorderRadius.only(
-            topRight: Radius.circular(isAppSearch ? 5 : 10),
-            topLeft: Radius.circular(isAppSearch ? 5 : 10),
-            bottomRight: Radius.circular(isAppSearch ? 5 : 10),
-            bottomLeft: Radius.circular(isAppSearch ? 5 : 10),
+            topRight: Radius.circular(10),
+            topLeft: Radius.circular(10),
+            bottomRight: Radius.circular(10),
+            bottomLeft: Radius.circular(10),
           ),
         ),
         focusedBorder: OutlineInputBorder(
           borderSide: BorderSide(
               color: isAppSearch ? Colors.grey.shade600 : Colors.blue),
           borderRadius: BorderRadius.only(
-            topRight: Radius.circular(isAppSearch ? 5 : 10),
-            topLeft: Radius.circular(isAppSearch ? 5 : 10),
-            bottomRight: Radius.circular(isAppSearch ? 5 : 10),
-            bottomLeft: Radius.circular(isAppSearch ? 5 : 10),
+            topRight: Radius.circular(10),
+            topLeft: Radius.circular(10),
+            bottomRight: Radius.circular(10),
+            bottomLeft: Radius.circular(10),
           ),
         ),
         errorBorder: OutlineInputBorder(
           borderSide: BorderSide(color: CupertinoColors.destructiveRed),
           borderRadius: BorderRadius.only(
-            topRight: Radius.circular(isAppSearch ? 5 : 10),
-            topLeft: Radius.circular(isAppSearch ? 5 : 10),
-            bottomRight: Radius.circular(isAppSearch ? 5 : 10),
-            bottomLeft: Radius.circular(isAppSearch ? 5 : 10),
+            topRight: Radius.circular(10),
+            topLeft: Radius.circular(10),
+            bottomRight: Radius.circular(10),
+            bottomLeft: Radius.circular(10),
           ),
         ),
       ),
@@ -166,14 +168,16 @@ class ThemeUtils {
           iconColor: Colors.white,
         ),
         appBarTheme: AppBarTheme(
-            titleTextStyle: TextStyle(fontSize: 17, color: Colors.white),
+            titleSpacing: 0,
+            titleTextStyle: TextStyle(fontSize: 15, color: Colors.white),
             scrolledUnderElevation: 0,
             backgroundColor: CupertinoColors.darkBackgroundGray,
             systemOverlayStyle: SystemUiOverlayStyle(
                 statusBarColor: CupertinoColors.darkBackgroundGray)),
         brightness: Brightness.dark,
         primaryColor: CupertinoColors.darkBackgroundGray,
-        listTileTheme: ListTileThemeData(tileColor: Colors.grey.shade600),
+        listTileTheme:
+            ListTileThemeData(tileColor: CupertinoColors.darkBackgroundGray),
         checkboxTheme: CheckboxThemeData(
             side: BorderSide(color: Colors.grey),
             checkColor: WidgetStateProperty.resolveWith((states) {
@@ -195,7 +199,7 @@ class ThemeUtils {
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(10),
                 side: BorderSide(color: Colors.transparent)),
-            backgroundColor: Colors.grey.shade800,
+            backgroundColor: Colors.grey.shade900,
             brightness: Brightness.dark),
         bottomSheetTheme: BottomSheetThemeData(
             backgroundColor: CupertinoColors.darkBackgroundGray),
@@ -244,31 +248,67 @@ class ThemeUtils {
           enabledBorder: OutlineInputBorder(
             borderSide: BorderSide(color: Colors.grey.shade600),
             borderRadius: BorderRadius.only(
-              topRight: Radius.circular(isAppSearch ? 5 : 10),
-              topLeft: Radius.circular(isAppSearch ? 5 : 10),
-              bottomRight: Radius.circular(isAppSearch ? 5 : 10),
-              bottomLeft: Radius.circular(isAppSearch ? 5 : 10),
+              topRight: Radius.circular(10),
+              topLeft: Radius.circular(10),
+              bottomRight: Radius.circular(10),
+              bottomLeft: Radius.circular(10),
             ),
           ),
           focusedBorder: OutlineInputBorder(
             borderSide: BorderSide(
                 color: isAppSearch ? Colors.grey.shade600 : Colors.blue),
             borderRadius: BorderRadius.only(
-              topRight: Radius.circular(isAppSearch ? 5 : 10),
-              topLeft: Radius.circular(isAppSearch ? 5 : 10),
-              bottomRight: Radius.circular(isAppSearch ? 5 : 10),
-              bottomLeft: Radius.circular(isAppSearch ? 5 : 10),
+              topRight: Radius.circular(10),
+              topLeft: Radius.circular(10),
+              bottomRight: Radius.circular(10),
+              bottomLeft: Radius.circular(10),
             ),
           ),
           errorBorder: OutlineInputBorder(
             borderSide: BorderSide(color: CupertinoColors.destructiveRed),
             borderRadius: BorderRadius.only(
-              topRight: Radius.circular(isAppSearch ? 5 : 10),
-              topLeft: Radius.circular(isAppSearch ? 5 : 10),
-              bottomRight: Radius.circular(isAppSearch ? 5 : 10),
-              bottomLeft: Radius.circular(isAppSearch ? 5 : 10),
+              topRight: Radius.circular(10),
+              topLeft: Radius.circular(10),
+              bottomRight: Radius.circular(10),
+              bottomLeft: Radius.circular(10),
             ),
           ),
         ));
+  }
+
+  static SkeletonTheme themeSkeleton(Widget child) {
+    return SkeletonTheme(
+        shimmerGradient: LinearGradient(
+          colors: [
+            Colors.grey.shade300,
+            Colors.grey.shade200,
+            Colors.grey.shade100,
+          ],
+          stops: [
+            0.1,
+            0.5,
+            0.9,
+          ],
+        ),
+        darkShimmerGradient: LinearGradient(
+          colors: [
+            Color(0xFF222222),
+            Color(0xFF242424),
+            Color(0xFF2B2B2B),
+            Color(0xFF242424),
+            Color(0xFF222222),
+          ],
+          stops: [
+            0.0,
+            0.2,
+            0.5,
+            0.8,
+            1,
+          ],
+          begin: Alignment(-2.4, -0.2),
+          end: Alignment(2.4, 0.2),
+          tileMode: TileMode.clamp,
+        ),
+        child: child);
   }
 }

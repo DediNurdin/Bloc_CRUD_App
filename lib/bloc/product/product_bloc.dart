@@ -114,7 +114,7 @@ class ProductDetailBloc extends Bloc<ProductDetailEvent, ProductDetailState> {
 
         if (response.statusCode == 200) {
           emit(AddCartSuccess(
-              'Cart successfully added!', event.wgtKey, event.quantity));
+              'Cart successfully added', event.wgtKey, event.quantity));
           add(GetProductDetailEvent());
         } else {
           emit(AddCartError('Failed to add cart: ${response.reasonPhrase}'));

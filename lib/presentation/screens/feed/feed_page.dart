@@ -200,7 +200,7 @@ class _FeedPageState extends State<FeedPage> {
                                   IconButton(
                                     onPressed: () {},
                                     icon: const Icon(
-                                      Icons.share,
+                                      CupertinoIcons.bubble_right,
                                       color: Colors.white,
                                     ),
                                     color: Colors.white,
@@ -222,7 +222,7 @@ class _FeedPageState extends State<FeedPage> {
                                 children: [
                                   IconButton(
                                     onPressed: () {},
-                                    icon: const Icon(Icons.bookmark_border),
+                                    icon: const Icon(CupertinoIcons.bookmark),
                                     color: Colors.white,
                                   ),
                                   Text(

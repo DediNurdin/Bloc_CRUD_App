@@ -1,3 +1,8 @@
+import 'package:bloc_online_store/presentation/screens/bottom_navigation/main_menu.dart';
+import 'package:bloc_online_store/presentation/screens/cart/cart_page.dart';
+import 'package:bloc_online_store/presentation/screens/product/item/product_item_widget.dart';
+import 'package:bloc_online_store/utils/skeleton_widget.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -6,7 +11,6 @@ import '../../../models/product_model.dart';
 import '../../../utils/colors.dart';
 import '../../../utils/utils.dart';
 import '../product/product_detail_page.dart';
-import '../product/search_product_page.dart';
 
 class SearchDelegateProduct extends SearchDelegate<String> {
   final String initQuery;
@@ -29,18 +33,40 @@ class SearchDelegateProduct extends SearchDelegate<String> {
   List<Widget>? buildActions(
     BuildContext context,
   ) {
-    return Utils.styleBuildActionAppBarSearch(
-      () {
-        if (query != '') {
-          Navigator.of(context).push(
-            MaterialPageRoute(
-                builder: (context) => SearchProductPage(
-                      query: query,
-                    )),
-          );
-        }
-      },
-    );
+    if (query.isNotEmpty) {
+      return [
+        InkWell(
+          overlayColor: WidgetStatePropertyAll(Colors.transparent),
+          onTap: () {
+            Navigator.of(context).push(
+              MaterialPageRoute(builder: (context) => CartPage()),
+            );
+          },
+          child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10),
+              child: Icon(CupertinoIcons.cart)),
+        ),
+        InkWell(
+          overlayColor: WidgetStatePropertyAll(Colors.transparent),
+          onTap: () {
+            showModalBottomSheet(
+                context: context,
+                isScrollControlled: true,
+                useSafeArea: true,
+                elevation: 0,
+                shape: BeveledRectangleBorder(),
+                builder: (context) => MainMenu());
+          },
+          child: Padding(
+              padding: const EdgeInsets.only(right: 10),
+              child: Icon(CupertinoIcons.line_horizontal_3)),
+        ),
+      ];
+    } else {
+      return [
+        Padding(padding: EdgeInsets.only(right: 15), child: null),
+      ];
+    }
   }
 
   @override
@@ -52,42 +78,65 @@ class SearchDelegateProduct extends SearchDelegate<String> {
 
   @override
   Widget buildResults(BuildContext context) {
-    return BlocBuilder<ProductSearchBloc, ProductSearchState>(
-      builder: (context, state) {
-        if (state is ProductLoading) {
-          return Center(
-            child: CircularProgressIndicator(),
-          );
-        }
-        if (state is ProductInitial) {
-          context.read<ProductSearchBloc>().add(GetProductSearchEvent());
-        }
-        if (state is ProductSearchSuccess) {
-          final List<Product> allProdResult = state.products
-              .where((item) => item.title.toLowerCase().contains(initQuery != ''
-                  ? initQuery.toLowerCase()
-                  : query.toLowerCase()))
-              .toList();
-          return ListView.builder(
-            itemCount: allProdResult.length,
-            itemBuilder: (context, index) {
-              return InkWell(
-                onTap: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) {
-                    return ProductDetailPage(product: allProdResult[index]);
-                  }));
-                },
-                child: Card(
-                    margin: const EdgeInsets.only(bottom: 5, left: 5, right: 5),
-                    child: Padding(
-                        padding: const EdgeInsets.all(10),
-                        child: Text(allProdResult[index].title))),
-              );
-            },
-          );
-        }
-        return Center(child: Text('No Data'));
-      },
+    return DefaultTabController(
+      length: 2,
+      child: Scaffold(
+          appBar: TabBar(indicatorSize: TabBarIndicatorSize.tab, tabs: [
+            Tab(
+              text: 'Product',
+            ),
+            Tab(
+              text: 'Seller',
+            )
+          ]),
+          body: TabBarView(children: [
+            BlocBuilder<ProductSearchBloc, ProductSearchState>(
+              builder: (context, state) {
+                if (state is ProductSearchLoading) {
+                  return SkeletonWidget.gridSkeleton(context);
+                }
+                if (state is ProductInitial) {
+                  context
+                      .read<ProductSearchBloc>()
+                      .add(GetProductSearchEvent());
+                }
+                if (state is ProductSearchSuccess) {
+                  final List<Product> productSearch = state.products
+                      .where((item) => item.title
+                          .toLowerCase()
+                          .contains(query.toLowerCase()))
+                      .toList();
+                  return Container(
+                    padding: const EdgeInsets.only(
+                      left: 10,
+                      right: 10,
+                    ),
+                    child: GridView.builder(
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                        mainAxisSpacing: 4,
+                        crossAxisSpacing: 4,
+                        crossAxisCount: 2,
+                        childAspectRatio: 0.79,
+                      ),
+                      itemBuilder: (context, index) {
+                        return ProductItemWidget(product: productSearch[index]);
+                      },
+                      itemCount: productSearch.length,
+                    ),
+                  );
+                }
+                if (state is ProductSearchFailure) {
+                  return Center(child: Text('No Data'));
+                }
+                if (state is ProductSortFailure) {
+                  return Center(child: Text('No Data'));
+                }
+                return Center(child: Text('No Data'));
+              },
+            ),
+            Center(child: Text('No Data'))
+          ])),
     );
   }
 

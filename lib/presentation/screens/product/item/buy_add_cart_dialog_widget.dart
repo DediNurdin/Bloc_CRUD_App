@@ -55,7 +55,7 @@ class _BuyAddCartDialogWidgetState extends State<BuyAddCartDialogWidget> {
                 onPressed: () {
                   Navigator.pop(context);
                 },
-                icon: Icon(Icons.close))
+                icon: Icon(CupertinoIcons.clear))
           ],
         ),
         BlocProvider(

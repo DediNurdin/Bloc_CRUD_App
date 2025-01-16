@@ -85,7 +85,7 @@ class _ProfilePageState extends State<ProfilePage> {
                               height: 80,
                               child: IconButton(
                                 onPressed: () {},
-                                icon: Icon(Icons.location_on),
+                                icon: Icon(CupertinoIcons.location),
                                 color: Colors.red,
                                 iconSize: 35,
                               ),

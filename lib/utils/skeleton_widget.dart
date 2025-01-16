@@ -22,7 +22,7 @@ class SkeletonWidget {
                 child: SkeletonAvatar(
                   style: SkeletonAvatarStyle(
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 10, vertical: 7),
+                          horizontal: 10, vertical: 10),
                       width: double.infinity,
                       borderRadius: BorderRadius.all(Radius.circular(10))),
                 ),
@@ -30,10 +30,9 @@ class SkeletonWidget {
               SkeletonParagraph(
                 style: SkeletonParagraphStyle(
                     lines: 3,
-                    spacing: 6,
+                    spacing: 7,
                     lineStyle: SkeletonLineStyle(
-                      padding: const EdgeInsets.symmetric(horizontal: 10),
-                      height: 7,
+                      height: 9,
                       borderRadius: BorderRadius.circular(8),
                       minLength: MediaQuery.of(context).size.width,
                     )),
@@ -129,6 +128,39 @@ class SkeletonWidget {
                   borderRadius: BorderRadius.all(Radius.circular(20)))),
         ],
       ),
+    );
+  }
+
+  static userAuthSkeleton(BuildContext context) {
+    return Row(
+      children: [
+        SkeletonAvatar(
+            style: SkeletonAvatarStyle(
+          shape: BoxShape.circle,
+          height: 75,
+          width: 60,
+        )),
+        SizedBox(width: 8),
+        Expanded(
+            child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            SkeletonParagraph(
+              style: SkeletonParagraphStyle(
+                  lines: 3,
+                  spacing: 6,
+                  lineStyle: SkeletonLineStyle(
+                    alignment: Alignment.centerRight,
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                    height: 10,
+                    borderRadius: BorderRadius.circular(8),
+                    minLength: MediaQuery.of(context).size.width,
+                  )),
+            ),
+          ],
+        ))
+      ],
     );
   }
 }

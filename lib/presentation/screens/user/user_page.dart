@@ -79,9 +79,7 @@ class _UserPageState extends State<UserPage> {
                                   Icons.edit,
                                   color: Colors.white,
                                 )),
-                            const VerticalDivider(
-                              color: Colors.black12,
-                            ),
+                            const VerticalDivider(),
                             IconButton(
                                 style: const ButtonStyle(
                                     backgroundColor:
