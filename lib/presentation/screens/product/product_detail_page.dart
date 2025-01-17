@@ -130,12 +130,17 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
               }
             }, builder: (context, state) {
               if (state is ProductDetailLoading) {
-                return const Center(child: CircularProgressIndicator());
+                return Column(
+                  children: [
+                    appBar(),
+                    Expanded(child: CupertinoActivityIndicator())
+                  ],
+                );
               } else if (state is ProductDetailSuccess) {
                 return main();
               } else if (state is ProductDetailInitial) {
                 context.read<ProductDetailBloc>().add(GetProductDetailEvent());
-                return const Center(child: CircularProgressIndicator());
+                return const Center(child: CupertinoActivityIndicator());
               } else if (state is AddCartLoading) {
                 return main();
               }
@@ -170,129 +175,15 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
               controller: scrollController,
               shrinkWrap: true,
               slivers: [
-                SliverAppBar(
-                  pinned: true,
-                  scrolledUnderElevation: 0,
-                  bottom: PreferredSize(
-                    preferredSize: Size.fromHeight(showTabBar ? 48.0 : 0.0),
-                    child: AnimatedOpacity(
-                      curve: Curves.easeIn,
-                      opacity: showTabBar ? 1.0 : 0.0,
-                      duration: const Duration(milliseconds: 500),
-                      child: showTabBar
-                          ? TabBar(
-                              indicatorSize: TabBarIndicatorSize.tab,
-                              labelStyle: TextStyle(
-                                  fontSize: 13, fontWeight: FontWeight.w700),
-                              unselectedLabelStyle: TextStyle(
-                                  fontSize: 13, fontWeight: FontWeight.w700),
-                              onTap: (int index) => scrollToIndex(index),
-                              tabs: [
-                                Tab(
-                                  text: 'Detail',
-                                ),
-                                Tab(
-                                  text: 'Review',
-                                ),
-                                Tab(
-                                  text: 'Recomendation',
-                                )
-                              ],
-                            )
-                          : SizedBox.shrink(),
-                    ),
-                  ),
-                  actions: [
-                    InkWell(
-                      onTap: () async {
-                        await showSearch(
-                            context: context,
-                            delegate: SearchDelegateProduct(initQuery: ''));
-                      },
-                      child: Padding(
-                          padding: const EdgeInsets.only(right: 10),
-                          child: Icon(CupertinoIcons.search)),
-                    ),
-                    Icon(CupertinoIcons.arrowshape_turn_up_right),
-                    InkWell(
-                      overlayColor: WidgetStatePropertyAll(Colors.transparent),
-                      onTap: () {
-                        Navigator.of(context).push(
-                          MaterialPageRoute(builder: (context) => CartPage()),
-                        );
-                      },
-                      child: AddToCartIcon(
-                        key: cartKey,
-                        icon: Icon(
-                          CupertinoIcons.shopping_cart,
-                        ),
-                        badgeOptions: const BadgeOptions(
-                          active: true,
-                          foregroundColor: Colors.white,
-                          backgroundColor: Colors.red,
-                        ),
-                      ),
-                    ),
-                    InkWell(
-                      overlayColor: WidgetStatePropertyAll(Colors.transparent),
-                      onTap: () {
-                        showModalBottomSheet(
-                            context: context,
-                            isScrollControlled: true,
-                            useSafeArea: true,
-                            elevation: 0,
-                            shape: BeveledRectangleBorder(),
-                            builder: (context) => MainMenu());
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 7),
-                        child: Icon(
-                          CupertinoIcons.line_horizontal_3,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
+                appBar(),
                 SliverList.list(children: [
                   SizedBox(
                     width: MediaQuery.of(context).size.width,
                     child: SizedBox(
-                      height: MediaQuery.of(context).size.height * 0.40,
-                      width: double.infinity,
-                      child: Image.network(
-                        widget.product.image,
-                        fit: BoxFit.fill,
-                        errorBuilder: (context, error, stackTrace) {
-                          return const SizedBox(
-                            height: 150,
-                            child: Icon(
-                              Icons.image,
-                              size: 40,
-                              color: Colors.green,
-                            ),
-                          );
-                        },
-                        loadingBuilder: (BuildContext context, Widget child,
-                            ImageChunkEvent? loadingProgress) {
-                          if (loadingProgress == null) {
-                            return child;
-                          }
-                          return SizedBox(
-                            height: 150,
-                            child: Center(
-                              child: CircularProgressIndicator(
-                                strokeWidth: 1.5,
-                                value: loadingProgress.expectedTotalBytes !=
-                                        null
-                                    ? loadingProgress.cumulativeBytesLoaded /
-                                        loadingProgress.expectedTotalBytes!
-                                    : null,
-                              ),
-                            ),
-                          );
-                        },
-                      ),
-                    ),
+                        height: MediaQuery.of(context).size.height * 0.45,
+                        width: double.infinity,
+                        child: Utils.imageNetwork(context, widget.product.image,
+                            MediaQuery.of(context).size.height * 0.45)),
                   ),
                   Container(
                       padding:
@@ -329,8 +220,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                                     final isLiked = state is LikeProductUpdated
                                         ? state.isLiked
                                         : false;
-                                    return InkWell(
-                                        splashColor: Colors.transparent,
+                                    return GestureDetector(
                                         onTap: () {
                                           context
                                               .read<LikeProductBloc>()
@@ -431,7 +321,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
             child: Container(
               decoration: BoxDecoration(
                   border:
-                      Border(top: BorderSide(color: Colors.grey, width: 0.5))),
+                      Border(top: BorderSide(color: Colors.grey, width: 0.1))),
               child: Container(
                 margin: const EdgeInsets.symmetric(horizontal: 10),
                 child: Row(
@@ -474,6 +364,90 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
           )
         ],
       ),
+    );
+  }
+
+  Widget appBar() {
+    return SliverAppBar(
+      pinned: true,
+      scrolledUnderElevation: 0,
+      bottom: PreferredSize(
+        preferredSize: Size.fromHeight(showTabBar ? 48.0 : 0.0),
+        child: AnimatedOpacity(
+          curve: Curves.easeIn,
+          opacity: showTabBar ? 1.0 : 0.0,
+          duration: const Duration(milliseconds: 500),
+          child: showTabBar
+              ? TabBar(
+                  indicatorSize: TabBarIndicatorSize.tab,
+                  labelStyle:
+                      TextStyle(fontSize: 13, fontWeight: FontWeight.w700),
+                  unselectedLabelStyle:
+                      TextStyle(fontSize: 13, fontWeight: FontWeight.w700),
+                  onTap: (int index) => scrollToIndex(index),
+                  tabs: [
+                    Tab(
+                      text: 'Detail',
+                    ),
+                    Tab(
+                      text: 'Review',
+                    ),
+                    Tab(
+                      text: 'Recomendation',
+                    )
+                  ],
+                )
+              : SizedBox.shrink(),
+        ),
+      ),
+      actions: [
+        GestureDetector(
+          onTap: () async {
+            await showSearch(
+                context: context,
+                delegate: SearchDelegateProduct(initQuery: ''));
+          },
+          child: Padding(
+              padding: const EdgeInsets.only(right: 10),
+              child: Icon(CupertinoIcons.search)),
+        ),
+        Icon(CupertinoIcons.arrowshape_turn_up_right),
+        GestureDetector(
+          onTap: () {
+            Navigator.of(context).push(
+              MaterialPageRoute(builder: (context) => CartPage()),
+            );
+          },
+          child: AddToCartIcon(
+            key: cartKey,
+            icon: Icon(
+              CupertinoIcons.shopping_cart,
+            ),
+            badgeOptions: const BadgeOptions(
+              active: true,
+              foregroundColor: Colors.white,
+              backgroundColor: Colors.red,
+            ),
+          ),
+        ),
+        GestureDetector(
+          onTap: () {
+            showModalBottomSheet(
+                context: context,
+                isScrollControlled: true,
+                useSafeArea: true,
+                elevation: 0,
+                shape: BeveledRectangleBorder(),
+                builder: (context) => MainMenu());
+          },
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 7),
+            child: Icon(
+              CupertinoIcons.line_horizontal_3,
+            ),
+          ),
+        ),
+      ],
     );
   }
 

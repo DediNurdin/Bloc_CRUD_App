@@ -12,7 +12,7 @@ part 'product_state.dart';
 
 class ProductBloc extends Bloc<ProductEvent, ProductState> {
   ProductBloc() : super(ProductInitial()) {
-    on<GetProductEvent>((event, emit) async {
+    on<GetAllProductEvent>((event, emit) async {
       emit(ProductLoading());
       try {
         final response = await http.get(
@@ -52,26 +52,6 @@ class ProductSearchBloc extends Bloc<ProductSearchEvent, ProductSearchState> {
         }
       } catch (e) {
         emit(ProductSearchFailure('An error occurred: $e'));
-      }
-    });
-
-    on<SortProductEvent>((event, emit) async {
-      emit(ProductSearchLoading());
-      try {
-        final response = await http.get(
-          Uri.parse('${Utils.baseUrlFakeApi}/products?sort=${event.type}'),
-          headers: {
-            "Content-Type": "application/json",
-          },
-        );
-        if (response.statusCode == 200) {
-          emit(ProductSearchSuccess(products: productFromJson(response.body)));
-        } else {
-          emit(ProductSortFailure(
-              'An error occurred: ${response.reasonPhrase}'));
-        }
-      } catch (e) {
-        emit(ProductSortFailure('An error occurred: $e'));
       }
     });
   }

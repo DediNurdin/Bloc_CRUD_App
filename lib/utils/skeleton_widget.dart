@@ -29,6 +29,7 @@ class SkeletonWidget {
               ),
               SkeletonParagraph(
                 style: SkeletonParagraphStyle(
+                    padding: const EdgeInsets.symmetric(horizontal: 13),
                     lines: 3,
                     spacing: 7,
                     lineStyle: SkeletonLineStyle(
@@ -73,8 +74,8 @@ class SkeletonWidget {
                     children: [
                       SkeletonAvatar(
                         style: SkeletonAvatarStyle(
-                            height: 100,
-                            width: 100,
+                            height: 60,
+                            width: 60,
                             borderRadius:
                                 BorderRadius.all(Radius.circular(20))),
                       ),
@@ -85,12 +86,12 @@ class SkeletonWidget {
                           SkeletonParagraph(
                             style: SkeletonParagraphStyle(
                                 lines: 3,
-                                spacing: 6,
+                                spacing: 4,
                                 lineStyle: SkeletonLineStyle(
                                   alignment: Alignment.centerRight,
                                   padding: const EdgeInsets.symmetric(
                                       horizontal: 10, vertical: 5),
-                                  height: 10,
+                                  height: 6,
                                   borderRadius: BorderRadius.circular(8),
                                   minLength: MediaQuery.of(context).size.width,
                                 )),

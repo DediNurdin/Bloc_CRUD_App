@@ -4,10 +4,11 @@ import 'package:flutter/services.dart';
 import 'package:flutter_skeleton_plus/flutter_skeleton_plus.dart';
 
 class ThemeUtils {
-  static ThemeData lightTheme(bool isAppSearch) {
+  static ThemeData lightTheme(bool isSearchDelegate) {
     return ThemeData(
       fontFamily: 'Roboto-Regular',
       cupertinoOverrideTheme: const CupertinoThemeData(
+          brightness: Brightness.light,
           primaryColor: Colors.green,
           textTheme:
               CupertinoTextThemeData(actionTextStyle: TextStyle(fontSize: 13))),
@@ -104,10 +105,10 @@ class ThemeUtils {
       inputDecorationTheme: InputDecorationTheme(
         hintStyle: const TextStyle(color: Colors.grey, fontSize: 14),
         labelStyle: const TextStyle(color: Colors.grey, fontSize: 14),
-        contentPadding: isAppSearch
+        contentPadding: isSearchDelegate
             ? EdgeInsets.symmetric(horizontal: 15, vertical: 7)
             : null,
-        isCollapsed: isAppSearch ? true : false,
+        isCollapsed: isSearchDelegate ? true : false,
         enabledBorder: OutlineInputBorder(
           borderSide: BorderSide(color: Colors.grey.shade600),
           borderRadius: BorderRadius.only(
@@ -119,7 +120,7 @@ class ThemeUtils {
         ),
         focusedBorder: OutlineInputBorder(
           borderSide: BorderSide(
-              color: isAppSearch ? Colors.grey.shade600 : Colors.blue),
+              color: isSearchDelegate ? Colors.grey.shade600 : Colors.blue),
           borderRadius: BorderRadius.only(
             topRight: Radius.circular(10),
             topLeft: Radius.circular(10),
@@ -140,10 +141,11 @@ class ThemeUtils {
     );
   }
 
-  static ThemeData darkTheme(bool isAppSearch) {
+  static ThemeData darkTheme(bool isSearchDelegate) {
     return ThemeData(
         fontFamily: 'Roboto-Regular',
         cupertinoOverrideTheme: const CupertinoThemeData(
+            brightness: Brightness.dark,
             primaryColor: Colors.green,
             textTheme: CupertinoTextThemeData(
                 actionTextStyle: TextStyle(fontSize: 13))),
@@ -241,10 +243,10 @@ class ThemeUtils {
         inputDecorationTheme: InputDecorationTheme(
           hintStyle: const TextStyle(color: Colors.grey, fontSize: 14),
           labelStyle: const TextStyle(color: Colors.grey, fontSize: 14),
-          contentPadding: isAppSearch
+          contentPadding: isSearchDelegate
               ? EdgeInsets.symmetric(horizontal: 15, vertical: 7)
               : null,
-          isCollapsed: isAppSearch ? true : false,
+          isCollapsed: isSearchDelegate ? true : false,
           enabledBorder: OutlineInputBorder(
             borderSide: BorderSide(color: Colors.grey.shade600),
             borderRadius: BorderRadius.only(
@@ -256,7 +258,7 @@ class ThemeUtils {
           ),
           focusedBorder: OutlineInputBorder(
             borderSide: BorderSide(
-                color: isAppSearch ? Colors.grey.shade600 : Colors.blue),
+                color: isSearchDelegate ? Colors.grey.shade600 : Colors.blue),
             borderRadius: BorderRadius.only(
               topRight: Radius.circular(10),
               topLeft: Radius.circular(10),

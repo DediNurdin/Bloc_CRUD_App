@@ -290,9 +290,7 @@ class _ProductPageState extends State<ProductPage> {
                             style: TextStyle(fontSize: 16),
                           ),
                           const Spacer(),
-                          InkWell(
-                            overlayColor:
-                                WidgetStatePropertyAll(Colors.transparent),
+                          GestureDetector(
                             onTap: () {
                               Navigator.of(context).push(
                                 MaterialPageRoute(

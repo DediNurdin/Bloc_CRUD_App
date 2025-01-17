@@ -94,9 +94,7 @@ class _BottomNavigationPageState extends State<BottomNavigationPage> {
                             Padding(
                                 padding: const EdgeInsets.only(right: 10),
                                 child: Icon(CupertinoIcons.bell)),
-                            InkWell(
-                                overlayColor:
-                                    WidgetStatePropertyAll(Colors.transparent),
+                            GestureDetector(
                                 onTap: () {
                                   Navigator.of(context).push(
                                     MaterialPageRoute(
@@ -106,9 +104,7 @@ class _BottomNavigationPageState extends State<BottomNavigationPage> {
                                 child: Padding(
                                     padding: const EdgeInsets.only(right: 10),
                                     child: Icon(CupertinoIcons.shopping_cart))),
-                            InkWell(
-                              overlayColor:
-                                  WidgetStatePropertyAll(Colors.transparent),
+                            GestureDetector(
                               onTap: () {
                                 showModalBottomSheet(
                                     context: context,

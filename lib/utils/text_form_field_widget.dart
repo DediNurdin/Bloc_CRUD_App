@@ -70,8 +70,8 @@ class _TextFormFieldWidgetState extends State<TextFormFieldWidget> {
                     });
                   },
                   icon: Icon(isPasswordVisible
-                      ? Icons.visibility_off
-                      : Icons.visibility))
+                      ? CupertinoIcons.eye_slash_fill
+                      : CupertinoIcons.eye_solid))
               : widget.isReadOnly
                   ? Icon(CupertinoIcons.chevron_down)
                   : null),

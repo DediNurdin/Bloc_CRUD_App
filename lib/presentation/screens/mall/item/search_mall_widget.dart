@@ -10,8 +10,7 @@ class SearchMallWidget extends StatelessWidget {
   final String query;
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      splashColor: Colors.transparent,
+    return GestureDetector(
       onTap: () async {
         if (query == '') {
         } else {

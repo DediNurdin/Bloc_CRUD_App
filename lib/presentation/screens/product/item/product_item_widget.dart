@@ -1,8 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_skeleton_plus/flutter_skeleton_plus.dart';
-
 import '../../../../bloc/cart/cart_bloc.dart';
 import '../../../../bloc/product/product_bloc.dart';
 import '../../../../models/product_model.dart';
@@ -66,37 +64,11 @@ class _ProductItemWidgetState extends State<ProductItemWidget> {
                 key: widgetKey,
                 width: double.infinity,
                 child: ClipRRect(
-                  borderRadius: const BorderRadius.all(
-                    Radius.circular(10),
-                  ),
-                  child: Image.network(
-                    widget.product.image,
-                    fit: BoxFit.fill,
-                    errorBuilder: (context, error, stackTrace) {
-                      return const SizedBox(
-                        height: 50,
-                        child: Icon(
-                          Icons.image,
-                          size: 40,
-                          color: Colors.green,
-                        ),
-                      );
-                    },
-                    loadingBuilder: (BuildContext context, Widget child,
-                        ImageChunkEvent? loadingProgress) {
-                      if (loadingProgress == null) {
-                        return child;
-                      }
-                      return SizedBox(
-                          height: 50,
-                          child: SkeletonAvatar(
-                            style: SkeletonAvatarStyle(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(20))),
-                          ));
-                    },
-                  ),
-                ),
+                    borderRadius: const BorderRadius.all(
+                      Radius.circular(10),
+                    ),
+                    child: Utils.imageNetwork(
+                        context, widget.product.image, double.infinity)),
               ),
             ),
             Padding(

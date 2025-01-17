@@ -1,6 +1,5 @@
+import '../../../../utils/utils.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_skeleton_plus/flutter_skeleton_plus.dart';
-
 import '../../../../models/product_model.dart';
 import '../product_detail_page.dart';
 
@@ -36,35 +35,9 @@ class ProductItemLimitWidget extends StatelessWidget {
                     borderRadius: const BorderRadius.all(Radius.circular(10)),
                   ),
                   child: ClipRRect(
-                    borderRadius: const BorderRadius.all(Radius.circular(10)),
-                    child: Image.network(
-                      product.image,
-                      fit: BoxFit.fill,
-                      errorBuilder: (context, error, stackTrace) {
-                        return const SizedBox(
-                          height: 50,
-                          child: Icon(
-                            Icons.image,
-                            size: 40,
-                            color: Colors.green,
-                          ),
-                        );
-                      },
-                      loadingBuilder: (BuildContext context, Widget child,
-                          ImageChunkEvent? loadingProgress) {
-                        if (loadingProgress == null) {
-                          return child;
-                        }
-                        return SizedBox(
-                            height: 50,
-                            child: SkeletonAvatar(
-                              style: SkeletonAvatarStyle(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(20))),
-                            ));
-                      },
-                    ),
-                  ),
+                      borderRadius: const BorderRadius.all(Radius.circular(10)),
+                      child: Utils.imageNetwork(
+                          context, product.image, double.infinity)),
                 ),
               ),
             ),

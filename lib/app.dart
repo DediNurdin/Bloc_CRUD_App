@@ -34,7 +34,7 @@ class ShoppyApp extends StatelessWidget {
           create: (context) => UserBloc(UserRepository())..add(GetUserEvent()),
         ),
         BlocProvider(
-          create: (context) => ProductBloc()..add(GetProductEvent()),
+          create: (context) => ProductBloc()..add(GetAllProductEvent()),
         ),
         BlocProvider(
           create: (context) => ProductLimitBloc()..add(GetProductLimitEvent()),

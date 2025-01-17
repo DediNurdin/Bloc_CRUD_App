@@ -37,8 +37,7 @@ class _CartPageState extends State<CartPage> {
                 child: Icon(
                   CupertinoIcons.heart,
                 )),
-            InkWell(
-              overlayColor: WidgetStatePropertyAll(Colors.transparent),
+            GestureDetector(
               onTap: () {
                 showModalBottomSheet(
                     context: context,
@@ -60,16 +59,13 @@ class _CartPageState extends State<CartPage> {
         body: Column(
           children: [
             Expanded(
-              child: RefreshIndicator(
-                color: Colors.green,
-                onRefresh: () async {
-                  context.read<CartBloc>().add(GetCartEvent());
-                },
-                child: CustomScrollView(
-                  shrinkWrap: true,
-                  slivers: [
-                    SliverList.list(children: [
-                      BlocBuilder<CartBloc, CartState>(
+              child: CustomScrollView(
+                shrinkWrap: true,
+                slivers: [
+                  SliverList.list(children: [
+                    BlocProvider(
+                      create: (context) => CartBloc()..add(GetCartEvent()),
+                      child: BlocBuilder<CartBloc, CartState>(
                         builder: (context, state) {
                           if (state is CartLoading) {
                             return SizedBox(
@@ -98,12 +94,12 @@ class _CartPageState extends State<CartPage> {
                                             children: [
                                               Text(
                                                 'Wow, your shopping cart is empty',
-                                                style: TextStyle(fontSize: 11),
+                                                style: TextStyle(fontSize: 12),
                                               ),
                                               Text(
                                                 'Come on, fill it with your dream items',
                                                 style: TextStyle(
-                                                    fontSize: 10,
+                                                    fontSize: 11,
                                                     color: Utils.isDarkMode(
                                                             context)
                                                         ? Colors.white
@@ -126,7 +122,7 @@ class _CartPageState extends State<CartPage> {
                                         },
                                             Text(
                                               'Start Shopping',
-                                              style: TextStyle(fontSize: 12),
+                                              style: TextStyle(fontSize: 10),
                                             ),
                                             false),
                                       )
@@ -260,18 +256,16 @@ class _CartPageState extends State<CartPage> {
                                                               height: 120,
                                                               width: 60,
                                                               child: ClipRRect(
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .circular(
-                                                                            4),
-                                                                child: Image
-                                                                    .network(
-                                                                  productDetail
-                                                                      .image,
-                                                                  fit: BoxFit
-                                                                      .fill,
-                                                                ),
-                                                              ),
+                                                                  borderRadius:
+                                                                      BorderRadius
+                                                                          .circular(
+                                                                              4),
+                                                                  child: Utils.imageNetwork(
+                                                                      context,
+                                                                      productDetail
+                                                                          .image,
+                                                                      double
+                                                                          .infinity)),
                                                             )
                                                           ],
                                                         ),
@@ -350,19 +344,22 @@ class _CartPageState extends State<CartPage> {
                           return Center(child: Text('No data'));
                         },
                       ),
-                      recomended(1)
-                    ]),
-                  ],
-                ),
+                    ),
+                    recomended(1)
+                  ]),
+                ],
               ),
             ),
-            BlocBuilder<CartBloc, CartState>(
-              builder: (context, state) {
-                if (state is CartSuccess) {
-                  return buttonCheckOut(state.carts.isEmpty ? false : true);
-                }
-                return Container();
-              },
+            BlocProvider(
+              create: (context) => CartBloc()..add(GetCartEvent()),
+              child: BlocBuilder<CartBloc, CartState>(
+                builder: (context, state) {
+                  if (state is CartSuccess) {
+                    return buttonCheckOut(state.carts.isEmpty ? false : true);
+                  }
+                  return Container();
+                },
+              ),
             )
           ],
         ));
@@ -380,7 +377,7 @@ Widget buttonCheckOut(bool visibleCheckOut) {
     visible: visibleCheckOut,
     child: Container(
       decoration: BoxDecoration(
-          border: Border(top: BorderSide(color: Colors.grey, width: 0.5))),
+          border: Border(top: BorderSide(color: Colors.grey, width: 0.1))),
       child: Container(
         margin: const EdgeInsets.symmetric(horizontal: 10),
         height: 60,

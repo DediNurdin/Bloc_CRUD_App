@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -38,7 +39,7 @@ class _UserPageState extends State<UserPage> {
         child: BlocBuilder<UserBloc, UserState>(
           builder: (context, state) {
             if (state is UserLoading) {
-              return const Center(child: CircularProgressIndicator());
+              return const Center(child: CupertinoActivityIndicator());
             } else if (state is UserSuccess) {
               return RefreshIndicator(
                 onRefresh: () async {
@@ -108,9 +109,9 @@ class _UserPageState extends State<UserPage> {
               );
             } else if (state is UserInitial) {
               context.read<UserBloc>().add(GetUserEvent());
-              return const Center(child: CircularProgressIndicator());
+              return const Center(child: CupertinoActivityIndicator());
             } else if (state is DeleteUserLoading) {
-              return const Center(child: CircularProgressIndicator());
+              return const Center(child: CupertinoActivityIndicator());
             }
             return const Center(
               child: Text('No Data'),

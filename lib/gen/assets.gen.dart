@@ -47,6 +47,9 @@ class $AssetsIconsGen {
   AssetGenImage get locationPin =>
       const AssetGenImage('assets/icons/location-pin.png');
 
+  /// File path: assets/icons/no_image.png
+  AssetGenImage get noImage => const AssetGenImage('assets/icons/no_image.png');
+
   /// File path: assets/icons/remote-control.png
   AssetGenImage get remoteControl =>
       const AssetGenImage('assets/icons/remote-control.png');
@@ -69,6 +72,7 @@ class $AssetsIconsGen {
         insurance,
         investment,
         locationPin,
+        noImage,
         remoteControl,
         shop,
         trolley,

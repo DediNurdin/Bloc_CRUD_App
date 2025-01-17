@@ -1,9 +1,12 @@
 import 'dart:convert';
 import 'dart:io';
 
+import '../gen/assets.gen.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_skeleton_plus/flutter_skeleton_plus.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
@@ -77,30 +80,38 @@ class Utils {
         : ElevatedButton(onPressed: onPressed, child: child);
   }
 
-  static List<Widget> styleBuildActionAppBarSearch(
-    void Function() onPressed,
-  ) {
-    return [
-      InkWell(
-        overlayColor: const WidgetStatePropertyAll(Colors.transparent),
-        onTap: onPressed,
-        child: const Padding(
-          padding: EdgeInsets.symmetric(horizontal: 15),
-          child: Text(
-            'Search',
-            style: TextStyle(fontSize: 12),
-          ),
-        ),
-      ),
-    ];
-  }
-
   static Widget styleBuildLeadingAppBarSearch(void Function() onPressed) {
     return IconButton(
       icon: const Icon(
-        Icons.arrow_back_rounded,
+        CupertinoIcons.arrow_left,
       ),
       onPressed: onPressed,
+    );
+  }
+
+  static Widget imageNetwork(BuildContext context, String srcImg, double size) {
+    return Image.network(
+      srcImg,
+      fit: BoxFit.fill,
+      errorBuilder: (context, error, stackTrace) {
+        return SizedBox(
+            height: size,
+            child: Assets.icons.noImage.image(
+                color:
+                    Utils.isDarkMode(context) ? Colors.white : Colors.black));
+      },
+      loadingBuilder: (BuildContext context, Widget child,
+          ImageChunkEvent? loadingProgress) {
+        if (loadingProgress == null) {
+          return child;
+        }
+        return SizedBox(
+            height: size,
+            child: SkeletonAvatar(
+              style: SkeletonAvatarStyle(
+                  borderRadius: BorderRadius.all(Radius.circular(20))),
+            ));
+      },
     );
   }
 

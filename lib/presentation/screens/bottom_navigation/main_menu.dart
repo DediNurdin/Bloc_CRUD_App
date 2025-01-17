@@ -45,11 +45,16 @@ class _MainMenuState extends State<MainMenu> {
               child: BlocBuilder<AuthBloc, AuthState>(
                 builder: (context, state) {
                   if (state is AuthLoading) {
-                    return SkeletonWidget.userAuthSkeleton(context);
+                    return Container(
+                      margin: const EdgeInsets.only(
+                          left: 15, right: 15, bottom: 15),
+                      child: SkeletonWidget.userAuthSkeleton(context),
+                    );
                   } else if (state is AuthSuccess) {
                     final auth = state.auth;
                     return Container(
-                      margin: const EdgeInsets.symmetric(horizontal: 15),
+                      margin: const EdgeInsets.only(
+                          left: 15, right: 15, bottom: 15),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -129,9 +134,6 @@ class _MainMenuState extends State<MainMenu> {
                                       : Colors.black,
                                 ),
                               )),
-                          const SizedBox(
-                            height: 15,
-                          )
                         ],
                       ),
                     );

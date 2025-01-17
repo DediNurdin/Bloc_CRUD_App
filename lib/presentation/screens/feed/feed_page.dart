@@ -59,7 +59,7 @@ class _FeedPageState extends State<FeedPage> {
                   key: UniqueKey(),
                   context: context,
                   loader: const Center(
-                    child: CircularProgressIndicator(),
+                    child: CupertinoActivityIndicator(),
                   ),
                   isCaching: true,
                   videoList: List.generate(
@@ -154,7 +154,7 @@ class _FeedPageState extends State<FeedPage> {
                                         CupertinoIcons.hand_thumbsup),
                                     color: Colors.white,
                                   ),
-                                  InkWell(
+                                  GestureDetector(
                                     onTap: () {},
                                     child: Text(
                                       '10K',
@@ -180,7 +180,7 @@ class _FeedPageState extends State<FeedPage> {
                                     ),
                                     color: Colors.white,
                                   ),
-                                  InkWell(
+                                  GestureDetector(
                                     child: Text(
                                       '10K',
                                       style: GoogleFonts.roboto(

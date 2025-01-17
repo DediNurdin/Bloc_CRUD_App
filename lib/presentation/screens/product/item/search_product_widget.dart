@@ -8,10 +8,10 @@ class SearchProductWidget extends StatelessWidget {
 
   final String query;
   final bool isMain;
+
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      splashColor: Colors.transparent,
+    return GestureDetector(
       onTap: () async {
         if (query == '') {
           await showSearch(

@@ -45,7 +45,7 @@ class RecomendedPage extends StatelessWidget {
 
   Widget main() {
     return BlocProvider(
-      create: (context) => ProductBloc()..add(GetProductEvent()),
+      create: (context) => ProductBloc()..add(GetAllProductEvent()),
       child: BlocBuilder<ProductBloc, ProductState>(
         builder: (context, state) {
           if (state is ProductLoading) {

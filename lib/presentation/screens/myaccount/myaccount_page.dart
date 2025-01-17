@@ -159,7 +159,6 @@ class MyAccountPage extends StatelessWidget {
                   },
                   title: Text('Logout', style: TextStyle(fontSize: 15)),
                   leading: Icon(CupertinoIcons.square_arrow_right),
-                  // trailing: Icon(CupertinoIcons.chevron_forward),
                 ),
               ]),
               RecomendedPage()

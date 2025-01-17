@@ -1,8 +1,9 @@
-import '../../../bloc/cubit/theme_cubit.dart';
-import '../../../utils/utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../../../bloc/cubit/theme_cubit.dart';
+import '../../../utils/utils.dart';
 
 class ThemePage extends StatefulWidget {
   const ThemePage({super.key});
@@ -23,7 +24,7 @@ class _ThemePageState extends State<ThemePage> {
             : SingingCharacter.lightMode;
         return Scaffold(
           appBar: AppBar(
-            title: Text('Theme'),
+            title: Text('Theme Application'),
           ),
           body: ListView(
             children: [

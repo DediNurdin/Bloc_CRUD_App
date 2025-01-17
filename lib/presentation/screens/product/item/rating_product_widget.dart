@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class RatingProductWidget extends StatelessWidget {
@@ -9,11 +10,15 @@ class RatingProductWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: List.generate(5, (index) {
-        return Icon(
-          size: 18,
-          index < value ? Icons.star : Icons.star_border,
-          color: Colors.yellow,
+        return Padding(
+          padding: const EdgeInsets.only(right: 3),
+          child: Icon(
+            size: 15,
+            index < value ? CupertinoIcons.star_fill : CupertinoIcons.star,
+            color: Colors.amber,
+          ),
         );
       }),
     );

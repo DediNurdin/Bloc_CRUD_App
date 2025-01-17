@@ -79,48 +79,12 @@ class _BuyAddCartDialogWidgetState extends State<BuyAddCartDialogWidget> {
                               height: 100,
                               width: 100,
                               child: ClipRRect(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(10)),
-                                child: Image.network(
-                                  widget.product.image,
-                                  fit: BoxFit.fill,
-                                  errorBuilder: (context, error, stackTrace) {
-                                    return const SizedBox(
-                                      height: 100,
-                                      child: Icon(
-                                        Icons.image,
-                                        size: 40,
-                                        color: Colors.green,
-                                      ),
-                                    );
-                                  },
-                                  loadingBuilder: (BuildContext context,
-                                      Widget child,
-                                      ImageChunkEvent? loadingProgress) {
-                                    if (loadingProgress == null) {
-                                      return child;
-                                    }
-                                    return SizedBox(
-                                      height: 100,
-                                      child: Center(
-                                        child: CircularProgressIndicator(
-                                          strokeWidth: 1.5,
-                                          value: loadingProgress
-                                                      .expectedTotalBytes !=
-                                                  null
-                                              ? loadingProgress
-                                                      .cumulativeBytesLoaded /
-                                                  loadingProgress
-                                                      .expectedTotalBytes!
-                                              : null,
-                                        ),
-                                      ),
-                                    );
-                                  },
-                                ),
-                              ),
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(10)),
+                                  child: Utils.imageNetwork(
+                                      context, widget.product.image, 100)),
                             ),
-                            InkWell(
+                            GestureDetector(
                               onTap: () {
                                 showModalBottomSheet(
                                     context: context,

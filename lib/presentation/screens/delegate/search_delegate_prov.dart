@@ -22,11 +22,7 @@ class SearchDelegateProv extends SearchDelegate<String> {
 
   @override
   List<Widget>? buildActions(BuildContext context) {
-    return Utils.styleBuildActionAppBarSearch(
-      () {
-        query = '';
-      },
-    );
+    return null;
   }
 
   @override

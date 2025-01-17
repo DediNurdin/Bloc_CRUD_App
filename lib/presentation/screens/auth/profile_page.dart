@@ -25,7 +25,7 @@ class _ProfilePageState extends State<ProfilePage> {
         child: BlocBuilder<AuthBloc, AuthState>(
           builder: (context, state) {
             if (state is AuthLoading) {
-              return Center(child: CircularProgressIndicator());
+              return Center(child: CupertinoActivityIndicator());
             } else if (state is AuthSuccess) {
               final auth = state.auth;
 

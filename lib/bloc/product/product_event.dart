@@ -12,7 +12,7 @@ abstract class ProductByCategoriesEvent {}
 
 abstract class ProductLimitEvent {}
 
-class GetProductEvent extends ProductEvent {}
+class GetAllProductEvent extends ProductEvent {}
 
 class GetProductSearchEvent extends ProductSearchEvent {}
 
@@ -27,11 +27,6 @@ class GetProductByCategoriesEvent extends ProductByCategoriesEvent {
 }
 
 class GetProductLimitEvent extends ProductLimitEvent {}
-
-class SortProductEvent extends ProductSearchEvent {
-  final String type;
-  SortProductEvent({required this.type});
-}
 
 class ShowBottomSheetBuyProductEvent extends ProductDetailEvent {}
 

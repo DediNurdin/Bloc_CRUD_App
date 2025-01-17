@@ -1,7 +1,7 @@
-import 'package:bloc_online_store/presentation/screens/bottom_navigation/main_menu.dart';
-import 'package:bloc_online_store/presentation/screens/cart/cart_page.dart';
-import 'package:bloc_online_store/presentation/screens/product/item/product_item_widget.dart';
-import 'package:bloc_online_store/utils/skeleton_widget.dart';
+import '../bottom_navigation/main_menu.dart';
+import '../cart/cart_page.dart';
+import '../product/item/product_item_widget.dart';
+import '../../../utils/skeleton_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -14,6 +14,7 @@ import '../product/product_detail_page.dart';
 
 class SearchDelegateProduct extends SearchDelegate<String> {
   final String initQuery;
+  bool isViewingResults = false;
 
   SearchDelegateProduct({
     this.initQuery = '',
@@ -33,10 +34,9 @@ class SearchDelegateProduct extends SearchDelegate<String> {
   List<Widget>? buildActions(
     BuildContext context,
   ) {
-    if (query.isNotEmpty) {
+    if (isViewingResults) {
       return [
-        InkWell(
-          overlayColor: WidgetStatePropertyAll(Colors.transparent),
+        GestureDetector(
           onTap: () {
             Navigator.of(context).push(
               MaterialPageRoute(builder: (context) => CartPage()),
@@ -46,8 +46,7 @@ class SearchDelegateProduct extends SearchDelegate<String> {
               padding: const EdgeInsets.symmetric(horizontal: 10),
               child: Icon(CupertinoIcons.cart)),
         ),
-        InkWell(
-          overlayColor: WidgetStatePropertyAll(Colors.transparent),
+        GestureDetector(
           onTap: () {
             showModalBottomSheet(
                 context: context,
@@ -64,7 +63,12 @@ class SearchDelegateProduct extends SearchDelegate<String> {
       ];
     } else {
       return [
-        Padding(padding: EdgeInsets.only(right: 15), child: null),
+        GestureDetector(
+          onTap: () {},
+          child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10),
+              child: Icon(CupertinoIcons.add_circled)),
+        ),
       ];
     }
   }
@@ -78,6 +82,7 @@ class SearchDelegateProduct extends SearchDelegate<String> {
 
   @override
   Widget buildResults(BuildContext context) {
+    isViewingResults = true;
     return DefaultTabController(
       length: 2,
       child: Scaffold(
@@ -146,7 +151,7 @@ class SearchDelegateProduct extends SearchDelegate<String> {
       builder: (context, state) {
         if (state is ProductSearchLoading) {
           return Center(
-            child: CircularProgressIndicator(),
+            child: CupertinoActivityIndicator(),
           );
         }
         if (state is ProductInitial) {
@@ -161,7 +166,7 @@ class SearchDelegateProduct extends SearchDelegate<String> {
           return ListView.builder(
             itemCount: allProdSugest.length,
             itemBuilder: (context, index) {
-              return InkWell(
+              return GestureDetector(
                 onTap: () {
                   Navigator.push(context, MaterialPageRoute(builder: (context) {
                     return ProductDetailPage(product: allProdSugest[index]);
