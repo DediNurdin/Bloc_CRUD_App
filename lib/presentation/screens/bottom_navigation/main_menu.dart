@@ -6,7 +6,7 @@ import '../../../bloc/auth/auth_bloc.dart';
 import '../../../gen/assets.gen.dart';
 import '../../../utils/skeleton_widget.dart';
 import '../../../utils/utils.dart';
-import '../myaccount/myaccount_page.dart';
+import '../my_account/my_account_page.dart';
 
 class MainMenu extends StatefulWidget {
   const MainMenu({
@@ -92,8 +92,8 @@ class _MainMenuState extends State<MainMenu> {
                                       Text(
                                         'USD 150.4892',
                                         style: TextStyle(
-                                            fontSize: 12,
-                                            fontWeight: FontWeight.w300),
+                                            fontSize: 11,
+                                            fontWeight: FontWeight.normal),
                                       )
                                     ],
                                   )
@@ -114,24 +114,29 @@ class _MainMenuState extends State<MainMenu> {
                           ),
                           SizedBox(
                               width: 200,
-                              child: OutlinedButton.icon(
+                              child: OutlinedButton(
                                 style: ButtonStyle(
                                     minimumSize:
                                         WidgetStatePropertyAll(Size(0, 30))),
                                 onPressed: () {},
                                 iconAlignment: IconAlignment.end,
-                                label: Row(
+                                child: Row(
                                   children: [
                                     Text(
                                       'Open Shop',
+                                      style: TextStyle(
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.normal),
+                                    ),
+                                    const Spacer(),
+                                    Icon(
+                                      size: 14,
+                                      CupertinoIcons.right_chevron,
+                                      color: Utils.isDarkMode(context)
+                                          ? Colors.white
+                                          : Colors.black,
                                     ),
                                   ],
-                                ),
-                                icon: Icon(
-                                  CupertinoIcons.right_chevron,
-                                  color: Utils.isDarkMode(context)
-                                      ? Colors.white
-                                      : Colors.black,
                                 ),
                               )),
                         ],
@@ -142,61 +147,67 @@ class _MainMenuState extends State<MainMenu> {
                 },
               ),
             ),
-            CupertinoFormSection(
-              children: [
-                CupertinoFormRow(
-                  child: MainMenuItemWidget(
-                    icon: CupertinoIcons.doc_append,
-                    title: 'List Transactions',
+            Utils.customColumn(
+              context,
+              Column(
+                children: [
+                  CupertinoFormRow(
+                    child: MainMenuItemWidget(
+                      icon: CupertinoIcons.doc_append,
+                      title: 'List Transactions',
+                    ),
                   ),
-                ),
-                CupertinoFormRow(
-                  child: MainMenuItemWidget(
-                    icon: CupertinoIcons.star,
-                    title: 'Review',
+                  CupertinoFormRow(
+                    child: MainMenuItemWidget(
+                      icon: CupertinoIcons.star,
+                      title: 'Review',
+                    ),
                   ),
-                ),
-                CupertinoFormRow(
-                  child: MainMenuItemWidget(
-                    icon: CupertinoIcons.cart,
-                    title: 'Buy Again',
+                  CupertinoFormRow(
+                    child: MainMenuItemWidget(
+                      icon: CupertinoIcons.cart,
+                      title: 'Buy Again',
+                    ),
                   ),
-                ),
-                CupertinoFormRow(
-                  child: MainMenuItemWidget(
-                    icon: CupertinoIcons.heart,
-                    title: 'Wishlist',
+                  CupertinoFormRow(
+                    child: MainMenuItemWidget(
+                      icon: CupertinoIcons.heart,
+                      title: 'Wishlist',
+                    ),
                   ),
-                ),
-                CupertinoFormRow(
-                  child: MainMenuItemWidget(
-                    icon: CupertinoIcons.house_alt,
-                    title: 'Store Folowing',
+                  CupertinoFormRow(
+                    child: MainMenuItemWidget(
+                      icon: CupertinoIcons.house_alt,
+                      title: 'Store Folowing',
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-            CupertinoFormSection(
-              children: [
-                CupertinoFormRow(
-                  child: MainMenuItemWidget(
-                    icon: CupertinoIcons.person_crop_circle_fill_badge_exclam,
-                    title: 'Order Complained',
+            Utils.customColumn(
+              context,
+              Column(
+                children: [
+                  CupertinoFormRow(
+                    child: MainMenuItemWidget(
+                      icon: CupertinoIcons.person_crop_circle_fill_badge_exclam,
+                      title: 'Order Complained',
+                    ),
                   ),
-                ),
-                CupertinoFormRow(
-                  child: MainMenuItemWidget(
-                    icon: CupertinoIcons.headphones,
-                    title: 'Help Care',
+                  CupertinoFormRow(
+                    child: MainMenuItemWidget(
+                      icon: CupertinoIcons.headphones,
+                      title: 'Help Care',
+                    ),
                   ),
-                ),
-                CupertinoFormRow(
-                  child: MainMenuItemWidget(
-                    icon: CupertinoIcons.qrcode_viewfinder,
-                    title: 'Scan QR',
+                  CupertinoFormRow(
+                    child: MainMenuItemWidget(
+                      icon: CupertinoIcons.qrcode_viewfinder,
+                      title: 'Scan QR',
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ],
         )),

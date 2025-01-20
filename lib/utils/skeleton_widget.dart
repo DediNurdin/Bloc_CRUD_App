@@ -27,17 +27,21 @@ class SkeletonWidget {
                       borderRadius: BorderRadius.all(Radius.circular(10))),
                 ),
               ),
-              SkeletonParagraph(
-                style: SkeletonParagraphStyle(
-                    padding: const EdgeInsets.symmetric(horizontal: 13),
-                    lines: 3,
-                    spacing: 7,
-                    lineStyle: SkeletonLineStyle(
-                      height: 9,
-                      borderRadius: BorderRadius.circular(8),
-                      minLength: MediaQuery.of(context).size.width,
-                    )),
-              ),
+              Column(
+                children: [
+                  SkeletonParagraph(
+                    style: SkeletonParagraphStyle(
+                        padding: const EdgeInsets.symmetric(horizontal: 13),
+                        lines: 3,
+                        spacing: 7,
+                        lineStyle: SkeletonLineStyle(
+                          height: 9,
+                          borderRadius: BorderRadius.circular(8),
+                          minLength: MediaQuery.of(context).size.width,
+                        )),
+                  ),
+                ],
+              )
             ],
           ));
         },
@@ -85,7 +89,7 @@ class SkeletonWidget {
                         children: [
                           SkeletonParagraph(
                             style: SkeletonParagraphStyle(
-                                lines: 3,
+                                lines: 2,
                                 spacing: 4,
                                 lineStyle: SkeletonLineStyle(
                                   alignment: Alignment.centerRight,

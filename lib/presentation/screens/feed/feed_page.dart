@@ -160,7 +160,7 @@ class _FeedPageState extends State<FeedPage> {
                                       '10K',
                                       style: GoogleFonts.roboto(
                                         color: Colors.white,
-                                        fontSize: 12,
+                                        fontSize: 10,
                                         fontWeight: FontWeight.normal,
                                       ),
                                     ),
@@ -185,7 +185,7 @@ class _FeedPageState extends State<FeedPage> {
                                       '10K',
                                       style: GoogleFonts.roboto(
                                         color: Colors.white,
-                                        fontSize: 12,
+                                        fontSize: 10,
                                         fontWeight: FontWeight.normal,
                                       ),
                                     ),
@@ -195,45 +195,21 @@ class _FeedPageState extends State<FeedPage> {
                               const SizedBox(
                                 height: 10,
                               ),
-                              Column(
-                                children: [
-                                  IconButton(
-                                    onPressed: () {},
-                                    icon: const Icon(
-                                      CupertinoIcons.bubble_right,
-                                      color: Colors.white,
-                                    ),
-                                    color: Colors.white,
-                                  ),
-                                  Text(
-                                    'Share',
-                                    style: GoogleFonts.roboto(
-                                      color: Colors.white,
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.normal,
-                                    ),
-                                  ),
-                                ],
+                              IconButton(
+                                onPressed: () {},
+                                icon: const Icon(
+                                  CupertinoIcons.arrowshape_turn_up_right,
+                                  color: Colors.white,
+                                ),
+                                color: Colors.white,
                               ),
                               const SizedBox(
                                 height: 10,
                               ),
-                              Column(
-                                children: [
-                                  IconButton(
-                                    onPressed: () {},
-                                    icon: const Icon(CupertinoIcons.bookmark),
-                                    color: Colors.white,
-                                  ),
-                                  Text(
-                                    'Save',
-                                    style: GoogleFonts.roboto(
-                                      color: Colors.white,
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.normal,
-                                    ),
-                                  ),
-                                ],
+                              IconButton(
+                                onPressed: () {},
+                                icon: const Icon(CupertinoIcons.ellipsis),
+                                color: Colors.white,
                               ),
                             ],
                           ),

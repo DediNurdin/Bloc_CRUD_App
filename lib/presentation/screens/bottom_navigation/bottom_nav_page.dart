@@ -88,17 +88,22 @@ class _BottomNavigationPageState extends State<BottomNavigationPage> {
                                           ? SearchTransactionWidget()
                                           : Container(),
                           actions: [
-                            Padding(
-                                padding: const EdgeInsets.only(right: 10),
-                                child: Icon(CupertinoIcons.envelope)),
+                            GestureDetector(
+                              onTap: () {},
+                              child: Padding(
+                                  padding: const EdgeInsets.only(right: 10),
+                                  child: Icon(CupertinoIcons.envelope)),
+                            ),
                             Padding(
                                 padding: const EdgeInsets.only(right: 10),
                                 child: Icon(CupertinoIcons.bell)),
                             GestureDetector(
                                 onTap: () {
-                                  Navigator.of(context).push(
+                                  Navigator.push(
+                                    context,
                                     MaterialPageRoute(
-                                        builder: (context) => CartPage()),
+                                      builder: (context) => const CartPage(),
+                                    ),
                                   );
                                 },
                                 child: Padding(

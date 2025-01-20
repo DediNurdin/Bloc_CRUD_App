@@ -10,6 +10,7 @@ import '../../../gen/assets.gen.dart';
 import '../../../models/cart_model.dart';
 import '../../../utils/skeleton_widget.dart';
 import '../../../utils/utils.dart';
+import '../bottom_navigation/bottom_nav_page.dart';
 import '../bottom_navigation/main_menu.dart';
 import '../product/item/quantity_widget.dart';
 import '../product/recomended_page.dart';
@@ -117,12 +118,18 @@ class _CartPageState extends State<CartPage> {
                                         margin: const EdgeInsets.only(top: 15),
                                         width: double.infinity,
                                         child: Utils.buttonWigget(() {
-                                          Navigator.pushReplacementNamed(
-                                              context, '/bottomnav');
+                                          Navigator.pushAndRemoveUntil(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) =>
+                                                  BottomNavigationPage(),
+                                            ),
+                                            (route) => false,
+                                          );
                                         },
                                             Text(
                                               'Start Shopping',
-                                              style: TextStyle(fontSize: 10),
+                                              style: TextStyle(fontSize: 11),
                                             ),
                                             false),
                                       )
@@ -135,206 +142,216 @@ class _CartPageState extends State<CartPage> {
                                 itemCount: state.carts.length,
                                 itemBuilder: (context, index) {
                                   final cart = state.carts[index];
-                                  return CupertinoFormSection(children: [
-                                    Row(
-                                      children: [
-                                        BlocProvider(
-                                          create: (context) => CartCheckBloc(),
-                                          child: BlocBuilder<CartCheckBloc,
-                                              CartCheckState>(
-                                            builder: (context, state) {
-                                              return Checkbox(
-                                                value: state.shopChecks[
-                                                        cart.id.toString()] ??
-                                                    false,
-                                                onChanged: (_) {
-                                                  context
-                                                      .read<CartCheckBloc>()
-                                                      .add(ToggleShopCheck(
-                                                          cart.id.toString()));
-                                                },
-                                              );
-                                            },
-                                          ),
-                                        ),
-                                        Text(cart.id.toString())
-                                      ],
-                                    ),
+                                  return Utils.customColumn(
+                                    context,
                                     Column(
-                                      children: cart.products.map((product) {
-                                        return FutureBuilder<ProductDetail>(
-                                            future: http
-                                                .get(Uri.parse(
-                                                    '${Utils.baseUrlFakeApi}/products/${product.productId}'))
-                                                .then((response) {
-                                              if (response.statusCode == 200) {
-                                                return ProductDetail.fromJson(
-                                                    json.decode(response.body));
-                                              } else {
-                                                throw Exception(
-                                                    'Failed to load product detail');
-                                              }
-                                            }),
-                                            builder: (context, snapshot) {
-                                              if (snapshot.connectionState ==
-                                                  ConnectionState.waiting) {
-                                                return SkeletonWidget
-                                                    .listSkeleton(
-                                                        context, false, 1);
-                                              } else if (snapshot.hasError) {
-                                                return Text(
-                                                  'Error loading product',
-                                                  style:
-                                                      TextStyle(fontSize: 12),
-                                                );
-                                              } else {
-                                                final productDetail =
-                                                    snapshot.data!;
-                                                var totProdPrc =
-                                                    productDetail.price *
-                                                        product.quantity;
-                                                return BlocProvider(
-                                                  create: (context) =>
-                                                      QuantityCartBloc(
-                                                          totProdPrc,
-                                                          product.quantity),
-                                                  child: BlocBuilder<
-                                                      QuantityCartBloc,
-                                                      QuantityCartState>(
-                                                    builder: (context, state) {
-                                                      final quantity = state
-                                                              is QuantityCartUpdated
-                                                          ? state.quantity
-                                                          : product.quantity;
+                                      children: [
+                                        Row(
+                                          children: [
+                                            BlocProvider(
+                                              create: (context) =>
+                                                  CartCheckBloc(),
+                                              child: BlocBuilder<CartCheckBloc,
+                                                  CartCheckState>(
+                                                builder: (context, state) {
+                                                  return Checkbox(
+                                                    value: state.shopChecks[cart
+                                                            .id
+                                                            .toString()] ??
+                                                        false,
+                                                    onChanged: (_) {
+                                                      context
+                                                          .read<CartCheckBloc>()
+                                                          .add(ToggleShopCheck(
+                                                              cart.id
+                                                                  .toString()));
+                                                    },
+                                                  );
+                                                },
+                                              ),
+                                            ),
+                                            Text(cart.id.toString())
+                                          ],
+                                        ),
+                                        Column(
+                                          children:
+                                              cart.products.map((product) {
+                                            return FutureBuilder<ProductDetail>(
+                                                future: http
+                                                    .get(Uri.parse(
+                                                        '${Utils.baseUrlFakeApi}/products/${product.productId}'))
+                                                    .then((response) {
+                                                  if (response.statusCode ==
+                                                      200) {
+                                                    return ProductDetail
+                                                        .fromJson(json.decode(
+                                                            response.body));
+                                                  } else {
+                                                    throw Exception(
+                                                        'Failed to load product detail');
+                                                  }
+                                                }),
+                                                builder: (context, snapshot) {
+                                                  if (snapshot
+                                                          .connectionState ==
+                                                      ConnectionState.waiting) {
+                                                    return SkeletonWidget
+                                                        .listSkeleton(
+                                                            context, false, 1);
+                                                  } else if (snapshot
+                                                      .hasError) {
+                                                    return Text(
+                                                      'Error loading product',
+                                                      style: TextStyle(
+                                                          fontSize: 12),
+                                                    );
+                                                  } else {
+                                                    final productDetail =
+                                                        snapshot.data!;
+                                                    var totProdPrc =
+                                                        productDetail.price *
+                                                            product.quantity;
+                                                    return BlocProvider(
+                                                      create: (context) =>
+                                                          QuantityCartBloc(
+                                                              totProdPrc,
+                                                              product.quantity),
+                                                      child: BlocBuilder<
+                                                          QuantityCartBloc,
+                                                          QuantityCartState>(
+                                                        builder:
+                                                            (context, state) {
+                                                          final quantity = state
+                                                                  is QuantityCartUpdated
+                                                              ? state.quantity
+                                                              : product
+                                                                  .quantity;
 
-                                                      final totalPrice =
-                                                          productDetail.price *
-                                                              quantity;
+                                                          final totalPrice =
+                                                              productDetail
+                                                                      .price *
+                                                                  quantity;
 
-                                                      return ListTile(
-                                                        contentPadding:
-                                                            const EdgeInsets
-                                                                .all(0),
-                                                        shape:
-                                                            RoundedRectangleBorder(
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(10),
-                                                        ),
-                                                        leading: Row(
-                                                          mainAxisSize:
-                                                              MainAxisSize.min,
-                                                          children: [
-                                                            BlocProvider(
-                                                              create: (context) =>
-                                                                  CartCheckBloc(),
-                                                              child: BlocBuilder<
-                                                                  CartCheckBloc,
-                                                                  CartCheckState>(
-                                                                builder:
-                                                                    (context,
-                                                                        state) {
-                                                                  return Checkbox(
-                                                                    value: state.productChecks[product
-                                                                            .productId
-                                                                            .toString()] ??
-                                                                        false,
-                                                                    onChanged:
-                                                                        (_) {
-                                                                      context
-                                                                          .read<
-                                                                              CartCheckBloc>()
-                                                                          .add(ToggleProductCheck(product
-                                                                              .productId
-                                                                              .toString()));
+                                                          return ListTile(
+                                                            contentPadding:
+                                                                const EdgeInsets
+                                                                    .all(0),
+                                                            shape:
+                                                                RoundedRectangleBorder(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          10),
+                                                            ),
+                                                            leading: Row(
+                                                              mainAxisSize:
+                                                                  MainAxisSize
+                                                                      .min,
+                                                              children: [
+                                                                BlocProvider(
+                                                                  create: (context) =>
+                                                                      CartCheckBloc(),
+                                                                  child: BlocBuilder<
+                                                                      CartCheckBloc,
+                                                                      CartCheckState>(
+                                                                    builder:
+                                                                        (context,
+                                                                            state) {
+                                                                      return Checkbox(
+                                                                        value: state.productChecks[product.productId.toString()] ??
+                                                                            false,
+                                                                        onChanged:
+                                                                            (_) {
+                                                                          context
+                                                                              .read<CartCheckBloc>()
+                                                                              .add(ToggleProductCheck(product.productId.toString()));
+                                                                        },
+                                                                      );
                                                                     },
-                                                                  );
-                                                                },
+                                                                  ),
+                                                                ),
+                                                                SizedBox(
+                                                                  height: 120,
+                                                                  width: 60,
+                                                                  child: ClipRRect(
+                                                                      borderRadius:
+                                                                          BorderRadius.circular(
+                                                                              4),
+                                                                      child: Utils.imageNetwork(
+                                                                          context,
+                                                                          productDetail
+                                                                              .image,
+                                                                          double
+                                                                              .infinity)),
+                                                                )
+                                                              ],
+                                                            ),
+                                                            title: Container(
+                                                              margin:
+                                                                  const EdgeInsets
+                                                                      .only(
+                                                                right: 10,
+                                                              ),
+                                                              child: Text(
+                                                                productDetail
+                                                                    .title,
+                                                                style: TextStyle(
+                                                                    fontSize:
+                                                                        12,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w700),
                                                               ),
                                                             ),
-                                                            SizedBox(
-                                                              height: 120,
-                                                              width: 60,
-                                                              child: ClipRRect(
-                                                                  borderRadius:
-                                                                      BorderRadius
-                                                                          .circular(
-                                                                              4),
-                                                                  child: Utils.imageNetwork(
-                                                                      context,
-                                                                      productDetail
-                                                                          .image,
-                                                                      double
-                                                                          .infinity)),
-                                                            )
-                                                          ],
-                                                        ),
-                                                        title: Container(
-                                                          margin:
-                                                              const EdgeInsets
-                                                                  .only(
-                                                            right: 10,
-                                                          ),
-                                                          child: Text(
-                                                            productDetail.title,
-                                                            style: TextStyle(
-                                                                fontSize: 12,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .w700),
-                                                          ),
-                                                        ),
-                                                        subtitle: Row(
-                                                          crossAxisAlignment:
-                                                              CrossAxisAlignment
-                                                                  .start,
-                                                          children: [
-                                                            Text(
-                                                              'USD $totalPrice',
-                                                              style: TextStyle(
-                                                                  fontSize: 10,
-                                                                  color: Colors
-                                                                      .green),
-                                                            ),
-                                                            const Spacer(),
-                                                            Padding(
-                                                              padding:
-                                                                  const EdgeInsets
-                                                                      .all(10),
-                                                              child:
-                                                                  QuantityWidget(
-                                                                      isCart:
-                                                                          true,
-                                                                      txtQauntity:
-                                                                          quantity
-                                                                              .toString(),
-                                                                      onPressIncrement:
-                                                                          () {
+                                                            subtitle: Row(
+                                                              crossAxisAlignment:
+                                                                  CrossAxisAlignment
+                                                                      .start,
+                                                              children: [
+                                                                Text(
+                                                                  'USD $totalPrice',
+                                                                  style: TextStyle(
+                                                                      fontSize:
+                                                                          10,
+                                                                      color: Colors
+                                                                          .green),
+                                                                ),
+                                                                const Spacer(),
+                                                                Padding(
+                                                                  padding:
+                                                                      const EdgeInsets
+                                                                          .all(
+                                                                          10),
+                                                                  child: QuantityWidget(
+                                                                      isCart: true,
+                                                                      txtQauntity: quantity.toString(),
+                                                                      onPressIncrement: () {
                                                                         context
                                                                             .read<QuantityCartBloc>()
                                                                             .add(IncrementCartQuantity());
                                                                       },
-                                                                      onPressDecrement:
-                                                                          () {
+                                                                      onPressDecrement: () {
                                                                         context
                                                                             .read<QuantityCartBloc>()
                                                                             .add(DecrementCartQuantity());
                                                                       }),
+                                                                ),
+                                                                const SizedBox(
+                                                                  width: 10,
+                                                                )
+                                                              ],
                                                             ),
-                                                            const SizedBox(
-                                                              width: 10,
-                                                            )
-                                                          ],
-                                                        ),
-                                                      );
-                                                    },
-                                                  ),
-                                                );
-                                              }
-                                            });
-                                      }).toList(),
-                                    )
-                                  ]);
+                                                          );
+                                                        },
+                                                      ),
+                                                    );
+                                                  }
+                                                });
+                                          }).toList(),
+                                        )
+                                      ],
+                                    ),
+                                  );
                                 },
                               );
                             }

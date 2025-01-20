@@ -31,36 +31,61 @@ class _ProfilePageState extends State<ProfilePage> {
 
               return Column(
                 children: [
-                  CupertinoFormSection(header: Text('Profile'), children: [
-                    CupertinoFormRow(
-                      prefix: Text(
-                        'Name',
+                  Utils.customColumn(
+                    context,
+                    Column(children: [
+                      CupertinoFormRow(
+                        child: Row(
+                          children: [
+                            Text(
+                              'Name',
+                            ),
+                            const Spacer(),
+                            Text(
+                                '${auth.name.firstname.capitalize()} ${auth.name.lastname.capitalize()}')
+                          ],
+                        ),
                       ),
-                      child: Text(
-                          '${auth.name.firstname.capitalize()} ${auth.name.lastname.capitalize()}'),
-                    ),
-                    CupertinoFormRow(
-                      prefix: Text(
-                        'Email',
+                      CupertinoFormRow(
+                        child: Row(
+                          children: [
+                            Text(
+                              'Email',
+                            ),
+                            const Spacer(),
+                            Text(auth.email)
+                          ],
+                        ),
                       ),
-                      child: Text(auth.email),
-                    ),
-                    CupertinoFormRow(
-                      prefix: Text(
-                        'Phone',
+                      CupertinoFormRow(
+                        child: Row(
+                          children: [
+                            Text(
+                              'Phone',
+                            ),
+                            const Spacer(),
+                            Text(auth.phone)
+                          ],
+                        ),
                       ),
-                      child: Text(auth.phone),
-                    ),
-                  ]),
-                  CupertinoFormSection(header: Text('Address'), children: [
-                    CupertinoFormRow(
-                      prefix: Text(
-                        'Full Adress',
-                      ),
-                      child: Text(
-                          '${auth.address.street.capitalize()}, ${auth.address.city.capitalize()}, ${auth.address.zipcode.capitalize()}'),
-                    ),
-                  ]),
+                    ]),
+                  ),
+                  Utils.customColumn(
+                      context,
+                      Column(children: [
+                        CupertinoFormRow(
+                          child: Row(
+                            children: [
+                              Text(
+                                'Full Adress',
+                              ),
+                              const Spacer(),
+                              Text(
+                                  '${auth.address.street.capitalize()}, ${auth.address.city.capitalize()}, ${auth.address.zipcode.capitalize()}')
+                            ],
+                          ),
+                        )
+                      ])),
                   SizedBox(
                       height: 500,
                       child: FlutterMap(

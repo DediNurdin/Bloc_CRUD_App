@@ -1,6 +1,10 @@
 import 'dart:convert';
 import 'dart:io';
 
+import '../bloc/cubit/theme_cubit.dart';
+import '../presentation/screens/my_account/theme_page.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
 import '../gen/assets.gen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
@@ -15,6 +19,68 @@ import 'package:shared_preferences/shared_preferences.dart';
 extension StringExtension on String {
   String capitalize() {
     return "${this[0].toUpperCase()}${substring(1).toLowerCase()}";
+  }
+}
+
+class MyAccountItemWidget extends StatelessWidget {
+  const MyAccountItemWidget(
+      {super.key,
+      required this.icon,
+      required this.title,
+      this.trailingText,
+      this.onTap});
+
+  final IconData icon;
+  final String title;
+  final String? trailingText;
+
+  final void Function()? onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<ThemeCubit, ThemeState>(
+      builder: (context, state) {
+        final themeText =
+            state.themeMode == ThemeMode.dark ? "Dark Mode" : "Light Mode";
+        return GestureDetector(
+          onTap: () {
+            switch (title) {
+              case 'Theme':
+                Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => ThemePage()),
+                );
+                break;
+            }
+          },
+          child: Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(4),
+                child: Icon(
+                  icon,
+                ),
+              ),
+              const SizedBox(width: 15),
+              Expanded(
+                child: Text(
+                  title,
+                  style: TextStyle(fontSize: 14),
+                ),
+              ),
+              trailingText != null
+                  ? Text(
+                      themeText,
+                      style: TextStyle(
+                        fontSize: 10,
+                      ),
+                    )
+                  : Text(''),
+              const SizedBox(width: 15),
+            ],
+          ),
+        );
+      },
+    );
   }
 }
 
@@ -61,6 +127,25 @@ class Utils {
 
   static bool isDarkMode(BuildContext context) {
     return Theme.of(context).brightness == Brightness.dark;
+  }
+
+  static Widget customColumn(BuildContext context, Widget child) {
+    return Column(
+      children: [
+        Container(
+          color: Utils.isDarkMode(context)
+              ? CupertinoColors.black
+              : CupertinoColors.lightBackgroundGray,
+          height: 10,
+        ),
+        Container(
+          color: Utils.isDarkMode(context)
+              ? CupertinoColors.darkBackgroundGray
+              : CupertinoColors.systemBackground,
+          child: child,
+        )
+      ],
+    );
   }
 
   static Widget buttonWigget(

@@ -100,7 +100,80 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
         child: Builder(builder: (context) {
           tabContext = context;
           return Scaffold(
-            extendBodyBehindAppBar: false,
+            appBar: AppBar(
+              scrolledUnderElevation: 0,
+              bottom: PreferredSize(
+                  preferredSize: Size.fromHeight(showTabBar ? 48 : 0),
+                  child: showTabBar
+                      ? TabBar(
+                          indicatorSize: TabBarIndicatorSize.tab,
+                          labelStyle: TextStyle(
+                              fontSize: 13, fontWeight: FontWeight.w700),
+                          unselectedLabelStyle: TextStyle(
+                              fontSize: 13, fontWeight: FontWeight.w700),
+                          onTap: (int index) => scrollToIndex(index),
+                          tabs: [
+                            Tab(
+                              text: 'Detail',
+                            ),
+                            Tab(
+                              text: 'Review',
+                            ),
+                            Tab(
+                              text: 'Recomendation',
+                            )
+                          ],
+                        )
+                      : SizedBox.shrink()),
+              actions: [
+                GestureDetector(
+                  onTap: () async {
+                    await showSearch(
+                        context: context,
+                        delegate: SearchDelegateProduct(initQuery: ''));
+                  },
+                  child: Padding(
+                      padding: const EdgeInsets.only(right: 10),
+                      child: Icon(CupertinoIcons.search)),
+                ),
+                Icon(CupertinoIcons.arrowshape_turn_up_right),
+                GestureDetector(
+                  onTap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(builder: (context) => CartPage()),
+                    );
+                  },
+                  child: AddToCartIcon(
+                    key: cartKey,
+                    icon: Icon(
+                      CupertinoIcons.shopping_cart,
+                    ),
+                    badgeOptions: const BadgeOptions(
+                      active: true,
+                      foregroundColor: Colors.white,
+                      backgroundColor: Colors.red,
+                    ),
+                  ),
+                ),
+                GestureDetector(
+                  onTap: () {
+                    showModalBottomSheet(
+                        context: context,
+                        isScrollControlled: true,
+                        useSafeArea: true,
+                        elevation: 0,
+                        shape: BeveledRectangleBorder(),
+                        builder: (context) => MainMenu());
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 7),
+                    child: Icon(
+                      CupertinoIcons.line_horizontal_3,
+                    ),
+                  ),
+                ),
+              ],
+            ),
             body: BlocConsumer<ProductDetailBloc, ProductDetailState>(
                 listener: (context, state) {
               if (state is AddCartSuccess) {
@@ -130,11 +203,8 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
               }
             }, builder: (context, state) {
               if (state is ProductDetailLoading) {
-                return Column(
-                  children: [
-                    appBar(),
-                    Expanded(child: CupertinoActivityIndicator())
-                  ],
+                return Center(
+                  child: CupertinoActivityIndicator(),
                 );
               } else if (state is ProductDetailSuccess) {
                 return main();
@@ -175,7 +245,6 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
               controller: scrollController,
               shrinkWrap: true,
               slivers: [
-                appBar(),
                 SliverList.list(children: [
                   SizedBox(
                     width: MediaQuery.of(context).size.width,
@@ -194,10 +263,10 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                           Text(
                             'USD ${widget.product.price}',
                             style: const TextStyle(
-                                fontSize: 17, fontWeight: FontWeight.bold),
+                                fontSize: 15, fontWeight: FontWeight.bold),
                           ),
                           const SizedBox(
-                            height: 7,
+                            height: 5,
                           ),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -206,11 +275,15 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                                 child: Text(
                                   widget.product.title,
                                   maxLines: 2,
+                                  textAlign: TextAlign.left,
                                   style: const TextStyle(
-                                    fontSize: 16,
+                                    fontSize: 14,
                                     fontWeight: FontWeight.normal,
                                   ),
                                 ),
+                              ),
+                              const SizedBox(
+                                width: 5,
                               ),
                               BlocProvider(
                                 create: (context) => LikeProductBloc(false),
@@ -242,7 +315,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                             ],
                           ),
                           const SizedBox(
-                            height: 7,
+                            height: 5,
                           ),
                           IntrinsicHeight(
                             child: Row(
@@ -342,7 +415,14 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                           context
                               .read<ProductDetailBloc>()
                               .add(ShowBottomSheetAddCartProductEvent());
-                        }, Text('Add To Cart'), true)),
+                        },
+                            Text(
+                              'Add To Cart',
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(fontSize: 12),
+                            ),
+                            true)),
                     const SizedBox(
                       width: 10,
                     ),
@@ -353,9 +433,10 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                               .read<ProductDetailBloc>()
                               .add(ShowBottomSheetBuyProductEvent());
                         },
-                            Text(
-                              'Buy USD ${widget.product.price}',
-                            ),
+                            Text('Buy USD ${widget.product.price}',
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 1,
+                                style: TextStyle(fontSize: 12)),
                             false)),
                   ],
                 ),
@@ -367,179 +448,91 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
     );
   }
 
-  Widget appBar() {
-    return SliverAppBar(
-      pinned: true,
-      scrolledUnderElevation: 0,
-      bottom: PreferredSize(
-        preferredSize: Size.fromHeight(showTabBar ? 48.0 : 0.0),
-        child: AnimatedOpacity(
-          curve: Curves.easeIn,
-          opacity: showTabBar ? 1.0 : 0.0,
-          duration: const Duration(milliseconds: 500),
-          child: showTabBar
-              ? TabBar(
-                  indicatorSize: TabBarIndicatorSize.tab,
-                  labelStyle:
-                      TextStyle(fontSize: 13, fontWeight: FontWeight.w700),
-                  unselectedLabelStyle:
-                      TextStyle(fontSize: 13, fontWeight: FontWeight.w700),
-                  onTap: (int index) => scrollToIndex(index),
-                  tabs: [
-                    Tab(
-                      text: 'Detail',
-                    ),
-                    Tab(
-                      text: 'Review',
-                    ),
-                    Tab(
-                      text: 'Recomendation',
-                    )
-                  ],
-                )
-              : SizedBox.shrink(),
-        ),
-      ),
-      actions: [
-        GestureDetector(
-          onTap: () async {
-            await showSearch(
-                context: context,
-                delegate: SearchDelegateProduct(initQuery: ''));
-          },
-          child: Padding(
-              padding: const EdgeInsets.only(right: 10),
-              child: Icon(CupertinoIcons.search)),
-        ),
-        Icon(CupertinoIcons.arrowshape_turn_up_right),
-        GestureDetector(
-          onTap: () {
-            Navigator.of(context).push(
-              MaterialPageRoute(builder: (context) => CartPage()),
-            );
-          },
-          child: AddToCartIcon(
-            key: cartKey,
-            icon: Icon(
-              CupertinoIcons.shopping_cart,
-            ),
-            badgeOptions: const BadgeOptions(
-              active: true,
-              foregroundColor: Colors.white,
-              backgroundColor: Colors.red,
-            ),
-          ),
-        ),
-        GestureDetector(
-          onTap: () {
-            showModalBottomSheet(
-                context: context,
-                isScrollControlled: true,
-                useSafeArea: true,
-                elevation: 0,
-                shape: BeveledRectangleBorder(),
-                builder: (context) => MainMenu());
-          },
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 7),
-            child: Icon(
-              CupertinoIcons.line_horizontal_3,
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-
   Widget review(int index) {
-    return CupertinoFormSection(key: tabType[index], children: [
-      Container(
-        margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'Product Review',
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+    return Utils.customColumn(
+        context,
+        Column(key: tabType[index], children: [
+          Container(
+            margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Product Review',
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                ),
+                ReviewWidget()
+              ],
             ),
-            ReviewWidget()
-          ],
-        ),
-      )
-    ]);
+          )
+        ]));
   }
 
   Widget detail(int index) {
-    return CupertinoFormSection(key: tabType[index], children: [
-      Container(
-          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'Product Detail',
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(
-                height: 5,
-              ),
-              Text('Description Product',
-                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500)),
-              const SizedBox(
-                height: 5,
-              ),
-              GestureDetector(
-                onTap: () {
-                  setState(() {
-                    isReadMore = !isReadMore;
-                  });
-                },
-                child: Container(
-                  constraints: const BoxConstraints(
-                    maxHeight: 300,
+    return Utils.customColumn(
+        context,
+        Column(key: tabType[index], children: [
+          Container(
+              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Product Detail',
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                   ),
-                  child: Text(
-                    widget.product.description,
-                    style: const TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.normal,
+                  const SizedBox(
+                    height: 5,
+                  ),
+                  Text('Description Product',
+                      style:
+                          TextStyle(fontSize: 14, fontWeight: FontWeight.w500)),
+                  const SizedBox(
+                    height: 5,
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        isReadMore = !isReadMore;
+                      });
+                    },
+                    child: Container(
+                      constraints: const BoxConstraints(
+                        maxHeight: 300,
+                      ),
+                      child: Text(
+                        widget.product.description,
+                        style: const TextStyle(
+                          fontSize: 12,
+                          fontWeight: FontWeight.normal,
+                        ),
+                        textAlign: TextAlign.justify,
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: isReadMore ? 100 : 3,
+                      ),
                     ),
-                    textAlign: TextAlign.justify,
-                    overflow: TextOverflow.ellipsis,
-                    maxLines: isReadMore ? 100 : 3,
                   ),
-                ),
-              ),
-            ],
-          )),
-    ]);
+                ],
+              )),
+        ]));
   }
 
   Widget recomedation(int index) {
-    return ListView(
-        physics: const NeverScrollableScrollPhysics(),
-        shrinkWrap: true,
-        children: [
-          CupertinoFormSection(key: tabType[index], children: [
-            SizedBox(
-              height: kToolbarHeight,
-              child: Row(
-                children: [
-                  Expanded(child: Divider()),
-                  const SizedBox(
-                    width: 10,
-                  ),
-                  Text(
-                    'You May Also Like',
-                    style: TextStyle(
-                      fontSize: 15,
-                    ),
-                  ),
-                  const SizedBox(
-                    width: 10,
-                  ),
-                  Expanded(child: Divider()),
-                ],
+    return Utils.customColumn(
+      context,
+      Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          key: tabType[index],
+          children: [
+            Container(
+              padding: const EdgeInsets.all(10),
+              margin: const EdgeInsets.only(left: 5),
+              child: Text(
+                'Recomended For You',
+                style: TextStyle(
+                  fontSize: 15,
+                ),
               ),
             ),
             BlocProvider(
@@ -563,7 +556,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                           mainAxisSpacing: 4,
                           crossAxisSpacing: 4,
                           crossAxisCount: 2,
-                          childAspectRatio: 0.79,
+                          childAspectRatio: 0.75,
                         ),
                         itemBuilder: (context, index) {
                           return ProductItemWidget(
@@ -580,6 +573,6 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
               ),
             ),
           ]),
-        ]);
+    );
   }
 }

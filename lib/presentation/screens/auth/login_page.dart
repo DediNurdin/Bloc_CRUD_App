@@ -49,7 +49,6 @@ class _LoginPageState extends State<LoginPage> {
         body: BlocConsumer<LoginBloc, LoginState>(
           listener: (context, state) {
             if (state is LoginSuccess) {
-              Utils.showToast('Login Successful');
               Navigator.pushReplacementNamed(context, '/bottomnav');
             } else if (state is LoginFailure) {
               Utils.showToast(state.error);

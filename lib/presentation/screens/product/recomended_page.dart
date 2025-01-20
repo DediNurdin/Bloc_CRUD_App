@@ -1,4 +1,4 @@
-import 'package:flutter/cupertino.dart';
+import '../../../utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -16,30 +16,24 @@ class RecomendedPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return visibleTitle
-        ? CupertinoFormSection(children: [
-            SizedBox(
-              height: kToolbarHeight,
-              child: Row(
+        ? Utils.customColumn(
+            context,
+            Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Expanded(child: Divider()),
-                  const SizedBox(
-                    width: 10,
-                  ),
-                  Text(
-                    'Recomended For You',
-                    style: TextStyle(
-                      fontSize: 15,
+                  Container(
+                    padding: const EdgeInsets.all(10),
+                    margin: const EdgeInsets.only(left: 5),
+                    child: Text(
+                      'Recomended For You',
+                      style: TextStyle(
+                        fontSize: 15,
+                      ),
                     ),
                   ),
-                  const SizedBox(
-                    width: 10,
-                  ),
-                  Expanded(child: Divider()),
-                ],
-              ),
-            ),
-            main()
-          ])
+                  main()
+                ]))
         : main();
   }
 
