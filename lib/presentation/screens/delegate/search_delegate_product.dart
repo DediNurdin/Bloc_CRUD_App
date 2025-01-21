@@ -147,41 +147,94 @@ class SearchDelegateProduct extends SearchDelegate<String> {
 
   @override
   Widget buildSuggestions(BuildContext context) {
-    return BlocBuilder<ProductSearchBloc, ProductSearchState>(
+    return BlocBuilder<ProductLimitBloc, ProductLimitState>(
       builder: (context, state) {
-        if (state is ProductSearchLoading) {
-          return Center(
-            child: CupertinoActivityIndicator(),
+        if (state is ProductLimitLoading) {
+          return SizedBox(
+            height: 130,
+            child: SkeletonWidget.listSkeleton(context, true, 4),
           );
         }
-        if (state is ProductInitial) {
-          context.read<ProductSearchBloc>().add(GetProductSearchEvent());
-        }
-        if (state is ProductSearchSuccess) {
-          final List<Product> allProdSugest = state.products
+        if (state is ProductLimitSuccess) {
+          final List<Product> allProdSugest = state.productLimit
               .where((item) => item.title.toLowerCase().contains(initQuery != ''
                   ? initQuery.toLowerCase()
                   : query.toLowerCase()))
               .toList();
-          return ListView.builder(
-            itemCount: allProdSugest.length,
-            itemBuilder: (context, index) {
-              return GestureDetector(
-                onTap: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) {
-                    return ProductDetailPage(product: allProdSugest[index]);
-                  }));
+          return Column(
+            children: [
+              ListView.builder(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                itemCount: allProdSugest.length,
+                itemBuilder: (context, index) {
+                  return GestureDetector(
+                    onTap: () {
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) {
+                        return ProductDetailPage(product: allProdSugest[index]);
+                      }));
+                    },
+                    child: Container(
+                        margin:
+                            const EdgeInsets.only(bottom: 5, left: 5, right: 5),
+                        child: Padding(
+                            padding: const EdgeInsets.all(10),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Expanded(
+                                    child: Text(allProdSugest[index].title)),
+                                Icon(
+                                  CupertinoIcons.flame,
+                                  size: 13,
+                                )
+                              ],
+                            ))),
+                  );
                 },
-                child: Card(
-                    margin: const EdgeInsets.only(bottom: 5, left: 5, right: 5),
-                    child: Padding(
-                        padding: const EdgeInsets.all(10),
-                        child: Text(allProdSugest[index].title))),
-              );
-            },
+              ),
+              Container(
+                padding: const EdgeInsets.all(13),
+                margin: const EdgeInsets.symmetric(horizontal: 10),
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    border: Border.all(color: Colors.grey)),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
+                      children: [
+                        Icon(CupertinoIcons.lightbulb,
+                            color: Colors.grey, size: 15),
+                        const SizedBox(
+                          width: 5,
+                        ),
+                        Text(
+                          'Search tips and tricks',
+                          style: TextStyle(fontSize: 12),
+                        )
+                      ],
+                    ),
+                    Text(
+                      'Learn',
+                      style: TextStyle(fontSize: 12, color: Colors.green),
+                    )
+                  ],
+                ),
+              )
+            ],
           );
         }
-        return Center(child: Text('No Data'));
+        return SizedBox(
+          height: 70,
+          child: Center(
+            child: Text(
+              'Failed to load data',
+              style: TextStyle(fontSize: 12),
+            ),
+          ),
+        );
       },
     );
   }

@@ -48,7 +48,7 @@ class _MainMenuState extends State<MainMenu> {
                     return Container(
                       margin: const EdgeInsets.only(
                           left: 15, right: 15, bottom: 15),
-                      child: SkeletonWidget.userAuthSkeleton(context),
+                      child: SkeletonWidget.userAuthSkeleton(context, 2),
                     );
                   } else if (state is AuthSuccess) {
                     final auth = state.auth;
@@ -154,7 +154,7 @@ class _MainMenuState extends State<MainMenu> {
                   CupertinoFormRow(
                     child: MainMenuItemWidget(
                       icon: CupertinoIcons.doc_append,
-                      title: 'List Transactions',
+                      title: 'Transactions',
                     ),
                   ),
                   CupertinoFormRow(

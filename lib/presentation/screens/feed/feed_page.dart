@@ -51,7 +51,7 @@ class _FeedPageState extends State<FeedPage> {
                 IconButton(
                     onPressed: () {},
                     icon:
-                        Icon(CupertinoIcons.photo_camera, color: Colors.white))
+                        Icon(CupertinoIcons.video_camera, color: Colors.white))
               ],
             ),
             body: TabBarView(children: [

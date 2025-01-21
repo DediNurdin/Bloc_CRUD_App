@@ -122,7 +122,9 @@ class _CartPageState extends State<CartPage> {
                                             context,
                                             MaterialPageRoute(
                                               builder: (context) =>
-                                                  BottomNavigationPage(),
+                                                  BottomNavigationPage(
+                                                initialIndex: 0,
+                                              ),
                                             ),
                                             (route) => false,
                                           );

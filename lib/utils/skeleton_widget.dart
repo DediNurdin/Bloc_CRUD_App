@@ -136,7 +136,7 @@ class SkeletonWidget {
     );
   }
 
-  static userAuthSkeleton(BuildContext context) {
+  static userAuthSkeleton(BuildContext context, double spacing) {
     return Row(
       children: [
         SkeletonAvatar(
@@ -153,7 +153,7 @@ class SkeletonWidget {
             SkeletonParagraph(
               style: SkeletonParagraphStyle(
                   lines: 3,
-                  spacing: 6,
+                  spacing: spacing,
                   lineStyle: SkeletonLineStyle(
                     alignment: Alignment.centerRight,
                     padding:

@@ -1,11 +1,10 @@
 part of 'bottom_nav_bloc.dart';
 
-abstract class BottomNavState {
-  final int tabIndex;
+class BottomNavState extends Equatable {
+  final int selectedIndex;
 
-  const BottomNavState({required this.tabIndex});
-}
+  const BottomNavState({this.selectedIndex = 0});
 
-class BottomNavInitial extends BottomNavState {
-  const BottomNavInitial({required super.tabIndex});
+  @override
+  List<Object> get props => [selectedIndex];
 }

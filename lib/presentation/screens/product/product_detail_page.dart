@@ -32,7 +32,6 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
   late ScrollController scrollController;
   BuildContext? tabContext;
 
-  bool showTabBar = false;
   bool isReadMore = false;
 
   final List<GlobalKey> tabType = [
@@ -81,6 +80,22 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
     await cartKey.currentState!.runCartAnimation((quantity).toString());
   }
 
+  bool _isTabBarVisible = false;
+
+  void _onNotification(ScrollNotification notification) {
+    if (notification is ScrollUpdateNotification) {
+      if (notification.metrics.pixels > 200 && !_isTabBarVisible) {
+        setState(() {
+          _isTabBarVisible = true;
+        });
+      } else if (notification.metrics.pixels <= 200 && _isTabBarVisible) {
+        setState(() {
+          _isTabBarVisible = false;
+        });
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return AddToCartAnimation(
@@ -95,36 +110,13 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
       createAddToCartAnimation: (runAddToCartAnimation) {
         this.runAddToCartAnimation = runAddToCartAnimation;
       },
-      child: DefaultTabController(
-        length: 3,
-        child: Builder(builder: (context) {
-          tabContext = context;
-          return Scaffold(
+      child: Builder(builder: (context) {
+        tabContext = context;
+        return DefaultTabController(
+          length: 3,
+          child: Scaffold(
             appBar: AppBar(
               scrolledUnderElevation: 0,
-              bottom: PreferredSize(
-                  preferredSize: Size.fromHeight(showTabBar ? 48 : 0),
-                  child: showTabBar
-                      ? TabBar(
-                          indicatorSize: TabBarIndicatorSize.tab,
-                          labelStyle: TextStyle(
-                              fontSize: 13, fontWeight: FontWeight.w700),
-                          unselectedLabelStyle: TextStyle(
-                              fontSize: 13, fontWeight: FontWeight.w700),
-                          onTap: (int index) => scrollToIndex(index),
-                          tabs: [
-                            Tab(
-                              text: 'Detail',
-                            ),
-                            Tab(
-                              text: 'Review',
-                            ),
-                            Tab(
-                              text: 'Recomendation',
-                            )
-                          ],
-                        )
-                      : SizedBox.shrink()),
               actions: [
                 GestureDetector(
                   onTap: () async {
@@ -218,177 +210,195 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                 child: Text('No Data'),
               );
             }),
-          );
-        }),
-      ),
+          ),
+        );
+      }),
     );
   }
 
   Widget main() {
     return NotificationListener<ScrollNotification>(
-      onNotification: (scrollNotification) {
-        if (scrollNotification.metrics.pixels > 200 && !showTabBar) {
-          setState(() {
-            showTabBar = true;
-          });
-        } else if (scrollNotification.metrics.pixels <= 200 && showTabBar) {
-          setState(() {
-            showTabBar = false;
-          });
-        }
+      onNotification: (notification) {
+        _onNotification(notification);
         return true;
       },
       child: Column(
         children: [
           Expanded(
-            child: CustomScrollView(
-              controller: scrollController,
-              shrinkWrap: true,
-              slivers: [
-                SliverList.list(children: [
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width,
-                    child: SizedBox(
-                        height: MediaQuery.of(context).size.height * 0.45,
-                        width: double.infinity,
-                        child: Utils.imageNetwork(context, widget.product.image,
-                            MediaQuery.of(context).size.height * 0.45)),
-                  ),
-                  Container(
-                      padding:
-                          const EdgeInsets.only(left: 10, top: 10, right: 10),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'USD ${widget.product.price}',
-                            style: const TextStyle(
-                                fontSize: 15, fontWeight: FontWeight.bold),
-                          ),
-                          const SizedBox(
-                            height: 5,
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Expanded(
-                                child: Text(
-                                  widget.product.title,
-                                  maxLines: 2,
-                                  textAlign: TextAlign.left,
-                                  style: const TextStyle(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.normal,
-                                  ),
+              child: Stack(
+            children: [
+              ListView(children: [
+                SizedBox(
+                  width: MediaQuery.of(context).size.width,
+                  child: SizedBox(
+                      height: MediaQuery.of(context).size.height * 0.45,
+                      width: double.infinity,
+                      child: Utils.imageNetwork(context, widget.product.image,
+                          MediaQuery.of(context).size.height * 0.45)),
+                ),
+                Container(
+                    padding:
+                        const EdgeInsets.only(left: 10, top: 10, right: 10),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'USD ${widget.product.price}',
+                          style: const TextStyle(
+                              fontSize: 15, fontWeight: FontWeight.bold),
+                        ),
+                        const SizedBox(
+                          height: 5,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Expanded(
+                              child: Text(
+                                widget.product.title,
+                                maxLines: 2,
+                                textAlign: TextAlign.left,
+                                style: const TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.normal,
                                 ),
+                              ),
+                            ),
+                            const SizedBox(
+                              width: 5,
+                            ),
+                            BlocProvider(
+                              create: (context) => LikeProductBloc(false),
+                              child: BlocBuilder<LikeProductBloc,
+                                  LikeProductState>(
+                                builder: (context, state) {
+                                  final isLiked = state is LikeProductUpdated
+                                      ? state.isLiked
+                                      : false;
+                                  return GestureDetector(
+                                      onTap: () {
+                                        context
+                                            .read<LikeProductBloc>()
+                                            .add(LikedProductEvent());
+                                      },
+                                      child: isLiked
+                                          ? Icon(
+                                              CupertinoIcons.heart_fill,
+                                              color: Colors.red,
+                                              size: 20,
+                                            )
+                                          : Icon(
+                                              CupertinoIcons.heart,
+                                              size: 20,
+                                            ));
+                                },
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(
+                          height: 5,
+                        ),
+                        IntrinsicHeight(
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Icon(
+                                CupertinoIcons.star_fill,
+                                color: Colors.amber,
+                                size: 12,
                               ),
                               const SizedBox(
                                 width: 5,
                               ),
-                              BlocProvider(
-                                create: (context) => LikeProductBloc(false),
-                                child: BlocBuilder<LikeProductBloc,
-                                    LikeProductState>(
-                                  builder: (context, state) {
-                                    final isLiked = state is LikeProductUpdated
-                                        ? state.isLiked
-                                        : false;
-                                    return GestureDetector(
-                                        onTap: () {
-                                          context
-                                              .read<LikeProductBloc>()
-                                              .add(LikedProductEvent());
-                                        },
-                                        child: isLiked
-                                            ? Icon(
-                                                CupertinoIcons.heart_fill,
-                                                color: Colors.red,
-                                                size: 20,
-                                              )
-                                            : Icon(
-                                                CupertinoIcons.heart,
-                                                size: 20,
-                                              ));
-                                  },
+                              Text(
+                                '${widget.product.rating.rate}',
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w600,
                                 ),
+                              ),
+                              const VerticalDivider(
+                                thickness: 1,
+                              ),
+                              Icon(
+                                CupertinoIcons.camera,
+                                size: 12,
+                              ),
+                              const SizedBox(
+                                width: 5,
+                              ),
+                              Text(
+                                '45',
+                                style: TextStyle(
+                                    fontSize: 12, fontWeight: FontWeight.w600),
+                              ),
+                              const VerticalDivider(
+                                thickness: 1,
+                              ),
+                              Icon(
+                                CupertinoIcons.tray,
+                                size: 12,
+                              ),
+                              const SizedBox(
+                                width: 5,
+                              ),
+                              Text(
+                                '${widget.product.rating.count} ',
+                                style: TextStyle(
+                                    fontSize: 12, fontWeight: FontWeight.w600),
+                              ),
+                              Text(
+                                'Sold',
+                                style: TextStyle(
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.normal),
                               ),
                             ],
                           ),
-                          const SizedBox(
-                            height: 5,
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                      ],
+                    )),
+                detail(0),
+                review(1),
+                recomedation(2)
+              ]),
+              Align(
+                alignment: Alignment.topCenter,
+                child: AnimatedOpacity(
+                    opacity: _isTabBarVisible ? 1.0 : 0.0,
+                    duration: const Duration(milliseconds: 300),
+                    child: Container(
+                      height: kToolbarHeight,
+                      color: Utils.isDarkMode(context)
+                          ? CupertinoColors.darkBackgroundGray
+                          : CupertinoColors.systemBackground,
+                      child: TabBar(
+                        indicatorSize: TabBarIndicatorSize.tab,
+                        labelStyle: TextStyle(
+                            fontSize: 13, fontWeight: FontWeight.w700),
+                        unselectedLabelStyle: TextStyle(
+                            fontSize: 13, fontWeight: FontWeight.w700),
+                        onTap: (int index) => scrollToIndex(index),
+                        tabs: [
+                          Tab(
+                            text: 'Detail',
                           ),
-                          IntrinsicHeight(
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Icon(
-                                  CupertinoIcons.star_fill,
-                                  color: Colors.amber,
-                                  size: 12,
-                                ),
-                                const SizedBox(
-                                  width: 5,
-                                ),
-                                Text(
-                                  '${widget.product.rating.rate}',
-                                  style: TextStyle(
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                ),
-                                const VerticalDivider(
-                                  thickness: 1,
-                                ),
-                                Icon(
-                                  CupertinoIcons.camera,
-                                  size: 12,
-                                ),
-                                const SizedBox(
-                                  width: 5,
-                                ),
-                                Text(
-                                  '45',
-                                  style: TextStyle(
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.w600),
-                                ),
-                                const VerticalDivider(
-                                  thickness: 1,
-                                ),
-                                Icon(
-                                  CupertinoIcons.tray,
-                                  size: 12,
-                                ),
-                                const SizedBox(
-                                  width: 5,
-                                ),
-                                Text(
-                                  '${widget.product.rating.count} ',
-                                  style: TextStyle(
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.w600),
-                                ),
-                                Text(
-                                  'Sold',
-                                  style: TextStyle(
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.normal),
-                                ),
-                              ],
-                            ),
+                          Tab(
+                            text: 'Review',
                           ),
-                          const SizedBox(
-                            height: 10,
-                          ),
+                          Tab(
+                            text: 'Recomendation',
+                          )
                         ],
-                      )),
-                  detail(0),
-                  review(1),
-                  recomedation(2)
-                ]),
-              ],
-            ),
-          ),
+                      ),
+                    )),
+              ),
+            ],
+          )),
           SizedBox(
             height: 60,
             child: Container(

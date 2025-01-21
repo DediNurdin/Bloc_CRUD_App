@@ -18,6 +18,7 @@ class MyAccountPage extends StatelessWidget {
         title: const Text('My Account'),
       ),
       body: CustomScrollView(
+        shrinkWrap: true,
         slivers: [
           SliverList.list(
             children: [
@@ -29,7 +30,7 @@ class MyAccountPage extends StatelessWidget {
                       return Container(
                         margin: const EdgeInsets.only(
                             left: 15, right: 15, bottom: 15),
-                        child: SkeletonWidget.userAuthSkeleton(context),
+                        child: SkeletonWidget.userAuthSkeleton(context, 2),
                       );
                     } else if (state is AuthSuccess) {
                       final auth = state.auth;

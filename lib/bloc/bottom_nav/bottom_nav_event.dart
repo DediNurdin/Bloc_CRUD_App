@@ -1,9 +1,17 @@
 part of 'bottom_nav_bloc.dart';
 
-abstract class BottomNavEvent {}
+abstract class BottomNavEvent extends Equatable {
+  const BottomNavEvent();
 
-class TabChange extends BottomNavEvent {
-  final int tabIndex;
+  @override
+  List<Object> get props => [];
+}
 
-  TabChange({required this.tabIndex});
+class SelectTabEvent extends BottomNavEvent {
+  final int selectedIndex;
+
+  const SelectTabEvent(this.selectedIndex);
+
+  @override
+  List<Object> get props => [selectedIndex];
 }
