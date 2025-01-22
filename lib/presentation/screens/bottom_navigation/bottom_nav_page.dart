@@ -62,7 +62,7 @@ class BottomNavigationPage extends StatelessWidget {
                         difference >= const Duration(seconds: 2);
                     timeBackPressed = DateTime.now();
                     if (isExitWarning) {
-                      Utils.showToast('Press back again to close');
+                      Utils.showToast('Press back again to close', false);
 
                       didPop = false;
                     } else {

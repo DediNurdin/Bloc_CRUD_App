@@ -30,12 +30,6 @@ class ShoppyApp extends StatelessWidget {
           create: (context) => BottomNavBloc(),
         ),
         BlocProvider(
-          create: (context) => RegisterBloc(UserRepository()),
-        ),
-        BlocProvider(
-          create: (context) => UserBloc(UserRepository())..add(GetUserEvent()),
-        ),
-        BlocProvider(
           create: (context) => ProductBloc()..add(GetAllProductEvent()),
         ),
         BlocProvider(

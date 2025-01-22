@@ -75,6 +75,12 @@ class ProductCategoriesSuccess extends ProductCategoriesState {
   });
 }
 
+class ProductCategoriesError extends ProductCategoriesState {
+  final String message;
+
+  ProductCategoriesError(this.message);
+}
+
 abstract class ProductByCategoriesState {}
 
 class ProductByCategoriesInitial extends ProductByCategoriesState {}

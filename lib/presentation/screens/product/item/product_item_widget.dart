@@ -145,7 +145,7 @@ class _ProductItemWidgetState extends State<ProductItemWidget> {
                                 ProductDetailState>(
                               listener: (context, state) {
                                 if (state is AddCartSuccess) {
-                                  Utils.showToast(state.message);
+                                  Utils.showToast(state.message, false);
                                   context.read<CartBloc>().add(GetCartEvent());
                                 }
                               },

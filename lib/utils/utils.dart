@@ -117,12 +117,13 @@ class MainMenuItemWidget extends StatelessWidget {
 class Utils {
   static String baseUrlFakeApi = 'https://fakestoreapi.com';
 
-  static Future showToast(String msg) {
+  static Future showToast(String msg, bool isError) {
     return Fluttertoast.showToast(
+        backgroundColor: isError ? CupertinoColors.destructiveRed : null,
         msg: msg,
         toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.CENTER,
-        fontSize: 15);
+        fontSize: 13);
   }
 
   static bool isDarkMode(BuildContext context) {

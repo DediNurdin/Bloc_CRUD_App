@@ -36,7 +36,7 @@ class _LoginPageState extends State<LoginPage> {
         final isExitWarning = difference >= const Duration(seconds: 2);
         timeBackPressed = DateTime.now();
         if (isExitWarning) {
-          Utils.showToast('Press back again to close');
+          Utils.showToast('Press back again to close', false);
 
           didPop = false;
         } else {
@@ -51,7 +51,7 @@ class _LoginPageState extends State<LoginPage> {
             if (state is LoginSuccess) {
               Navigator.pushReplacementNamed(context, '/bottomnav');
             } else if (state is LoginFailure) {
-              Utils.showToast(state.error);
+              Utils.showToast(state.error, true);
             }
           },
           builder: (context, state) {

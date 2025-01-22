@@ -183,12 +183,15 @@ class SearchDelegateProduct extends SearchDelegate<String> {
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Expanded(
-                                    child: Text(allProdSugest[index].title)),
                                 Icon(
                                   CupertinoIcons.flame,
-                                  size: 13,
-                                )
+                                  size: 15,
+                                ),
+                                const SizedBox(
+                                  width: 10,
+                                ),
+                                Expanded(
+                                    child: Text(allProdSugest[index].title)),
                               ],
                             ))),
                   );

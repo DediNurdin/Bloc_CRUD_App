@@ -113,14 +113,19 @@ class ProductCategoriesBloc
   ProductCategoriesBloc() : super(ProductCategoriesInitial()) {
     on<GetProductCategoriesEvent>((event, emit) async {
       emit(ProductCategoriesLoading());
-      final response = await http.get(
-        Uri.parse('${Utils.baseUrlFakeApi}/products/categories'),
-        headers: {
-          "Content-Type": "application/json",
-        },
-      );
-      List<dynamic> jsonData = jsonDecode(response.body);
-      emit(ProductCategoriesSuccess(categories: jsonData));
+      try {
+        final response = await http.get(
+          Uri.parse('${Utils.baseUrlFakeApi}/products/categories'),
+          headers: {
+            "Content-Type": "application/json",
+          },
+        );
+
+        List<dynamic> jsonData = jsonDecode(response.body);
+        emit(ProductCategoriesSuccess(categories: jsonData));
+      } catch (e) {
+        emit(ProductCategoriesError(e.toString()));
+      }
     });
   }
 }

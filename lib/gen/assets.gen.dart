@@ -95,8 +95,21 @@ class $AssetsImagesGen {
   AssetGenImage get banner3 =>
       const AssetGenImage('assets/images/banner_3.jpg');
 
+  /// File path: assets/images/wishlist_1.png
+  AssetGenImage get wishlist1 =>
+      const AssetGenImage('assets/images/wishlist_1.png');
+
+  /// File path: assets/images/wishlist_2.png
+  AssetGenImage get wishlist2 =>
+      const AssetGenImage('assets/images/wishlist_2.png');
+
+  /// File path: assets/images/wishlist_3.png
+  AssetGenImage get wishlist3 =>
+      const AssetGenImage('assets/images/wishlist_3.png');
+
   /// List of all assets
-  List<AssetGenImage> get values => [banner1, banner2, banner3];
+  List<AssetGenImage> get values =>
+      [banner1, banner2, banner3, wishlist1, wishlist2, wishlist3];
 }
 
 class Assets {

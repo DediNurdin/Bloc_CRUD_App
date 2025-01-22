@@ -18,7 +18,7 @@ class SplashScreen extends StatelessWidget {
           } else if (state is SplashTokenExpired) {
             Navigator.pushReplacementNamed(context, '/login');
           } else if (state is SplashError) {
-            Utils.showToast(state.message);
+            Utils.showToast(state.message, true);
           }
         },
         child: BlocBuilder<SplashBloc, SplashState>(

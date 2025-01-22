@@ -31,7 +31,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
   late Function(GlobalKey) runAddToCartAnimation;
   late ScrollController scrollController;
   BuildContext? tabContext;
-
+  bool isTabBarVisible = false;
   bool isReadMore = false;
 
   final List<GlobalKey> tabType = [
@@ -80,17 +80,15 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
     await cartKey.currentState!.runCartAnimation((quantity).toString());
   }
 
-  bool _isTabBarVisible = false;
-
-  void _onNotification(ScrollNotification notification) {
+  void onNotification(ScrollNotification notification) {
     if (notification is ScrollUpdateNotification) {
-      if (notification.metrics.pixels > 200 && !_isTabBarVisible) {
+      if (notification.metrics.pixels > 200 && !isTabBarVisible) {
         setState(() {
-          _isTabBarVisible = true;
+          isTabBarVisible = true;
         });
-      } else if (notification.metrics.pixels <= 200 && _isTabBarVisible) {
+      } else if (notification.metrics.pixels <= 200 && isTabBarVisible) {
         setState(() {
-          _isTabBarVisible = false;
+          isTabBarVisible = false;
         });
       }
     }
@@ -173,7 +171,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                 if (!context.mounted) return;
                 Navigator.of(context).pop();
               } else if (state is AddCartError) {
-                Utils.showToast(state.error);
+                Utils.showToast(state.error, true);
               }
 
               if (state is ShowBottomSheetBuyProduct) {
@@ -219,7 +217,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
   Widget main() {
     return NotificationListener<ScrollNotification>(
       onNotification: (notification) {
-        _onNotification(notification);
+        onNotification(notification);
         return true;
       },
       child: Column(
@@ -369,7 +367,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
               Align(
                 alignment: Alignment.topCenter,
                 child: AnimatedOpacity(
-                    opacity: _isTabBarVisible ? 1.0 : 0.0,
+                    opacity: isTabBarVisible ? 1.0 : 0.0,
                     duration: const Duration(milliseconds: 300),
                     child: Container(
                       height: kToolbarHeight,
