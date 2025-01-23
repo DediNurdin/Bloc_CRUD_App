@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../bloc/product/product_bloc.dart';
 import '../../../../models/product_model.dart';
+import '../../../../utils/colors_app.dart';
 import '../../../../utils/utils.dart';
 import 'detail_product_src_widget.dart';
 import 'quantity_widget.dart';
@@ -108,7 +109,7 @@ class _BuyAddCartDialogWidgetState extends State<BuyAddCartDialogWidget> {
                                 child: Icon(
                                   CupertinoIcons.fullscreen,
                                   size: 15,
-                                  color: Colors.green,
+                                  color: colorDefaultGreen,
                                 ),
                               ),
                             )
@@ -127,7 +128,7 @@ class _BuyAddCartDialogWidgetState extends State<BuyAddCartDialogWidget> {
                             Text(
                               'USD ${totalPrice.toString()}',
                               style: const TextStyle(
-                                  color: Colors.green,
+                                  color: colorDefaultGreen,
                                   fontSize: 13,
                                   fontWeight: FontWeight.normal),
                             )
@@ -145,7 +146,7 @@ class _BuyAddCartDialogWidgetState extends State<BuyAddCartDialogWidget> {
                             Text(
                               'Quantity',
                               style: const TextStyle(
-                                  color: Colors.green,
+                                  color: colorDefaultGreen,
                                   fontSize: 13,
                                   fontWeight: FontWeight.normal),
                             ),
@@ -153,7 +154,7 @@ class _BuyAddCartDialogWidgetState extends State<BuyAddCartDialogWidget> {
                             QuantityWidget(
                                 isCart: false,
                                 txtQauntity: cartQuantityItems.toString(),
-                                colorTxt: Colors.green,
+                                colorTxt: colorDefaultGreen,
                                 onPressIncrement: () {
                                   context
                                       .read<QuantityBloc>()

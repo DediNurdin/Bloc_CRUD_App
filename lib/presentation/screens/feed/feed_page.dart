@@ -1,12 +1,13 @@
 import 'dart:async';
 
+import '../../../utils/colors_app.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:whitecodel_reels/whitecodel_reels.dart';
 
-import '../../../utils/colors.dart';
+import '../../../utils/theme_app.dart';
 
 class FeedPage extends StatefulWidget {
   const FeedPage({super.key});
@@ -231,7 +232,7 @@ class _FeedPageState extends State<FeedPage> {
                                   value: (snapshot.data ?? 0).clamp(0.0, 1.0),
                                   min: 0.0,
                                   max: 1.0,
-                                  activeColor: Colors.green,
+                                  activeColor: colorDefaultGreen,
                                   inactiveColor: Colors.white,
 
                                   onChanged: (value) {

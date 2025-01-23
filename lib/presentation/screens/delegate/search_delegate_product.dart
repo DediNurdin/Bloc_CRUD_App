@@ -1,3 +1,5 @@
+import '../../../utils/colors_app.dart';
+
 import '../bottom_navigation/main_menu.dart';
 import '../cart/cart_page.dart';
 import '../product/item/product_item_widget.dart';
@@ -8,7 +10,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../bloc/product/product_bloc.dart';
 import '../../../models/product_model.dart';
-import '../../../utils/colors.dart';
+import '../../../utils/theme_app.dart';
 import '../../../utils/utils.dart';
 import '../product/product_detail_page.dart';
 
@@ -111,25 +113,30 @@ class SearchDelegateProduct extends SearchDelegate<String> {
                           .toLowerCase()
                           .contains(query.toLowerCase()))
                       .toList();
-                  return Container(
-                    padding: const EdgeInsets.only(
-                      left: 10,
-                      right: 10,
-                    ),
-                    child: GridView.builder(
-                      gridDelegate:
-                          const SliverGridDelegateWithFixedCrossAxisCount(
-                        mainAxisSpacing: 4,
-                        crossAxisSpacing: 4,
-                        crossAxisCount: 2,
-                        childAspectRatio: 0.79,
+                  if (productSearch.isEmpty) {
+                    return Center(child: Text('No Data'));
+                  } else {
+                    return Container(
+                      padding: const EdgeInsets.only(
+                        left: 10,
+                        right: 10,
                       ),
-                      itemBuilder: (context, index) {
-                        return ProductItemWidget(product: productSearch[index]);
-                      },
-                      itemCount: productSearch.length,
-                    ),
-                  );
+                      child: GridView.builder(
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                          mainAxisSpacing: 4,
+                          crossAxisSpacing: 4,
+                          crossAxisCount: 2,
+                          childAspectRatio: 0.79,
+                        ),
+                        itemBuilder: (context, index) {
+                          return ProductItemWidget(
+                              product: productSearch[index]);
+                        },
+                        itemCount: productSearch.length,
+                      ),
+                    );
+                  }
                 }
                 if (state is ProductSearchFailure) {
                   return Center(child: Text('No Data'));
@@ -221,7 +228,7 @@ class SearchDelegateProduct extends SearchDelegate<String> {
                     ),
                     Text(
                       'Learn',
-                      style: TextStyle(fontSize: 12, color: Colors.green),
+                      style: TextStyle(fontSize: 12, color: colorDefaultGreen),
                     )
                   ],
                 ),

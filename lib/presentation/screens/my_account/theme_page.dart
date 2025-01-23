@@ -1,3 +1,4 @@
+import 'package:bloc_online_store/utils/colors_app.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -41,6 +42,7 @@ class _ThemePageState extends State<ThemePage> {
                           : Colors.black),
                 ),
                 trailing: CupertinoRadio<SingingCharacter>(
+                  activeColor: colorDefaultGreen,
                   value: SingingCharacter.darkMode,
                   groupValue: character,
                   onChanged: (SingingCharacter? value) {},
@@ -59,6 +61,7 @@ class _ThemePageState extends State<ThemePage> {
                           : Colors.black),
                 ),
                 trailing: CupertinoRadio<SingingCharacter>(
+                  activeColor: colorDefaultGreen,
                   value: SingingCharacter.lightMode,
                   groupValue: character,
                   onChanged: (SingingCharacter? value) {},

@@ -1,3 +1,4 @@
+import 'colors_app.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -9,7 +10,7 @@ class ThemeUtils {
       fontFamily: 'Roboto-Regular',
       cupertinoOverrideTheme: const CupertinoThemeData(
           brightness: Brightness.light,
-          primaryColor: Colors.green,
+          primaryColor: colorDefaultGreen,
           textTheme:
               CupertinoTextThemeData(actionTextStyle: TextStyle(fontSize: 13))),
       dividerColor: Colors.transparent,
@@ -22,8 +23,8 @@ class ThemeUtils {
           dividerColor: Colors.transparent,
           unselectedLabelStyle: TextStyle(fontSize: 12),
           overlayColor: WidgetStatePropertyAll(Colors.transparent),
-          labelColor: Colors.green,
-          indicatorColor: Colors.green),
+          labelColor: colorDefaultGreen,
+          indicatorColor: colorDefaultGreen),
       pageTransitionsTheme: const PageTransitionsTheme(builders: {
         TargetPlatform.android: CupertinoPageTransitionsBuilder(),
         TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
@@ -53,7 +54,7 @@ class ThemeUtils {
           }),
           fillColor: WidgetStateProperty.resolveWith((states) {
             if (states.contains(WidgetState.selected)) {
-              return Colors.green;
+              return colorDefaultGreen;
             }
             return Colors.transparent;
           })),
@@ -68,8 +69,8 @@ class ThemeUtils {
           backgroundColor: CupertinoColors.systemBackground),
       bottomNavigationBarTheme: BottomNavigationBarThemeData(
           type: BottomNavigationBarType.fixed,
-          selectedLabelStyle: TextStyle(color: Colors.green, fontSize: 11),
-          selectedItemColor: Colors.green,
+          selectedLabelStyle: TextStyle(color: colorDefaultGreen, fontSize: 11),
+          selectedItemColor: colorDefaultGreen,
           unselectedItemColor: Colors.grey.shade600,
           unselectedLabelStyle: TextStyle(color: Colors.grey, fontSize: 11),
           backgroundColor: CupertinoColors.systemBackground),
@@ -81,10 +82,10 @@ class ThemeUtils {
           elevation: 0,
           backgroundColor: CupertinoColors.secondarySystemBackground),
       floatingActionButtonTheme: const FloatingActionButtonThemeData(
-          backgroundColor: Colors.green, foregroundColor: Colors.white),
+          backgroundColor: colorDefaultGreen, foregroundColor: Colors.white),
       cardTheme: CardTheme(color: Colors.grey.shade200),
       progressIndicatorTheme: const ProgressIndicatorThemeData(
-          color: Colors.green,
+          color: colorDefaultGreen,
           linearMinHeight: 2,
           refreshBackgroundColor: CupertinoColors.extraLightBackgroundGray,
           circularTrackColor: Colors.transparent,
@@ -100,7 +101,7 @@ class ThemeUtils {
           style: ButtonStyle(
               shape: WidgetStatePropertyAll(RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10))),
-              backgroundColor: WidgetStatePropertyAll(Colors.green),
+              backgroundColor: WidgetStatePropertyAll(colorDefaultGreen),
               foregroundColor: WidgetStatePropertyAll(Colors.white))),
       inputDecorationTheme: InputDecorationTheme(
         hintStyle: const TextStyle(color: Colors.grey, fontSize: 14),
@@ -146,7 +147,7 @@ class ThemeUtils {
         fontFamily: 'Roboto-Regular',
         cupertinoOverrideTheme: const CupertinoThemeData(
             brightness: Brightness.dark,
-            primaryColor: Colors.green,
+            primaryColor: colorDefaultGreen,
             textTheme: CupertinoTextThemeData(
                 actionTextStyle: TextStyle(fontSize: 13))),
         dividerColor: Colors.transparent,
@@ -159,8 +160,8 @@ class ThemeUtils {
             dividerColor: Colors.transparent,
             unselectedLabelStyle: TextStyle(fontSize: 12),
             overlayColor: WidgetStatePropertyAll(Colors.transparent),
-            labelColor: Colors.green,
-            indicatorColor: Colors.green),
+            labelColor: colorDefaultGreen,
+            indicatorColor: colorDefaultGreen),
         pageTransitionsTheme: const PageTransitionsTheme(builders: {
           TargetPlatform.android: CupertinoPageTransitionsBuilder(),
           TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
@@ -192,7 +193,7 @@ class ThemeUtils {
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
             fillColor: WidgetStateProperty.resolveWith((states) {
               if (states.contains(WidgetState.selected)) {
-                return Colors.green;
+                return colorDefaultGreen;
               }
               return Colors.transparent;
             })),
@@ -207,8 +208,9 @@ class ThemeUtils {
             backgroundColor: CupertinoColors.darkBackgroundGray),
         bottomNavigationBarTheme: BottomNavigationBarThemeData(
             type: BottomNavigationBarType.fixed,
-            selectedLabelStyle: TextStyle(color: Colors.green, fontSize: 11),
-            selectedItemColor: Colors.green,
+            selectedLabelStyle:
+                TextStyle(color: colorDefaultGreen, fontSize: 11),
+            selectedItemColor: colorDefaultGreen,
             unselectedItemColor: Colors.grey.shade600,
             unselectedLabelStyle: TextStyle(color: Colors.grey, fontSize: 11),
             backgroundColor: CupertinoColors.darkBackgroundGray),
@@ -220,10 +222,10 @@ class ThemeUtils {
             elevation: 0,
             backgroundColor: CupertinoColors.darkBackgroundGray),
         floatingActionButtonTheme: const FloatingActionButtonThemeData(
-            backgroundColor: Colors.green, foregroundColor: Colors.white),
+            backgroundColor: colorDefaultGreen, foregroundColor: Colors.white),
         cardTheme: CardTheme(color: Colors.grey.shade600),
         progressIndicatorTheme: const ProgressIndicatorThemeData(
-            color: Colors.green,
+            color: colorDefaultGreen,
             linearMinHeight: 2,
             refreshBackgroundColor: CupertinoColors.darkBackgroundGray,
             circularTrackColor: Colors.transparent,
@@ -238,7 +240,7 @@ class ThemeUtils {
             style: ButtonStyle(
                 shape: WidgetStatePropertyAll(RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10))),
-                backgroundColor: WidgetStatePropertyAll(Colors.green),
+                backgroundColor: WidgetStatePropertyAll(colorDefaultGreen),
                 foregroundColor: WidgetStatePropertyAll(Colors.white))),
         inputDecorationTheme: InputDecorationTheme(
           hintStyle: const TextStyle(color: Colors.grey, fontSize: 14),

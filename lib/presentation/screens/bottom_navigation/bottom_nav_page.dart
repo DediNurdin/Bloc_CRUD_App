@@ -1,4 +1,4 @@
-import '../../../bloc/cubit/theme_cubit.dart';
+import '../../../bloc/cart/cart_bloc.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -6,7 +6,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 import '../../../bloc/bottom_nav/bottom_nav_bloc.dart';
-import '../../../utils/colors.dart';
+import '../../../bloc/cubit/theme_cubit.dart';
+import '../../../utils/theme_app.dart';
 import '../../../utils/utils.dart';
 import '../cart/cart_page.dart';
 import '../feed/feed_page.dart';
@@ -109,8 +110,33 @@ class BottomNavigationPage extends StatelessWidget {
                                   },
                                   child: Padding(
                                       padding: const EdgeInsets.only(right: 10),
-                                      child:
-                                          Icon(CupertinoIcons.shopping_cart))),
+                                      child: BlocProvider(
+                                        create: (context) =>
+                                            CartBloc()..add(GetCartEvent()),
+                                        child: BlocBuilder<CartBloc, CartState>(
+                                          builder: (context, state) {
+                                            if (state is CartSuccess) {
+                                              if (state.carts.isNotEmpty) {
+                                                return Badge(
+                                                    label: Text(
+                                                        style: TextStyle(
+                                                            color:
+                                                                Colors.white),
+                                                        state.carts.length
+                                                            .toString()),
+                                                    backgroundColor: Colors.red,
+                                                    child: Icon(CupertinoIcons
+                                                        .shopping_cart));
+                                              } else {
+                                                return Icon(CupertinoIcons
+                                                    .shopping_cart);
+                                              }
+                                            }
+                                            return Icon(
+                                                CupertinoIcons.shopping_cart);
+                                          },
+                                        ),
+                                      ))),
                               GestureDetector(
                                 onTap: () {
                                   showModalBottomSheet(

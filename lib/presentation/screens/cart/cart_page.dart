@@ -8,6 +8,7 @@ import 'package:http/http.dart' as http;
 import '../../../bloc/cart/cart_bloc.dart';
 import '../../../gen/assets.gen.dart';
 import '../../../models/cart_model.dart';
+import '../../../utils/colors_app.dart';
 import '../../../utils/skeleton_widget.dart';
 import '../../../utils/utils.dart';
 import '../bottom_navigation/bottom_nav_page.dart';
@@ -315,8 +316,8 @@ class _CartPageState extends State<CartPage> {
                                                                   style: TextStyle(
                                                                       fontSize:
                                                                           10,
-                                                                      color: Colors
-                                                                          .green),
+                                                                      color:
+                                                                          colorDefaultGreen),
                                                                 ),
                                                                 const Spacer(),
                                                                 Padding(

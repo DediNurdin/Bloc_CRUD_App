@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'colors_app.dart';
+
 import '../bloc/cubit/theme_cubit.dart';
 import '../presentation/screens/my_account/theme_page.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -158,8 +160,9 @@ class Utils {
         ? OutlinedButton(
             onPressed: onPressed,
             style: ButtonStyle(
-              foregroundColor: WidgetStatePropertyAll(Colors.green),
-              side: WidgetStatePropertyAll(BorderSide(color: Colors.green)),
+              foregroundColor: WidgetStatePropertyAll(colorDefaultGreen),
+              side:
+                  WidgetStatePropertyAll(BorderSide(color: colorDefaultGreen)),
             ),
             child: child,
           )

@@ -1,3 +1,4 @@
+import '../../../../utils/colors_app.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -174,7 +175,7 @@ class _ProductItemWidgetState extends State<ProductItemWidget> {
                                       children: [
                                         Icon(
                                           Icons.add,
-                                          color: Colors.green,
+                                          color: colorDefaultGreen,
                                         ),
                                         Text(
                                           'Add To Cart',

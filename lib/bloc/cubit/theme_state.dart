@@ -1,14 +1,24 @@
 part of 'theme_cubit.dart';
 
 class ThemeState extends Equatable {
-  const ThemeState({this.themeMode = ThemeMode.light});
-
   final ThemeMode themeMode;
+  final ColorScheme? dynamicColorScheme;
 
-  ThemeState copyWith({ThemeMode? themeMode}) => ThemeState(
-        themeMode: themeMode ?? this.themeMode,
-      );
+  const ThemeState({
+    this.themeMode = ThemeMode.system,
+    this.dynamicColorScheme,
+  });
+
+  ThemeState copyWith({
+    ThemeMode? themeMode,
+    ColorScheme? dynamicColorScheme,
+  }) {
+    return ThemeState(
+      themeMode: themeMode ?? this.themeMode,
+      dynamicColorScheme: dynamicColorScheme ?? this.dynamicColorScheme,
+    );
+  }
 
   @override
-  List<Object?> get props => [themeMode];
+  List<Object?> get props => [themeMode, dynamicColorScheme];
 }
