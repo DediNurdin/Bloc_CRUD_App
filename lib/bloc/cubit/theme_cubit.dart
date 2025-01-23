@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:dynamic_color/dynamic_color.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -29,19 +28,6 @@ class ThemeCubit extends Cubit<ThemeState> {
     });
   }
 
-  Future<void> loadDynamicColor() async {
-    final lightDynamic = await DynamicColorPlugin.getCorePalette();
-    final darkDynamic = await DynamicColorPlugin.getCorePalette();
-
-    if (lightDynamic != null && darkDynamic != null) {
-      emit(state.copyWith(
-        dynamicColorScheme: ColorScheme.fromSeed(
-          seedColor: Color(lightDynamic.primary.get(0)),
-        ),
-      ));
-    }
-  }
-
   Future<void> switchThemeLight() async {
     await _themeRepository.setTheme(isDarkTheme: false);
     emit(state.copyWith(themeMode: ThemeMode.light));
@@ -50,9 +36,5 @@ class ThemeCubit extends Cubit<ThemeState> {
   Future<void> switchThemeDark() async {
     await _themeRepository.setTheme(isDarkTheme: true);
     emit(state.copyWith(themeMode: ThemeMode.dark));
-  }
-
-  Future<void> switchToSystemMode() async {
-    emit(state.copyWith(themeMode: ThemeMode.system));
   }
 }
