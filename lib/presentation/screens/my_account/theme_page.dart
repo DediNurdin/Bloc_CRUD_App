@@ -1,4 +1,4 @@
-import 'package:bloc_online_store/utils/colors_app.dart';
+import '../../../utils/colors_app.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
