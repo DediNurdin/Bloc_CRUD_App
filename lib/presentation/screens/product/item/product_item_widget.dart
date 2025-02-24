@@ -1,10 +1,11 @@
-import '../../../../utils/colors_app.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
 import '../../../../bloc/cart/cart_bloc.dart';
 import '../../../../bloc/product/product_bloc.dart';
 import '../../../../models/product_model.dart';
+import '../../../../utils/colors_app.dart';
 import '../../../../utils/utils.dart';
 import '../product_detail_page.dart';
 

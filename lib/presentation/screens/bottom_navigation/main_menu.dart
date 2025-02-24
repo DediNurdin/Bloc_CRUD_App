@@ -119,7 +119,7 @@ class _MainMenuState extends State<MainMenu> {
                                     minimumSize:
                                         WidgetStatePropertyAll(Size(0, 30))),
                                 onPressed: () {},
-                                iconAlignment: IconAlignment.end,
+                                // iconAlignment: IconAlignment.end,
                                 child: Row(
                                   children: [
                                     Text(

@@ -1,5 +1,6 @@
-import '../product/recomended_page.dart';
 import 'package:flutter/material.dart';
+
+import '../product/recomended_page.dart';
 
 class MallPage extends StatefulWidget {
   const MallPage({super.key});

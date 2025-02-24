@@ -1,17 +1,16 @@
-import '../../../utils/colors_app.dart';
-
-import '../bottom_navigation/main_menu.dart';
-import '../cart/cart_page.dart';
-import '../product/item/product_item_widget.dart';
-import '../../../utils/skeleton_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../bloc/product/product_bloc.dart';
 import '../../../models/product_model.dart';
+import '../../../utils/colors_app.dart';
+import '../../../utils/skeleton_widget.dart';
 import '../../../utils/theme_app.dart';
 import '../../../utils/utils.dart';
+import '../bottom_navigation/main_menu.dart';
+import '../cart/cart_page.dart';
+import '../product/item/product_item_widget.dart';
 import '../product/product_detail_page.dart';
 
 class SearchDelegateProduct extends SearchDelegate<String> {

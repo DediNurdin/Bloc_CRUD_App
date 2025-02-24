@@ -1,6 +1,7 @@
-import '../../../../utils/utils.dart';
 import 'package:flutter/material.dart';
+
 import '../../../../models/product_model.dart';
+import '../../../../utils/utils.dart';
 import '../product_detail_page.dart';
 
 class ProductItemLimitWidget extends StatelessWidget {

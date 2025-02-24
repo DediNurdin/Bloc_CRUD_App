@@ -6,8 +6,8 @@ import 'package:fluttertoast/fluttertoast.dart';
 
 import '../../../bloc/user/user_bloc.dart';
 import '../../../gen/assets.gen.dart';
-import '../../../utils/theme_app.dart';
 import '../../../utils/text_form_field_widget.dart';
+import '../../../utils/theme_app.dart';
 import '../../../utils/utils.dart';
 
 class LoginPage extends StatefulWidget {
